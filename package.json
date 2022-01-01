@@ -6,9 +6,13 @@
     "start": "next start"
   },
   "dependencies": {
+    "cors": "^2.8.5",
+    "leaflet": "^1.7.1",
     "next": "latest",
+    "pigeon-maps": "^0.19.7",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "react-leaflet": "^3.2.2"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.0",

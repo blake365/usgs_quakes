@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?> <!-- Created with Vectornator for iOS (http://vectornator.io/) --><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" xmlns:vectornator="http://vectornator.io" xmlns:xlink="http://www.w3.org/1999/xlink" height="100%" xml:space="preserve" style="fill-rule:nonzero;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" width="100%">
+<metadata>
+<vectornator:setting key="IsTimeLapseWatermarkDisabled" value="false"/>
+<vectornator:setting value="false" key="WDSnapToEdges"/>
+<vectornator:setting key="WDDynamicGuides" value="false"/>
+<vectornator:setting key="WDRulersVisible" value="true"/>
+<vectornator:setting key="WDDisplayWhiteBackground" value="false"/>
+<vectornator:setting value="false" key="WDSnapToGrid"/>
+<vectornator:setting value="false" key="WDSnapToPoints"/>
+<vectornator:setting value="true" key="VNSnapToGuides"/>
+<vectornator:setting value="false" key="WDIsolateActiveLayer"/>
+<vectornator:setting key="WDCMYKEnabledKey" value="false"/>
+<vectornator:setting key="WDUnits" value="Points"/>
+<vectornator:setting value="true" key="WDGuidesVisible"/>
+<vectornator:setting key="VNDimensionsVisible" value="true"/>
+<vectornator:setting value="false" key="VNPencilOnly"/>
+<vectornator:setting key="UndoHistoryDisabled" value="false"/>
+<vectornator:setting value="false" key="WDOutlineMode"/>
+</metadata>
+<defs/>
+<g vectornator:layerName="Layer 1" id="Layer 1">
+<path d="M10.0163+50C10.7418+50+19.771+50.3569+19.9517+50.02C19.9999+49.9302+25.4028+39.9671+25.4028+40.1092C25.4028+40.9106+30.0752+60.3644+30.0752+60.0997C30.0752+58.4429+36.9453+33.3501+36.9453+30.0407C36.9453+29.7995+44.5127+70.0639+44.5127+70.0639C44.5127+70.0639+49.9938+20.085+50+20.1249C50.5358+23.5461+56.5594+70.0639+56.5594+70.0639L62.756+30.0407C62.756+30.0407+70.1573+60.0997+70.0145+60.0997C69.9554+60.0997+74.4684+40.6725+74.4684+40.1092C74.4684+39.7927+79.5227+50.7076+80.0889+50.02C80.2765+49.7922+86.6739+50.02+89.9783+50" stroke-linejoin="round" stroke="#000000" stroke-linecap="round" opacity="1" stroke-width="3" fill="none"/>
+</g>
+</svg>
