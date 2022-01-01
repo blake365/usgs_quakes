@@ -3,10 +3,7 @@ import { Map, Marker, ZoomControl } from 'pigeon-maps'
 import { stamenTerrain } from 'pigeon-maps/providers'
 
 export default function FeaturedQuake() {
-  const [quakes, setQuakes] = useState([])
   const [details, setDetails] = useState({})
-
-  // https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2014-01-01&endtime=2014-01-02
 
   let today = ''
   function getDateString() {
@@ -32,7 +29,7 @@ export default function FeaturedQuake() {
             return response.json()
           })
           .then(function (data) {
-            console.log(data.properties)
+            // console.log(data.properties)
             setDetails(data)
           })
       })
@@ -144,12 +141,12 @@ export default function FeaturedQuake() {
   }
 
   return (
-    <section className='px-2 lg:w-3/5 xl:w-3/5'>
-      {details.properties ? (
-        <section className='w-full  columns-1 border mt-5 border-stone-600 bg-stone-100 '>
-          <div className='p-1 text-center w-full border-b border-stone-600 text-2xl bg-amber-400 uppercase'>
-            Featured quake
-          </div>
+    <section className='px-2 lg:w-3/5 xl:w-3/5 '>
+      <section className='w-full columns-1 border mt-5  border-stone-600 bg-stone-100'>
+        <div className='p-1 text-center w-full border-b border-stone-600 text-2xl bg-amber-400 uppercase'>
+          Featured quake
+        </div>
+        {details.properties ? (
           <div className='px-5 text-left w-full py-2 '>
             <div className='text-sm text-stone-800 flex columns-2 justify-between'>
               <div className=''>
@@ -169,7 +166,7 @@ export default function FeaturedQuake() {
               )}
             </div>
             <a
-              className='text-lg font-bold block hover:text-red-900 hover:underline pr-3 text-red-700'
+              className='text-3xl font-bold  hover:text-red-900 hover:underline pr-3 text-red-700'
               href={details.properties.url}
               target='_blank'
             >
@@ -204,52 +201,87 @@ export default function FeaturedQuake() {
                 Did you feel it?
               </a>
             </div>
-            {/*}
-            <Map
-              provider={stamenTerrain}
-              dprs={[1, 2]}
-              height={300}
-              defaultCenter={[
-                details.geometry.coordinates[1],
-                details.geometry.coordinates[0],
-              ]}
-              defaultZoom={6}
-            >
-              <ZoomControl />
-              <Marker
-                color={details.properties.alert}
-                width={30}
-                anchor={[
-                  details.geometry.coordinates[1],
-                  details.geometry.coordinates[0],
-                ]}
-              />
-              </Map> */}
             <div className='w-full'>
               <img
-                className='w-10/12 max-w-lg h-auto object-cover m-auto'
+                className='w-10/12 max-w-lg h-auto object-cover m-auto border border-stone-600'
                 src={`https://earthquake.usgs.gov/product/shakemap/${details.properties.products.shakemap[0].code}/us/${details.properties.products.shakemap[0].updateTime}/download/intensity.jpg
           `}
               />
+
+              {details.properties.products['impact-text'] ? (
+                <div className='pt-4'>
+                  <div className='text-lg mb-1 font-bold'>Human Impact</div>
+                  <div
+                    className='text-sm mb-1'
+                    dangerouslySetInnerHTML={{
+                      __html:
+                        details.properties.products['impact-text'][0].contents[
+                          ''
+                        ].bytes,
+                    }}
+                  ></div>
+                </div>
+              ) : (
+                ''
+              )}
+
               {details.properties.products['general-text'] ? (
-                <div
-                  className='text-sm max-w-fit'
-                  dangerouslySetInnerHTML={{
-                    __html:
-                      details.properties.products['general-text'][0].contents[
-                        ''
-                      ].bytes,
-                  }}
-                ></div>
+                <div className='pt-4'>
+                  <div
+                    className='text-lg mb-1 font-bold'
+                    dangerouslySetInnerHTML={{
+                      __html: details.properties.products[
+                        'general-text'
+                      ][0].contents[''].bytes
+                        .split('\n')
+                        .filter(n => n)[0],
+                    }}
+                  ></div>
+                  <div
+                    className='text-sm max-w-fit mb-1.5'
+                    dangerouslySetInnerHTML={{
+                      __html: details.properties.products[
+                        'general-text'
+                      ][0].contents[''].bytes
+                        .split('\n')
+                        .filter(n => n)[2],
+                    }}
+                  ></div>
+                  <div
+                    className='text-sm max-w-fit mb-1.5'
+                    dangerouslySetInnerHTML={{
+                      __html: details.properties.products[
+                        'general-text'
+                      ][0].contents[''].bytes
+                        .split('\n')
+                        .filter(n => n)[4],
+                    }}
+                  ></div>
+                  <div
+                    className='text-sm max-w-fit mb-1.5'
+                    dangerouslySetInnerHTML={{
+                      __html: details.properties.products[
+                        'general-text'
+                      ][0].contents[''].bytes
+                        .split('\n')
+                        .filter(n => n)[6],
+                    }}
+                  ></div>
+                </div>
               ) : (
                 ''
               )}
             </div>
           </div>
-        </section>
-      ) : (
-        <div>loading</div>
-      )}
+        ) : (
+          <div className='w-full border mb-4 border-stone-600 bg-stone-100 text-center align-middle'>
+            <div className='ldsripple mt-5'>
+              <div></div>
+              <div></div>
+            </div>
+          </div>
+        )}
+      </section>
     </section>
   )
 }

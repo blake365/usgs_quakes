@@ -114,7 +114,7 @@ export default function Quake(props) {
         <div className=' w-5 bg-yellow-400 '></div>
       )}
 
-      <div className='pl-3 p-1 text-left w-full border-l selection:border-stone-600 '>
+      <div className='pl-3 p-1 text-left w-full border-l border-stone-600 '>
         <div className='text-sm text-stone-800 flex columns-2 justify-between'>
           <div className=''>
             {new Date(props.quakeData.properties.time).customFormat(
@@ -155,28 +155,6 @@ export default function Quake(props) {
           {Math.round(props.quakeData.geometry.coordinates[2] * 100) / 100} km
           deep
         </div>
-
-        {/* <Map
-          provider={stamenTerrain}
-          dprs={[1, 2]}
-          height={100}
-          defaultCenter={[
-            props.quakeData.geometry.coordinates[1],
-            props.quakeData.geometry.coordinates[0],
-          ]}
-          defaultZoom={6}
-        >
-          <ZoomControl />
-          <Marker
-            color={props.quakeData.properties.alert}
-            width={30}
-            anchor={[
-              props.quakeData.geometry.coordinates[1],
-              props.quakeData.geometry.coordinates[0],
-            ]}
-          />
-          </Map> */}
-
         <div className='leading-8 align-middle text-lg'>
           <img src='/icons/waveform 1.svg' className='w-7 h-7 inline' />{' '}
           {props.quakeData.properties.mag} {props.quakeData.properties.magType}

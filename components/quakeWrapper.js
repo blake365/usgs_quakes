@@ -3,8 +3,17 @@ import Quake from './quake'
 import { Map, Marker, ZoomControl } from 'pigeon-maps'
 import { stamenTerrain } from 'pigeon-maps/providers'
 import Search from './search'
+// import styles from './styles.css'
 
 export default function QuakeWrapper() {
+  // let locationAvailable
+
+  // if ('geolocation' in navigator) {
+  //   locationAvailable = true
+  // } else {
+  //   locationAvailable = false
+  // }
+
   let today = ''
   let startDefault = ''
 
@@ -23,35 +32,45 @@ export default function QuakeWrapper() {
   today = getDateString()
   startDefault = getStartDateString()
 
-  const [minMag, setMinMag] = useState(0)
+  const [minMag, setMinMag] = useState(6)
   const [maxMag, setMaxMag] = useState(10)
   const [latitude, setLat] = useState('')
   const [longitude, setLong] = useState('')
-  const [radius, setRadius] = useState('')
+  const [radius, setRadius] = useState(500)
   const [start, setStart] = useState('')
   const [end, setEnd] = useState(today)
   const [sort, setSort] = useState('time')
 
   const [fetchString, setFetch] = useState(
-    'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&minmagnitude=6&limit=5'
+    'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&minmagnitude=6&limit=10&orderby=magnitude'
   )
   const [quakes, setQuakes] = useState([])
   const [meta, setMeta] = useState([])
+  const [loading, isLoading] = useState(false)
 
-  // https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2014-01-01&endtime=2014-01-02
-
-  // TODO: string builder for fetch request
+  // useEffect(() => {
+  //   fetch(fetchString)
+  //     .then(function (response) {
+  //       return response.json()
+  //     })
+  //     .then(function (data) {
+  //       setQuakes(data.features)
+  //       setMeta(data.metadata)
+  //       // console.log(data.features)
+  //     })
+  // }, [fetchString])
 
   useEffect(() => {
-    fetch(fetchString)
-      .then(function (response) {
-        return response.json()
-      })
-      .then(function (data) {
-        setQuakes(data.features)
-        setMeta(data.metadata)
-        // console.log(data.features)
-      })
+    const fetchData = async () => {
+      isLoading(true)
+      const res = await fetch(fetchString)
+      const json = await res.json()
+      // console.log(json)
+      setQuakes(json.features)
+      setMeta(json.metadata)
+      isLoading(false)
+    }
+    fetchData()
   }, [fetchString])
 
   // const handleSortChange = e => {
@@ -71,6 +90,15 @@ export default function QuakeWrapper() {
     setRadius('')
     setStart('')
     setEnd(today)
+  }
+
+  const handleLocationRequest = evt => {
+    evt.preventDefault()
+    navigator.geolocation.getCurrentPosition(position => {
+      setLat(position.coords.latitude)
+      setLong(position.coords.longitude)
+      setRadius(100)
+    })
   }
 
   const startString =
@@ -134,9 +162,9 @@ export default function QuakeWrapper() {
   }
 
   return (
-    <div className=' columns-1 gap-5 p-5 w-full'>
-      <div className='border border-stone-500 p-2 pb-0 text-center bg-stone-100 mb-5'>
-        <div className='flex justify-between'>
+    <div className=' columns-1 gap-4 pt-4 w-full min-h-max p-2'>
+      <div className='border border-stone-500 pb-0 text-center bg-stone-100 mb-5'>
+        <div className='flex justify-between bg-amber-400 p-1'>
           <button
             type='submit'
             className='bg-orange-200 rounded-md border border-orange-700 hover:bg-orange-50 px-1 text-center invisible'
@@ -145,8 +173,8 @@ export default function QuakeWrapper() {
             Reset
           </button>
           <div>
-            <h3 className='font-bold text-lg block'>
-              Earthquake Search Filter:
+            <h3 className=' text-2xl block uppercase'>
+              Earthquake Search Filter
             </h3>
             <p className='text-stone-600 text-sm block'>
               Limited to 100 results
@@ -154,18 +182,18 @@ export default function QuakeWrapper() {
           </div>
           <button
             type='submit'
-            className='bg-stone-200 rounded-md border h-fit align-middle border-stone-700 hover:bg-stone-50 px-1 text-center'
+            className='bg-stone-200 rounded-md border h-fit align-middle border-stone-700 hover:bg-stone-50 px-1 text-center m-3'
             onClick={handleResetFields}
           >
             Reset
           </button>
         </div>
         <form className='font-bold'>
-          <div className='m-2 block border-y py-2 border-stone-600 text-center'>
-            <label className='p-1 inline-block'>
+          <div className=' block border-y py-2 border-stone-600 text-center'>
+            <label className='p-1 inline-block xs:block'>
               Min Magnitude:{' '}
               <input
-                className='bg-stone-200 rounded-md border border-stone-700 hover:bg-blue-50 px-1 text-center'
+                className='bg-stone-200 rounded-md border border-stone-700 hover:bg-blue-50 px-1 text-right w-10'
                 type='number'
                 value={minMag}
                 min='0'
@@ -175,10 +203,10 @@ export default function QuakeWrapper() {
                 onChange={e => setMinMag(e.target.value)}
               />
             </label>
-            <label className='p-1 inline-block'>
+            <label className='p-1 inline-block xs:block'>
               Max Magnitude:{' '}
               <input
-                className='bg-stone-200 rounded-md border border-stone-700 hover:bg-blue-50 px-1 text-center'
+                className='bg-stone-200 rounded-md border border-stone-700 hover:bg-blue-50 px-1 text-right w-12'
                 type='number'
                 value={maxMag}
                 min='0'
@@ -189,11 +217,11 @@ export default function QuakeWrapper() {
               />
             </label>
           </div>
-          <div className='m-2 block border-b pb-2 border-stone-600 text-center'>
-            <label className='p-1 inline-block'>
+          <div className=' block border-b py-2 border-stone-600 text-center'>
+            <label className='p-1 inline-block xs:block'>
               Latitude:{' '}
               <input
-                className='bg-stone-200 rounded-md border border-stone-700 hover:bg-blue-50 px-1 text-center'
+                className='bg-stone-200 rounded-md border border-stone-700 hover:bg-blue-50 px-1 text-right w-28'
                 type='number'
                 step='0.001'
                 value={latitude}
@@ -203,10 +231,10 @@ export default function QuakeWrapper() {
                 onChange={e => setLat(e.target.value)}
               />
             </label>
-            <label className='p-1 inline-block'>
+            <label className='p-1 inline-block xs:block'>
               Longitude:{' '}
               <input
-                className='bg-stone-200 rounded-md border border-stone-700 hover:bg-blue-50 px-1 text-center'
+                className='bg-stone-200 rounded-md border border-stone-700 hover:bg-blue-50 px-1 text-right w-32'
                 type='number'
                 step='0.001'
                 value={longitude}
@@ -216,27 +244,37 @@ export default function QuakeWrapper() {
                 onChange={e => setLong(e.target.value)}
               />
             </label>
-            <label className='p-1 inline-block'>
+
+            <label className='p-1 inline-block xs:block'>
               Radius (km):{' '}
               <input
-                className='bg-stone-200 rounded-md border border-stone-700 hover:bg-blue-50 px-1 text-center'
+                className='bg-stone-200 rounded-md border border-stone-700 hover:bg-blue-50 px-1 text-right'
                 type='number'
                 value={radius}
-                min='500'
+                min='100'
                 max='20000'
-                placeholder='5000'
+                placeholder='500'
                 onChange={e => setRadius(e.target.value)}
               />
             </label>
+            <div className=' mb-1 inline text-center'>
+              <button
+                type='submit'
+                className='px-1 py-1 text-center text-xl'
+                onClick={handleLocationRequest}
+              >
+                📍
+              </button>
+            </div>
             <p className='text-stone-600 text-sm font-normal'>
               Must include all fields to use location search
             </p>
           </div>
-          <div className='m-2 block border-b pb-2 border-stone-600 text-center'>
-            <label className='p-1 inline-block'>
+          <div className=' block border-b py-2 border-stone-600 text-center'>
+            <label className='p-1 inline-block xs:block'>
               Start Date:{' '}
               <input
-                className='bg-stone-200 rounded-md border border-stone-700 hover:bg-blue-50 px-1 text-center'
+                className='bg-stone-200 rounded-md border border-stone-700 hover:bg-blue-50 px-1 text-right'
                 type='date'
                 value={start}
                 //   min='1'
@@ -245,10 +283,10 @@ export default function QuakeWrapper() {
                 onChange={e => setStart(e.target.value)}
               />
             </label>
-            <label className='p-1 inline-block'>
+            <label className='p-1 inline-block xs:block'>
               End Date:{' '}
               <input
-                className='bg-stone-200 rounded-md border border-stone-700 hover:bg-blue-50 px-1 text-center'
+                className='bg-stone-200 rounded-md border border-stone-700 hover:bg-blue-50 px-1 text-right'
                 type='date'
                 value={end}
                 //   min='1'
@@ -297,17 +335,26 @@ export default function QuakeWrapper() {
             {meta.error}
           </div>
           <div className='text-stone-600 text-sm font-normal m-2'>
-            {quakes.length} Earthquakes found
+            {loading ? (
+              <div>Searching...</div>
+            ) : (
+              <div>{quakes.length} Earthquakes found</div>
+            )}
           </div>
         </form>
       </div>
 
-      {quakes.length > 0 ? (
+      {loading ? (
+        <div className='w-full border mb-4 border-stone-600 bg-stone-100 text-center align-middle'>
+          <div className='ldsripple mt-5'>
+            <div></div>
+            <div></div>
+          </div>
+        </div>
+      ) : (
         quakes.map(quake => {
           return <Quake quakeData={quake} key={quake.id} />
         })
-      ) : (
-        <div></div>
       )}
     </div>
   )

@@ -9,22 +9,22 @@ export default function Home() {
     <div className='flex flex-col items-center justify-center  py-2 bg-stone-300 min-h-screen'>
       <Head>
         <title>USGS Earthquakes</title>
-        <link rel='icon' href='/favicon.ico' />
+        <link rel='icon' href='/icons/waveform 1.ico' />
       </Head>
-      <div className='font-bold w-full text-center md:p-5 p-2'>
-        <h1 className='md:text-6xl text-3xl w-full uppercase'>
+      <div className='font-bold w-full text-center p-2 pb-0'>
+        <h1 className='lg:text-6xl md:text-4xl text-3xl w-full uppercase'>
           <img
             src='/icons/waveform 1.svg'
-            className='md:w-20 md:h-20 w-10 h-10 hidden sm:inline'
-          />
-          USGS Earthquake Feed
+            className='lg:w-20 lg:h-20 w-10 h-10 hidden sm:inline'
+          />{' '}
+          USGS Earthquake Feed{' '}
           <img
             src='/icons/waveform 1.svg'
-            className='md:w-20 md:h-20 w-10 h-10 hidden sm:inline'
+            className='lg:w-20 lg:h-20 w-10 h-10 hidden sm:inline'
           />
         </h1>
       </div>
-      <main className='h-full md:w-11/12'>
+      <main className='w-11/12'>
         <div className='flex lg:flex-row flex-col'>
           <FeaturedQuake />
           <FeatureQuakeWrapper />
