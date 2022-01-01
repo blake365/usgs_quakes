@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import FeaturedQuake from '../components/featureQuake'
+import FeatureQuakeWrapper from '../components/featureQuakeWrapper'
 import QuakeWrapper from '../components/quakeWrapper'
 // https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson
 
@@ -11,10 +12,10 @@ export default function Home() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <div className='font-bold w-full text-center md:p-5 p-2'>
-        <h1 className='md:text-6xl text-3xl w-full'>
+        <h1 className='md:text-6xl text-3xl w-full uppercase'>
           <img
             src='/icons/waveform 1.svg'
-            className='md:w-20 md:h-20 w-10 h-10 inline'
+            className='md:w-20 md:h-20 w-10 h-10 hidden sm:inline'
           />
           USGS Earthquake Feed
           <img
@@ -23,9 +24,12 @@ export default function Home() {
           />
         </h1>
       </div>
-      <main className='h-full'>
-        {/*<FeaturedQuake />*/}
-        <QuakeWrapper parameters={3} />
+      <main className='h-full md:w-11/12'>
+        <div className='flex lg:flex-row flex-col'>
+          <FeaturedQuake />
+          <FeatureQuakeWrapper />
+        </div>
+        <QuakeWrapper />
       </main>
 
       <footer className=''></footer>

@@ -103,9 +103,9 @@ export default function Quake(props) {
   }
 
   return (
-    <section className='w-full flex columns-2 border mt-5 border-stone-600 bg-stone-100 '>
+    <section className='w-full flex columns-2 border mb-4 border-stone-600 bg-stone-100 '>
       {props.quakeData.properties.mag < 4 ? (
-        <div className=' w-5 bg-stone-400 '></div>
+        <div className=' w-5 bg-green-400 '></div>
       ) : props.quakeData.properties.mag >= 6.5 ? (
         <div className=' w-5 bg-red-500 '></div>
       ) : props.quakeData.properties.mag >= 5 ? (

@@ -36,6 +36,7 @@ export default function QuakeWrapper() {
     'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&minmagnitude=6&limit=5'
   )
   const [quakes, setQuakes] = useState([])
+  const [meta, setMeta] = useState([])
 
   // https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2014-01-01&endtime=2014-01-02
 
@@ -48,6 +49,7 @@ export default function QuakeWrapper() {
       })
       .then(function (data) {
         setQuakes(data.features)
+        setMeta(data.metadata)
         // console.log(data.features)
       })
   }, [fetchString])
@@ -59,6 +61,17 @@ export default function QuakeWrapper() {
   //     sort: value,
   //   })
   // }
+
+  const handleResetFields = evt => {
+    evt.preventDefault()
+    setMinMag(0)
+    setMaxMag(10)
+    setLat('')
+    setLong('')
+    setRadius('')
+    setStart('')
+    setEnd(today)
+  }
 
   const startString =
     'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&'
@@ -114,16 +127,39 @@ export default function QuakeWrapper() {
       startDateString +
       endDateString +
       '&limit=100' +
-      orderString
+      orderString +
+      '&jsonerror=true'
 
     setFetch(fetchString)
   }
 
   return (
-    <div className='sm:columns-2 xl:columns-auto columns-1 gap-5 p-5 md:min-w-full'>
-      <div className='border border-stone-500 p-2 pb-0 text-center bg-stone-100'>
-        <h3 className='font-bold text-lg'>Earthquake Search Filter:</h3>
-        <p className='text-stone-600 text-sm'>Limited to 100 results</p>
+    <div className=' columns-1 gap-5 p-5 w-full'>
+      <div className='border border-stone-500 p-2 pb-0 text-center bg-stone-100 mb-5'>
+        <div className='flex justify-between'>
+          <button
+            type='submit'
+            className='bg-orange-200 rounded-md border border-orange-700 hover:bg-orange-50 px-1 text-center invisible'
+            onClick={handleResetFields}
+          >
+            Reset
+          </button>
+          <div>
+            <h3 className='font-bold text-lg block'>
+              Earthquake Search Filter:
+            </h3>
+            <p className='text-stone-600 text-sm block'>
+              Limited to 100 results
+            </p>
+          </div>
+          <button
+            type='submit'
+            className='bg-stone-200 rounded-md border h-fit align-middle border-stone-700 hover:bg-stone-50 px-1 text-center'
+            onClick={handleResetFields}
+          >
+            Reset
+          </button>
+        </div>
         <form className='font-bold'>
           <div className='m-2 block border-y py-2 border-stone-600 text-center'>
             <label className='p-1 inline-block'>
@@ -257,6 +293,9 @@ export default function QuakeWrapper() {
               Find Earthquakes
             </button>
           </div>
+          <div className='text-red-600 text-sm font-normal m-2'>
+            {meta.error}
+          </div>
           <div className='text-stone-600 text-sm font-normal m-2'>
             {quakes.length} Earthquakes found
           </div>
@@ -268,19 +307,7 @@ export default function QuakeWrapper() {
           return <Quake quakeData={quake} key={quake.id} />
         })
       ) : (
-        <div>
-          No Earthquakes Found
-          <Map
-            provider={stamenTerrain}
-            dprs={[1, 2]}
-            height={300}
-            defaultCenter={[latitude, longitude]}
-            defaultZoom={4}
-          >
-            <ZoomControl />
-            <Marker width={30} anchor={[latitude, longitude]} />
-          </Map>
-        </div>
+        <div></div>
       )}
     </div>
   )

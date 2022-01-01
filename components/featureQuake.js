@@ -4,11 +4,9 @@ import { stamenTerrain } from 'pigeon-maps/providers'
 
 export default function FeaturedQuake() {
   const [quakes, setQuakes] = useState([])
-  const [details, setDetails] = useState([])
+  const [details, setDetails] = useState({})
 
   // https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2014-01-01&endtime=2014-01-02
-
-  // TODO: string builder for fetch request
 
   let today = ''
   function getDateString() {
@@ -20,26 +18,40 @@ export default function FeaturedQuake() {
   today = getDateString()
 
   let startString =
-    'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&endtime='
-
-  let fetchString = startString + today + '&minmagnitude=7&limit=1'
+    'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&alertlevel=red&minmagnitude=6.5&starttime=2020-01-01&limit=1'
 
   useEffect(() => {
-    fetch(fetchString)
+    fetch(startString)
       .then(function (response) {
         return response.json()
       })
       .then(function (data) {
-        setQuakes(data.features)
-        console.log(data.features)
+        // console.log(data)
+        fetch(data.features[0].properties.detail)
+          .then(function (response) {
+            return response.json()
+          })
+          .then(function (data) {
+            console.log(data.properties)
+            setDetails(data)
+          })
       })
   }, [])
+
+  // console.log(details.properties)
+
+  //earthquake.usgs.gov/product/shakemap/us7000f93v/us/1632532448210/download/intensity.jpg
+  //earthquake.usgs.gov/product/shakemap/us7000f93v/us/1632532514552/download/intensity.jpg
+  //earthquake.usgs.gov/product/shakemap/us7000f93v/us/1640260509523/download/intensity.jpg
+
+  // details.properties.products.shakemap[0].code
+  // details.properties.products.shakemap[0].updateTime
 
   // let quakeTime = new Date(quakes.properties.time)
 
   //*** This code is copyright 2002-2016 by Gavin Kistner, !@phrogz.net
   //*** It is covered under the license viewable at http://phrogz.net/JS/_ReuseLicense.txt
-  Date.prototype.customFormat = function (formatString) {
+  http: https: Date.prototype.customFormat = function (formatString) {
     var YYYY,
       YY,
       MMMM,
@@ -132,69 +144,112 @@ export default function FeaturedQuake() {
   }
 
   return (
-    <section>
-      <div className='flex flex-wrap items-center justify-around max-w-8xl mt-2 sm:w-full md:w-1/2'>
-        {quakes.length > 0 ? (
-          quakes.map(quake => {
-            return (
-              <div className='px-6 py-2 mt-4 text-left border border-yellow-400 rounded-none shadow-md bg-gradient-to-b from-yellow-400 to-white w-full'>
-                <h2 className='text-center text-xl font-bold'>
-                  Featured Quake
-                </h2>
-
-                <div className='flex justify-between'>
-                  <h3 className='text-2xl font-bold inline'>
-                    {quake.properties.place}
-                  </h3>
-                  <div
-                    style={{
-                      backgroundImage: "url('/icons/shockwave.svg')",
-                    }}
-                    className='inline w-15 h-15 py-1 px-2  text-blue-300 bg-auto bg-no-repeat bg-center font-bold'
-                  >
-                    {quake.properties.mag}
-                  </div>
-                </div>
-                <h4>
-                  {new Date(quake.properties.time).customFormat(
-                    '#MM#/#DD#/#YYYY# #hh#:#mm#:#ss#'
-                  )}
-                </h4>
-                <p className='mt-1 text-md'>
-                  Tsunami Potential: {quake.properties.tsunami}
-                </p>
-                <p className='mt-1 text-md'>
-                  location: {quake.geometry.coordinates[1]},{' '}
-                  {quake.geometry.coordinates[0]}
-                </p>
-
-                <Map
-                  provider={stamenTerrain}
-                  dprs={[1, 2]}
-                  height={200}
-                  defaultCenter={[
-                    quake.geometry.coordinates[1],
-                    quake.geometry.coordinates[0],
-                  ]}
-                  defaultZoom={4}
-                >
-                  <ZoomControl />
-                  <Marker
-                    color={quake.properties.alert}
-                    width={30}
-                    anchor={[
-                      quake.geometry.coordinates[1],
-                      quake.geometry.coordinates[0],
-                    ]}
-                  />
-                </Map>
+    <section className='px-2 lg:w-3/5 xl:w-3/5'>
+      {details.properties ? (
+        <section className='w-full  columns-1 border mt-5 border-stone-600 bg-stone-100 '>
+          <div className='p-1 text-center w-full border-b border-stone-600 text-2xl bg-amber-400 uppercase'>
+            Featured quake
+          </div>
+          <div className='px-5 text-left w-full py-2 '>
+            <div className='text-sm text-stone-800 flex columns-2 justify-between'>
+              <div className=''>
+                {new Date(details.properties.time).customFormat(
+                  '#MM#/#DD#/#YYYY# #hh#:#mm#:#ss#'
+                )}{' '}
+                UTC
               </div>
-            )
-          })
-        ) : (
-          <div>loading...</div>
-        )}
-      </div>
+              {details.properties.status === 'reviewed' ? (
+                <div className='pr-1 text-green-700'>
+                  {details.properties.status}
+                </div>
+              ) : (
+                <div className='pr-1 text-stone-700'>
+                  {details.properties.status.substring(0, 4)}
+                </div>
+              )}
+            </div>
+            <a
+              className='text-lg font-bold block hover:text-red-900 hover:underline pr-3 text-red-700'
+              href={details.properties.url}
+              target='_blank'
+            >
+              {details.properties.title}
+            </a>
+
+            <div className='text-lg leading-8 align-middle'>
+              <img src='/icons/shockwave.svg' className='w-7 h-7 inline' />{' '}
+              {Math.round(Math.abs(details.geometry.coordinates[1]) * 1000) /
+                1000}
+              &deg;
+              {details.geometry.coordinates[1] < 0 ? 'S' : 'N'},{' '}
+              {Math.round(Math.abs(details.geometry.coordinates[0]) * 1000) /
+                1000}
+              &deg;
+              {details.geometry.coordinates[0] < 0 ? 'W' : 'E'},{' '}
+              {Math.round(details.geometry.coordinates[2] * 100) / 100} km deep
+            </div>
+
+            <div className='leading-8 align-middle text-lg'>
+              <img src='/icons/waveform 1.svg' className='w-7 h-7 inline' />{' '}
+              {details.properties.mag} {details.properties.magType}
+            </div>
+            <div className='leading-8 align-middle text-lg'>
+              {details.properties.felt != null ? details.properties.felt : 0}{' '}
+              reports{' '}
+              <a
+                className='text-sm text-blue-600 hover:text-blue-800 hover:underline'
+                href={details.properties.url + '/tellus'}
+                target='_blank'
+              >
+                Did you feel it?
+              </a>
+            </div>
+            {/*}
+            <Map
+              provider={stamenTerrain}
+              dprs={[1, 2]}
+              height={300}
+              defaultCenter={[
+                details.geometry.coordinates[1],
+                details.geometry.coordinates[0],
+              ]}
+              defaultZoom={6}
+            >
+              <ZoomControl />
+              <Marker
+                color={details.properties.alert}
+                width={30}
+                anchor={[
+                  details.geometry.coordinates[1],
+                  details.geometry.coordinates[0],
+                ]}
+              />
+              </Map> */}
+            <div className='w-full'>
+              <img
+                className='w-10/12 max-w-lg h-auto object-cover m-auto'
+                src={`https://earthquake.usgs.gov/product/shakemap/${details.properties.products.shakemap[0].code}/us/${details.properties.products.shakemap[0].updateTime}/download/intensity.jpg
+          `}
+              />
+              {details.properties.products['general-text'] ? (
+                <div
+                  className='text-sm max-w-fit'
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      details.properties.products['general-text'][0].contents[
+                        ''
+                      ].bytes,
+                  }}
+                ></div>
+              ) : (
+                ''
+              )}
+            </div>
+          </div>
+        </section>
+      ) : (
+        <div>loading</div>
+      )}
     </section>
   )
 }
