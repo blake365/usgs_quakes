@@ -270,7 +270,7 @@ export default function FeaturedQuake() {
               {Math.round(details.geometry.coordinates[2] * 100) / 100} km deep
             </div>
             <div className='leading-8 align-middle text-lg mb-2'>
-              {details.properties.felt != null ? details.properties.felt : 0}{' '}
+              📝 {details.properties.felt != null ? details.properties.felt : 0}{' '}
               reports{' '}
               <a
                 className='text-sm text-blue-600 hover:text-blue-800 hover:underline'
