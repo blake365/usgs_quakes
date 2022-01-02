@@ -137,11 +137,11 @@ export default function Quake(props) {
           href={props.quakeData.properties.url}
           target='_blank'
         >
-          {props.quakeData.properties.place}
+          {props.quakeData.properties.title}
         </a>
 
         <div className='text-lg leading-8 align-middle'>
-          <img src='/icons/shockwave.svg' className='w-7 h-7 inline' />{' '}
+          🗺{' '}
           {Math.round(
             Math.abs(props.quakeData.geometry.coordinates[1]) * 1000
           ) / 1000}
@@ -155,10 +155,10 @@ export default function Quake(props) {
           {Math.round(props.quakeData.geometry.coordinates[2] * 100) / 100} km
           deep
         </div>
-        <div className='leading-8 align-middle text-lg'>
+        {/*<div className='leading-8 align-middle text-lg'>
           <img src='/icons/waveform 1.svg' className='w-7 h-7 inline' />{' '}
           {props.quakeData.properties.mag} {props.quakeData.properties.magType}
-        </div>
+          </div>*/}
         <div className='leading-8 align-middle text-lg'>
           {props.quakeData.properties.felt != null
             ? props.quakeData.properties.felt

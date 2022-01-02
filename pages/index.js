@@ -32,7 +32,16 @@ export default function Home() {
         <QuakeWrapper />
       </main>
 
-      <footer className=''></footer>
+      <footer className='w-full border-t border-stone-600 p-5 text-center text-lg'>
+        <div>Data provided by the United States Geological Survey</div>
+        <a
+          href='https://earthquake.usgs.gov/fdsnws/event/1/'
+          target='_blank'
+          className='underline text-blue-600 hover:text-blue-900'
+        >
+          API Documentation
+        </a>
+      </footer>
     </div>
   )
 }

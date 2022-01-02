@@ -4,6 +4,8 @@ import { stamenTerrain } from 'pigeon-maps/providers'
 
 export default function FeaturedQuake() {
   const [details, setDetails] = useState({})
+  const [tectonic, setTectonic] = useState({})
+  const [loading, isLoading] = useState(false)
 
   let today = ''
   function getDateString() {
@@ -14,32 +16,79 @@ export default function FeaturedQuake() {
 
   today = getDateString()
 
+  const randomFeature = max => {
+    return Math.floor(Math.random() * (max - 0)) + 0
+  }
+
   let startString =
-    'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&alertlevel=red&minmagnitude=6.5&starttime=2020-01-01&limit=1'
+    'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&alertlevel=red&minmagnitude=6&starttime=2021-01-01&limit=10'
+
+  let altString =
+    'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_month.geojson'
+
+  let tectonicSearch = 'https://earthquake.usgs.gov/ws/geoserve/regions.json?'
 
   useEffect(() => {
-    fetch(startString)
+    fetch(altString)
       .then(function (response) {
         return response.json()
       })
       .then(function (data) {
         // console.log(data)
-        fetch(data.features[0].properties.detail)
+        fetch(
+          data.features[randomFeature(data.features.length)].properties.detail
+        )
           .then(function (response) {
             return response.json()
           })
           .then(function (data) {
             // console.log(data.properties)
-            setDetails(data)
+            // console.log(
+            //   data.properties.products['general-text'][0].contents[''].bytes
+            //     .split('Tectonic Summary')[1]
+            //     .split('\n')
+            //     .filter(n => n)
+            // )
+
+            if (data.properties.products['general-text']) {
+              setDetails(data)
+            } else {
+              tectonicSearch =
+                tectonicSearch +
+                'latitude=' +
+                data.geometry.coordinates[1] +
+                '&longitude=' +
+                data.geometry.coordinates[0]
+
+              // console.log(tectonicSearch)
+
+              const fetchData = async () => {
+                isLoading(true)
+                const res = await fetch(tectonicSearch)
+                const json = await res.json()
+                // console.log(json)
+                setTectonic(json.tectonic.features)
+                isLoading(false)
+              }
+              fetchData()
+              setDetails(data)
+            }
           })
       })
   }, [])
+
+  // console.log(tectonic)
 
   // console.log(details.properties)
 
   //earthquake.usgs.gov/product/shakemap/us7000f93v/us/1632532448210/download/intensity.jpg
   //earthquake.usgs.gov/product/shakemap/us7000f93v/us/1632532514552/download/intensity.jpg
   //earthquake.usgs.gov/product/shakemap/us7000f93v/us/1640260509523/download/intensity.jpg
+
+  //earthquake.usgs.gov/realtime/product/shakemap/021gbh4rso/ak/1640127973752/download/intensity.jpg
+  // "021gbh4rso" 1640127973752
+
+  //earthquake.usgs.gov/ws/geoserve/regions.json?latitude=39.5&longitude=-105
 
   // details.properties.products.shakemap[0].code
   // details.properties.products.shakemap[0].updateTime
@@ -174,7 +223,7 @@ export default function FeaturedQuake() {
             </a>
 
             <div className='text-lg leading-8 align-middle'>
-              <img src='/icons/shockwave.svg' className='w-7 h-7 inline' />{' '}
+              🗺{' '}
               {Math.round(Math.abs(details.geometry.coordinates[1]) * 1000) /
                 1000}
               &deg;
@@ -185,12 +234,7 @@ export default function FeaturedQuake() {
               {details.geometry.coordinates[0] < 0 ? 'W' : 'E'},{' '}
               {Math.round(details.geometry.coordinates[2] * 100) / 100} km deep
             </div>
-
-            <div className='leading-8 align-middle text-lg'>
-              <img src='/icons/waveform 1.svg' className='w-7 h-7 inline' />{' '}
-              {details.properties.mag} {details.properties.magType}
-            </div>
-            <div className='leading-8 align-middle text-lg'>
+            <div className='leading-8 align-middle text-lg mb-2'>
               {details.properties.felt != null ? details.properties.felt : 0}{' '}
               reports{' '}
               <a
@@ -203,74 +247,83 @@ export default function FeaturedQuake() {
             </div>
             <div className='w-full'>
               <img
-                className='w-10/12 max-w-lg h-auto object-cover m-auto border border-stone-600'
-                src={`https://earthquake.usgs.gov/product/shakemap/${details.properties.products.shakemap[0].code}/us/${details.properties.products.shakemap[0].updateTime}/download/intensity.jpg
-          `}
+                className='w-10/12 max-w-lg h-auto object-cover m-auto border border-stone-600 mb-5'
+                src={`https://earthquake.usgs.gov/product/shakemap/${details.properties.products.shakemap[0].code}/${details.properties.products.shakemap[0].source}/${details.properties.products.shakemap[0].updateTime}/download/intensity.jpg`}
               />
+              <div className='max-h-screen overflow-scroll'>
+                {details.properties.products['impact-text'] ? (
+                  <div className=''>
+                    <div className='text-2xl mb-1 font-bold'>Human Impact</div>
+                    <div
+                      className='text-sm mb-1'
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          details.properties.products['impact-text'][0]
+                            .contents[''].bytes,
+                      }}
+                    ></div>
+                  </div>
+                ) : (
+                  ''
+                )}
 
-              {details.properties.products['impact-text'] ? (
-                <div className='pt-4'>
-                  <div className='text-lg mb-1 font-bold'>Human Impact</div>
-                  <div
-                    className='text-sm mb-1'
-                    dangerouslySetInnerHTML={{
-                      __html:
-                        details.properties.products['impact-text'][0].contents[
-                          ''
-                        ].bytes,
-                    }}
-                  ></div>
-                </div>
-              ) : (
-                ''
-              )}
-
-              {details.properties.products['general-text'] ? (
-                <div className='pt-4'>
-                  <div
-                    className='text-lg mb-1 font-bold'
-                    dangerouslySetInnerHTML={{
-                      __html: details.properties.products[
-                        'general-text'
-                      ][0].contents[''].bytes
-                        .split('\n')
-                        .filter(n => n)[0],
-                    }}
-                  ></div>
-                  <div
-                    className='text-sm max-w-fit mb-1.5'
-                    dangerouslySetInnerHTML={{
-                      __html: details.properties.products[
-                        'general-text'
-                      ][0].contents[''].bytes
-                        .split('\n')
-                        .filter(n => n)[2],
-                    }}
-                  ></div>
-                  <div
-                    className='text-sm max-w-fit mb-1.5'
-                    dangerouslySetInnerHTML={{
-                      __html: details.properties.products[
-                        'general-text'
-                      ][0].contents[''].bytes
-                        .split('\n')
-                        .filter(n => n)[4],
-                    }}
-                  ></div>
-                  <div
-                    className='text-sm max-w-fit mb-1.5'
-                    dangerouslySetInnerHTML={{
-                      __html: details.properties.products[
-                        'general-text'
-                      ][0].contents[''].bytes
-                        .split('\n')
-                        .filter(n => n)[6],
-                    }}
-                  ></div>
-                </div>
-              ) : (
-                ''
-              )}
+                {(() => {
+                  if (details.properties.products['general-text']) {
+                    return (
+                      <div>
+                        <div className='text-2xl mb-1 font-bold'>
+                          Tectonic Summary
+                        </div>
+                        {details.properties.products[
+                          'general-text'
+                        ][0].contents[''].bytes
+                          .split('Tectonic Summary')[1]
+                          .split('\n')
+                          .filter(n => n)
+                          .map((item, index) => {
+                            return (
+                              <div
+                                key={index}
+                                className='text-sm mb-1.5'
+                                dangerouslySetInnerHTML={{
+                                  __html: item,
+                                }}
+                              ></div>
+                            )
+                          })}
+                      </div>
+                    )
+                  } else {
+                    if (loading) {
+                      return (
+                        <div className='w-full border mb-4 border-stone-600 bg-stone-100 text-center align-middle'>
+                          <div className='ldsripple mt-5'>
+                            <div></div>
+                            <div></div>
+                          </div>
+                        </div>
+                      )
+                    } else if (tectonic.length > 0) {
+                      // console.log(tectonic[0].properties.summary.length)
+                      return (
+                        <div>
+                          <div className='text-2xl mb-1 font-bold'>
+                            Tectonic Summary
+                          </div>
+                          <div
+                            className='text-sm mb-1'
+                            dangerouslySetInnerHTML={{
+                              __html: tectonic[0].properties.summary,
+                            }}
+                          ></div>
+                        </div>
+                      )
+                    } else {
+                      return <div></div>
+                    }
+                  }
+                })()}
+              </div>
             </div>
           </div>
         ) : (
