@@ -193,7 +193,7 @@ export default function QuakeWrapper() {
             <label className='p-1 inline-block xs:block'>
               Min Magnitude:{' '}
               <input
-                className='bg-stone-200 rounded-md border border-stone-700 hover:bg-blue-50 px-1 text-right w-10'
+                className='bg-stone-200 rounded-md border border-stone-700 hover:bg-blue-50 px-1 text-right w-14'
                 type='number'
                 value={minMag}
                 min='0'
@@ -206,7 +206,7 @@ export default function QuakeWrapper() {
             <label className='p-1 inline-block xs:block'>
               Max Magnitude:{' '}
               <input
-                className='bg-stone-200 rounded-md border border-stone-700 hover:bg-blue-50 px-1 text-right w-12'
+                className='bg-stone-200 rounded-md border border-stone-700 hover:bg-blue-50 px-1 text-right w-14'
                 type='number'
                 value={maxMag}
                 min='0'

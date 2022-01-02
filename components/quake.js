@@ -117,6 +117,7 @@ export default function Quake(props) {
       <div className='pl-3 p-1 text-left w-full border-l border-stone-600 '>
         <div className='text-sm text-stone-800 flex columns-2 justify-between'>
           <div className=''>
+            {' '}
             {new Date(props.quakeData.properties.time).customFormat(
               '#MM#/#DD#/#YYYY# #hh#:#mm#:#ss#'
             )}{' '}
@@ -133,7 +134,7 @@ export default function Quake(props) {
           )}
         </div>
         <a
-          className='text-lg font-bold block hover:text-blue-900 hover:underline pr-3 text-blue-700'
+          className='text-lg font-bold hover:text-blue-900 hover:underline pr-3 text-blue-700'
           href={props.quakeData.properties.url}
           target='_blank'
         >
@@ -160,6 +161,7 @@ export default function Quake(props) {
           {props.quakeData.properties.mag} {props.quakeData.properties.magType}
           </div>*/}
         <div className='leading-8 align-middle text-lg'>
+          📝{' '}
           {props.quakeData.properties.felt != null
             ? props.quakeData.properties.felt
             : 0}{' '}

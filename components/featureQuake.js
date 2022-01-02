@@ -20,16 +20,25 @@ export default function FeaturedQuake() {
     return Math.floor(Math.random() * (max - 0)) + 0
   }
 
-  let startString =
+  let redString =
     'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&alertlevel=red&minmagnitude=6&starttime=2021-01-01&limit=10'
 
-  let altString =
+  let orangeString =
+    'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&alertlevel=orange&minmagnitude=6&starttime=2021-01-01&limit=10'
+
+  let sigString =
     'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_month.geojson'
+
+  let fetchStrings = [redString, orangeString, sigString]
+
+  const randomFetchString = () => {
+    return Math.floor(Math.random() * (3 - 0)) + 0
+  }
 
   let tectonicSearch = 'https://earthquake.usgs.gov/ws/geoserve/regions.json?'
 
   useEffect(() => {
-    fetch(altString)
+    fetch(fetchStrings[randomFetchString()])
       .then(function (response) {
         return response.json()
       })
@@ -42,7 +51,7 @@ export default function FeaturedQuake() {
             return response.json()
           })
           .then(function (data) {
-            // console.log(data.properties)
+            console.log(data.properties)
             // console.log(
             //   data.properties.products['general-text'][0].contents[''].bytes
             //     .split('Tectonic Summary')[1]
@@ -214,13 +223,39 @@ export default function FeaturedQuake() {
                 </div>
               )}
             </div>
-            <a
-              className='text-3xl font-bold  hover:text-red-900 hover:underline pr-3 text-red-700'
-              href={details.properties.url}
-              target='_blank'
-            >
-              {details.properties.title}
-            </a>
+            {details.properties.alert === 'orange' ? (
+              <a
+                className='text-3xl font-bold  hover:text-orange-800 hover:underline pr-3 text-orange-600'
+                href={details.properties.url}
+                target='_blank'
+              >
+                {details.properties.title}
+              </a>
+            ) : details.properties.alert === 'red' ? (
+              <a
+                className='text-3xl font-bold  hover:text-red-900 hover:underline pr-3 text-red-700'
+                href={details.properties.url}
+                target='_blank'
+              >
+                {details.properties.title}
+              </a>
+            ) : details.properties.alert === 'yellow' ? (
+              <a
+                className='text-3xl font-bold  hover:text-amber-600 hover:underline pr-3 text-amber-400'
+                href={details.properties.url}
+                target='_blank'
+              >
+                {details.properties.title}
+              </a>
+            ) : (
+              <a
+                className='text-3xl font-bold  hover:text-green-900 hover:underline pr-3 text-green-700'
+                href={details.properties.url}
+                target='_blank'
+              >
+                {details.properties.title}
+              </a>
+            )}
 
             <div className='text-lg leading-8 align-middle'>
               🗺{' '}
@@ -250,7 +285,7 @@ export default function FeaturedQuake() {
                 className='w-10/12 max-w-lg h-auto object-cover m-auto border border-stone-600 mb-5'
                 src={`https://earthquake.usgs.gov/product/shakemap/${details.properties.products.shakemap[0].code}/${details.properties.products.shakemap[0].source}/${details.properties.products.shakemap[0].updateTime}/download/intensity.jpg`}
               />
-              <div className='max-h-screen overflow-scroll'>
+              <div className='max-h-[600px] overflow-scroll p-4 mb-2 border border-stone-600'>
                 {details.properties.products['impact-text'] ? (
                   <div className=''>
                     <div className='text-2xl mb-1 font-bold'>Human Impact</div>
