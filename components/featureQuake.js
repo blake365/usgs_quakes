@@ -51,7 +51,7 @@ export default function FeaturedQuake() {
             return response.json()
           })
           .then(function (data) {
-            console.log(data.properties)
+            // console.log(data.properties)
             // console.log(
             //   data.properties.products['general-text'][0].contents[''].bytes
             //     .split('Tectonic Summary')[1]
@@ -85,6 +85,8 @@ export default function FeaturedQuake() {
           })
       })
   }, [])
+
+  let now = new Date()
 
   // console.log(tectonic)
 
@@ -209,9 +211,8 @@ export default function FeaturedQuake() {
             <div className='text-sm text-stone-800 flex columns-2 justify-between'>
               <div className=''>
                 {new Date(details.properties.time).customFormat(
-                  '#MM#/#DD#/#YYYY# #hh#:#mm#:#ss#'
-                )}{' '}
-                UTC
+                  '#MM#/#DD#/#YYYY# #hh#:#mm#:#ss# #AMPM#'
+                )}
               </div>
               {details.properties.status === 'reviewed' ? (
                 <div className='pr-1 text-green-700'>
@@ -257,8 +258,8 @@ export default function FeaturedQuake() {
               </a>
             )}
 
-            <div className='text-lg leading-8 align-middle'>
-              🗺{' '}
+            <div className='md:text-lg leading-8 align-middle text-md'>
+              <div className='text-lg inline align-middle'>🗺 </div>
               {Math.round(Math.abs(details.geometry.coordinates[1]) * 1000) /
                 1000}
               &deg;
@@ -272,13 +273,17 @@ export default function FeaturedQuake() {
             <div className='leading-8 align-middle text-lg mb-2'>
               📝 {details.properties.felt != null ? details.properties.felt : 0}{' '}
               reports{' '}
-              <a
-                className='text-sm text-blue-600 hover:text-blue-800 hover:underline'
-                href={details.properties.url + '/tellus'}
-                target='_blank'
-              >
-                Did you feel it?
-              </a>
+              {(now - details.properties.time) / (1000 * 60 * 60 * 24) > 30 ? (
+                ''
+              ) : (
+                <a
+                  className='text-sm text-blue-600 hover:text-blue-800 hover:underline'
+                  href={details.properties.url + '/tellus'}
+                  target='_blank'
+                >
+                  Did you feel it?
+                </a>
+              )}
             </div>
             <div className='w-full'>
               <img

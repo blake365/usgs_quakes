@@ -102,6 +102,8 @@ export default function Quake(props) {
       .replace('#AMPM#', AMPM)
   }
 
+  let now = new Date()
+
   return (
     <section className='w-full flex columns-2 border mb-4 border-stone-600 bg-stone-100 '>
       {props.quakeData.properties.mag < 4 ? (
@@ -119,9 +121,8 @@ export default function Quake(props) {
           <div className=''>
             {' '}
             {new Date(props.quakeData.properties.time).customFormat(
-              '#MM#/#DD#/#YYYY# #hh#:#mm#:#ss#'
-            )}{' '}
-            UTC
+              '#MM#/#DD#/#YYYY# #hh#:#mm#:#ss# #AMPM#'
+            )}
           </div>
           {props.quakeData.properties.status === 'reviewed' ? (
             <div className='pr-1 text-green-700'>
@@ -141,8 +142,8 @@ export default function Quake(props) {
           {props.quakeData.properties.title}
         </a>
 
-        <div className='text-lg leading-8 align-middle'>
-          🗺{' '}
+        <div className='md:text-lg leading-8 align-middle text-sm'>
+          <div className='text-lg inline align-middle'>🗺 </div>
           {Math.round(
             Math.abs(props.quakeData.geometry.coordinates[1]) * 1000
           ) / 1000}
@@ -166,13 +167,18 @@ export default function Quake(props) {
             ? props.quakeData.properties.felt
             : 0}{' '}
           reports{' '}
-          <a
-            className='text-sm text-blue-600 hover:text-blue-800 hover:underline'
-            href={props.quakeData.properties.url + '/tellus'}
-            target='_blank'
-          >
-            Did you feel it?
-          </a>
+          {(now - props.quakeData.properties.time) / (1000 * 60 * 60 * 24) >
+          30 ? (
+            ''
+          ) : (
+            <a
+              className='text-sm text-blue-600 hover:text-blue-800 hover:underline'
+              href={props.quakeData.properties.url + '/tellus'}
+              target='_blank'
+            >
+              Did you feel it?
+            </a>
+          )}
         </div>
       </div>
     </section>
