@@ -202,7 +202,7 @@ export default function FeaturedQuake() {
 
   return (
     <section className='px-2 lg:w-3/5 xl:w-3/5 '>
-      <section className='w-full columns-1 border mt-5  border-stone-600 bg-stone-100'>
+      <section className='w-full columns-1 border mt-5  border-stone-600 bg-stone-100 rounded-lg overflow-hidden shadow-lg'>
         <div className='p-1 text-center w-full border-b border-stone-600 text-2xl bg-amber-400 uppercase'>
           Featured quake
         </div>
@@ -287,10 +287,10 @@ export default function FeaturedQuake() {
             </div>
             <div className='w-full'>
               <img
-                className='w-10/12 max-w-lg h-auto object-cover m-auto border border-stone-600 mb-5'
+                className='max-h-[95vh] max-w-full h-auto object-cover m-auto border border-stone-600 mb-5 rounded-md'
                 src={`https://earthquake.usgs.gov/product/shakemap/${details.properties.products.shakemap[0].code}/${details.properties.products.shakemap[0].source}/${details.properties.products.shakemap[0].updateTime}/download/intensity.jpg`}
               />
-              <div className='max-h-[600px] overflow-scroll p-4 mb-2 border border-stone-600'>
+              <div className='max-h-[600px] overflow-scroll p-4 mb-3 border border-stone-600 rounded-md bg-stone-200'>
                 {details.properties.products['impact-text'] ? (
                   <div className=''>
                     <div className='text-2xl mb-1 font-bold'>Human Impact</div>

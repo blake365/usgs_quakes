@@ -1,7 +1,4 @@
-import React from 'react'
-import { useEffect, useState } from 'react'
-import { Map, Marker, ZoomControl } from 'pigeon-maps'
-import { stamenTerrain } from 'pigeon-maps/providers'
+// import React from 'react'
 
 export default function Quake(props) {
   //   const [detailsLink, setDetailsLink] = useState('')
@@ -104,19 +101,21 @@ export default function Quake(props) {
 
   let now = new Date()
 
+  // console.log(props.quakeData.properties.title)
+
   return (
-    <section className='w-full flex columns-2 border mb-4 border-stone-600 bg-stone-100 '>
+    <section className='w-full flex columns-2 border mb-4 border-stone-600 bg-stone-100 rounded-lg shadow-md overflow-hidden'>
       {props.quakeData.properties.mag < 4 ? (
-        <div className=' w-5 bg-green-400 '></div>
+        <div className=' w-5 bg-green-400'></div>
       ) : props.quakeData.properties.mag >= 6.5 ? (
         <div className=' w-5 bg-red-500 '></div>
       ) : props.quakeData.properties.mag >= 5 ? (
         <div className=' w-5 bg-orange-500 '></div>
       ) : (
-        <div className=' w-5 bg-yellow-400 '></div>
+        <div className=' w-5 bg-yellow-300 '></div>
       )}
 
-      <div className='pl-3 p-1 text-left w-full border-l border-stone-600 '>
+      <div className='pl-3 p-1 text-left w-full border-l border-stone-600'>
         <div className='text-sm text-stone-800 flex columns-2 justify-between'>
           <div className=''>
             {' '}

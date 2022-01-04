@@ -11,16 +11,16 @@ export default function Home() {
         <title>USGS Earthquakes</title>
         <link rel='icon' href='/icons/waveform 1.ico' />
       </Head>
-      <div className='font-bold w-full text-center p-2 pb-0'>
-        <h1 className='lg:text-6xl md:text-4xl text-3xl w-full uppercase'>
+      <div className='flex font-semibold w-full text-center p-2  h-20 align-middle overflow-hidden'>
+        <h1 className='lg:text-6xl md:text-5xl sm:text-3xl text-2xl w-full uppercase my-auto'>
           <img
             src='/icons/waveform 1.svg'
-            className='lg:w-20 lg:h-20 w-10 h-10 hidden sm:inline'
+            className='md:w-20 md:h-20 w-10 h-10 hidden sm:inline'
           />{' '}
           USGS Earthquake Feed{' '}
           <img
             src='/icons/waveform 1.svg'
-            className='lg:w-20 lg:h-20 w-10 h-10 hidden sm:inline'
+            className='md:w-20 md:h-20 w-10 h-10 hidden sm:inline'
           />
         </h1>
       </div>
@@ -32,7 +32,7 @@ export default function Home() {
         <QuakeWrapper />
       </main>
 
-      <footer className='w-full border-t border-stone-600 p-5 text-center text-lg'>
+      <footer className='w-full border-y border-stone-600 p-5 text-center text-lg bg-stone-100'>
         <div>Data provided by the United States Geological Survey</div>
         <a
           href='https://earthquake.usgs.gov/fdsnws/event/1/'

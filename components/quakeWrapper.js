@@ -1,19 +1,7 @@
 import { useState, useEffect } from 'react'
 import Quake from './quake'
-import { Map, Marker, ZoomControl } from 'pigeon-maps'
-import { stamenTerrain } from 'pigeon-maps/providers'
-import Search from './search'
-// import styles from './styles.css'
 
 export default function QuakeWrapper() {
-  // let locationAvailable
-
-  // if ('geolocation' in navigator) {
-  //   locationAvailable = true
-  // } else {
-  //   locationAvailable = false
-  // }
-
   let today = ''
   let startDefault = ''
 
@@ -47,18 +35,6 @@ export default function QuakeWrapper() {
   const [quakes, setQuakes] = useState([])
   const [meta, setMeta] = useState([])
   const [loading, isLoading] = useState(false)
-
-  // useEffect(() => {
-  //   fetch(fetchString)
-  //     .then(function (response) {
-  //       return response.json()
-  //     })
-  //     .then(function (data) {
-  //       setQuakes(data.features)
-  //       setMeta(data.metadata)
-  //       // console.log(data.features)
-  //     })
-  // }, [fetchString])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -162,12 +138,12 @@ export default function QuakeWrapper() {
   }
 
   return (
-    <div className=' columns-1 gap-4 pt-4 w-full min-h-max p-2'>
-      <div className='border border-stone-500 pb-0 text-center bg-stone-100 mb-5'>
+    <div className=' columns-1 gap-4 w-full min-h-max p-2 mt-5'>
+      <div className='border border-stone-500 pb-0 text-center bg-stone-50 mb-5 rounded-md overflow-hidden'>
         <div className='flex justify-between bg-amber-400 p-1'>
           <button
             type='submit'
-            className='bg-orange-200 rounded-md border border-orange-700 hover:bg-orange-50 px-1 text-center invisible'
+            className='bg-orange-200 rounded-md border border-orange-700 hover:bg-orange-50 px-1 text-center m-1 invisible'
             onClick={handleResetFields}
           >
             Reset
@@ -180,13 +156,15 @@ export default function QuakeWrapper() {
               Limited to 100 results
             </p>
           </div>
-          <button
-            type='submit'
-            className='bg-stone-200 rounded-md border h-fit align-middle border-stone-700 hover:bg-stone-50 px-1 text-center m-3'
-            onClick={handleResetFields}
-          >
-            Reset
-          </button>
+          <div className='align-middle h-auto my-auto'>
+            <button
+              type='submit'
+              className='bg-stone-200 rounded-md border border-stone-700 hover:bg-stone-50 px-1 text-center m-1'
+              onClick={handleResetFields}
+            >
+              Reset
+            </button>
+          </div>
         </div>
         <form className='font-bold'>
           <div className=' block border-y py-2 border-stone-600 text-center'>
@@ -325,7 +303,7 @@ export default function QuakeWrapper() {
           <div className='m-2 mb-1 block text-center'>
             <button
               type='submit'
-              className='bg-blue-200 rounded-md border border-blue-700 hover:bg-blue-50 px-2 py-1 text-center'
+              className='bg-amber-400 rounded-md border-2 border-stone-700 hover:bg-amber-200 px-2 py-1 text-center'
               onClick={handleFetchChange}
             >
               Find Earthquakes

@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  background-color: rgb(214 211 209)
+}
+
 .ldsripple {
     display: inline-block;
     position: relative;

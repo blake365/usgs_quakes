@@ -7,23 +7,13 @@ export default function FeatureQuakeWrapper() {
 
   const fetchString =
     'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&minmagnitude=2&limit=10'
-  // https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2014-01-01&endtime=2014-01-02
-
-  // useEffect(() => {
-  //   fetch(fetchString)
-  //     .then(function (response) {
-  //       return response.json()
-  //     })
-  //     .then(function (data) {
-  //       setQuakes(data.features)
-  //       // console.log(data.features)
-  //     })
-  // }, [])
 
   useEffect(() => {
     const fetchData = async () => {
       isLoading(true)
       const res = await fetch(fetchString)
+
+      // console.log(res)
       const json = await res.json()
       // console.log(json)
       setQuakes(json.features)
@@ -33,8 +23,8 @@ export default function FeatureQuakeWrapper() {
   }, [])
 
   return (
-    <div className='block columns-1 px-2 pt-0 w-full lg:w-2/5 xl:w-2/5'>
-      <div className='w-full text-center bg-amber-400 border border-stone-600 border-b-0 mt-5 md:text-2xl uppercase p-1 text-xl'>
+    <div className='block columns-1 px-2 pt-0 w-full lg:w-2/5 xl:w-2/5 mt-5'>
+      <div className='w-full text-center bg-amber-400 border border-stone-600 rounded-lg mb-2.5 md:text-2xl uppercase p-1 text-xl'>
         10 Most Recent Quakes: M {'>'} 2
       </div>
       {loading ? (
