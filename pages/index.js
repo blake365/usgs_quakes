@@ -2,16 +2,15 @@ import Head from 'next/head'
 import FeaturedQuake from '../components/featureQuake'
 import FeatureQuakeWrapper from '../components/featureQuakeWrapper'
 import QuakeWrapper from '../components/quakeWrapper'
-// https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson
 
 export default function Home() {
   return (
-    <div className='flex flex-col items-center justify-center  py-2 bg-stone-300 min-h-screen'>
+    <div className='flex flex-col items-center justify-center py-2 bg-stone-300 min-h-screen'>
       <Head>
         <title>USGS Earthquakes</title>
         <link rel='icon' href='/icons/waveform 1.ico' />
       </Head>
-      <div className='flex font-semibold w-full text-center p-2  h-20 align-middle overflow-hidden'>
+      <div className='flex font-semibold w-full text-center p-2 mt-5 h-20 align-middle overflow-hidden border-y border-stone-600 bg-stone-100'>
         <h1 className='lg:text-6xl md:text-5xl sm:text-3xl text-2xl w-full uppercase my-auto'>
           <img
             src='/icons/waveform 1.svg'

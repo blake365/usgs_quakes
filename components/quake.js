@@ -1,4 +1,5 @@
 // import React from 'react'
+import Link from 'next/link'
 
 export default function Quake(props) {
   //   const [detailsLink, setDetailsLink] = useState('')
@@ -160,24 +161,33 @@ export default function Quake(props) {
           <img src='/icons/waveform 1.svg' className='w-7 h-7 inline' />{' '}
           {props.quakeData.properties.mag} {props.quakeData.properties.magType}
           </div>*/}
-        <div className='leading-8 align-middle text-lg'>
-          📝{' '}
-          {props.quakeData.properties.felt != null
-            ? props.quakeData.properties.felt
-            : 0}{' '}
-          reports{' '}
-          {(now - props.quakeData.properties.time) / (1000 * 60 * 60 * 24) >
-          30 ? (
-            ''
-          ) : (
-            <a
-              className='text-sm text-blue-600 hover:text-blue-800 hover:underline'
-              href={props.quakeData.properties.url + '/tellus'}
-              target='_blank'
-            >
-              Did you feel it?
-            </a>
-          )}
+        <div className='text-sm text-stone-800 flex columns-2 justify-between leading-8 align-middle'>
+          <div className='pb-1 text-lg'>
+            📝{' '}
+            {props.quakeData.properties.felt != null
+              ? props.quakeData.properties.felt
+              : 0}{' '}
+            reports{' '}
+            {(now - props.quakeData.properties.time) / (1000 * 60 * 60 * 24) >
+            30 ? (
+              ''
+            ) : (
+              <a
+                className='text-sm text-blue-600 hover:text-blue-800 hover:underline'
+                href={props.quakeData.properties.url + '/tellus'}
+                target='_blank'
+              >
+                Did you feel it?
+              </a>
+            )}
+          </div>
+          <div className='align-middle pb-0 pr-2 text-sm sm:text-lg '>
+            <Link className='' href={`/details/${props.quakeData.id}`}>
+              <a className=' text-stone-600 hover:text-stone-800 underline'>
+                show details
+              </a>
+            </Link>
+          </div>
         </div>
       </div>
     </section>

@@ -1,110 +1,63 @@
-import { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+
 import { Map, Marker, ZoomControl } from 'pigeon-maps'
 import { stamenTerrain } from 'pigeon-maps/providers'
 
-export default function FeaturedQuake() {
+export default function Details() {
+  const router = useRouter()
+  const quakeID = router.query.id
+  // console.log()
+
   const [details, setDetails] = useState({})
   const [tectonic, setTectonic] = useState({})
+  const [offshore, setOffshore] = useState({})
   const [loading, isLoading] = useState(false)
 
-  let today = ''
-  function getDateString() {
-    let date = new Date().toISOString().slice(0, 10)
-    // console.log(typeof date)
-    return date
-  }
-
-  today = getDateString()
-
-  const randomFeature = max => {
-    return Math.floor(Math.random() * (max - 0)) + 0
-  }
-
-  let redString =
-    'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&alertlevel=red&minmagnitude=6&starttime=2021-01-01&limit=10'
-
-  let orangeString =
-    'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&alertlevel=orange&minmagnitude=6&starttime=2021-01-01&limit=10'
-
-  let sigString =
-    'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_month.geojson'
-
-  let fetchStrings = [sigString, sigString, sigString]
-
-  const randomFetchString = () => {
-    return Math.floor(Math.random() * (3 - 0)) + 0
-  }
+  let detailSearch =
+    'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventid=' +
+    quakeID
 
   let tectonicSearch = 'https://earthquake.usgs.gov/ws/geoserve/regions.json?'
 
   useEffect(() => {
-    fetch(fetchStrings[randomFetchString()])
+    fetch(detailSearch)
       .then(function (response) {
         return response.json()
       })
       .then(function (data) {
         // console.log(data)
-        fetch(
-          data.features[randomFeature(data.features.length)].properties.detail
-        )
-          .then(function (response) {
-            return response.json()
-          })
-          .then(function (data) {
-            // console.log(data.properties)
-            // console.log(
-            //   data.properties.products['general-text'][0].contents[''].bytes
-            //     .split('Tectonic Summary')[1]
-            //     .split('\n')
-            //     .filter(n => n)
-            // )
+        if (data.properties.products['general-text']) {
+          setDetails(data)
+        } else {
+          tectonicSearch =
+            tectonicSearch +
+            'latitude=' +
+            data.geometry.coordinates[1] +
+            '&longitude=' +
+            data.geometry.coordinates[0]
 
-            if (data.properties.products['general-text']) {
-              setDetails(data)
-            } else {
-              tectonicSearch =
-                tectonicSearch +
-                'latitude=' +
-                data.geometry.coordinates[1] +
-                '&longitude=' +
-                data.geometry.coordinates[0]
+          // console.log(tectonicSearch)
 
-              // console.log(tectonicSearch)
-
-              const fetchData = async () => {
-                isLoading(true)
-                const res = await fetch(tectonicSearch)
-                const json = await res.json()
-                // console.log(json)
-                setTectonic(json.tectonic.features)
-                isLoading(false)
-              }
-              fetchData()
-              setDetails(data)
-            }
-          })
+          const fetchData = async () => {
+            isLoading(true)
+            const res = await fetch(tectonicSearch)
+            const json = await res.json()
+            // console.log(json)
+            setTectonic(json.tectonic.features)
+            setOffshore(json.offshore)
+            isLoading(false)
+          }
+          fetchData()
+          setDetails(data)
+        }
       })
   }, [])
 
   let now = new Date()
 
-  // console.log(tectonic)
-
-  // console.log(details.properties)
-
-  //earthquake.usgs.gov/product/shakemap/us7000f93v/us/1632532448210/download/intensity.jpg
-  //earthquake.usgs.gov/product/shakemap/us7000f93v/us/1632532514552/download/intensity.jpg
-  //earthquake.usgs.gov/product/shakemap/us7000f93v/us/1640260509523/download/intensity.jpg
-
-  //earthquake.usgs.gov/realtime/product/shakemap/021gbh4rso/ak/1640127973752/download/intensity.jpg
-  // "021gbh4rso" 1640127973752
-
-  //earthquake.usgs.gov/ws/geoserve/regions.json?latitude=39.5&longitude=-105
-
-  // details.properties.products.shakemap[0].code
-  // details.properties.products.shakemap[0].updateTime
-
-  // let quakeTime = new Date(quakes.properties.time)
+  // console.log(details.properties.products)
+  // console.log(offshore)
 
   //*** This code is copyright 2002-2016 by Gavin Kistner, !@phrogz.net
   //*** It is covered under the license viewable at http://phrogz.net/JS/_ReuseLicense.txt
@@ -201,11 +154,29 @@ export default function FeaturedQuake() {
   }
 
   return (
-    <section className='px-2 lg:w-3/5 xl:w-3/5 '>
-      <section className='w-full columns-1 border mt-5  border-stone-600 bg-stone-100 rounded-lg overflow-hidden shadow-lg'>
-        <div className='p-1 text-center w-full border-b border-stone-600 text-2xl bg-amber-400 uppercase'>
-          Featured quake
-        </div>
+    <div className='bg-stone-300 w-full py-2'>
+      <div className='flex font-semibold w-full text-center p-2 mt-5 h-20 align-middle overflow-hidden border-y border-stone-600 bg-stone-100'>
+        <h1 className='lg:text-6xl md:text-5xl sm:text-3xl text-2xl w-full uppercase my-auto'>
+          <img
+            src='/icons/waveform 1.svg'
+            className='md:w-20 md:h-20 w-10 h-10 hidden sm:inline'
+          />
+
+          <a
+            href='/'
+            className='lg:text-6xl md:text-5xl sm:text-3xl text-2xl w-full uppercase text-black hover:no-underline'
+          >
+            {' '}
+            USGS Earthquake Feed{' '}
+          </a>
+
+          <img
+            src='/icons/waveform 1.svg'
+            className='md:w-20 md:h-20 w-10 h-10 hidden sm:inline'
+          />
+        </h1>
+      </div>
+      <main className=' md:max-w-4xl w-11/12 border my-5  border-stone-600 bg-stone-100 rounded-lg overflow-hidden shadow-lg m-auto'>
         {details.properties ? (
           <div className='px-5 text-left w-full py-2 '>
             <div className='text-sm text-stone-800 flex columns-2 justify-between'>
@@ -286,10 +257,40 @@ export default function FeaturedQuake() {
               )}
             </div>
             <div className='w-full'>
-              <img
-                className='max-h-[95vh] max-w-full h-auto object-cover m-auto border border-stone-600 mb-5 rounded-md'
-                src={`https://earthquake.usgs.gov/product/shakemap/${details.properties.products.shakemap[0].code}/${details.properties.products.shakemap[0].source}/${details.properties.products.shakemap[0].updateTime}/download/intensity.jpg`}
-              />
+              {details.properties.products['shakemap'] ? (
+                <img
+                  className='max-h-[95vh] max-w-full h-auto object-cover m-auto border border-stone-600 mb-5 rounded-md'
+                  src={`https://earthquake.usgs.gov/product/shakemap/${details.properties.products.shakemap[0].code}/${details.properties.products.shakemap[0].source}/${details.properties.products.shakemap[0].updateTime}/download/intensity.jpg`}
+                />
+              ) : (
+                <div className='border border-stone-600 rounded-lg overflow-hidden m-auto mb-5 w-11/12 h-[400px] justify-center'>
+                  <Map
+                    provider={stamenTerrain}
+                    dprs={[1, 2]}
+                    height={400}
+                    metaWheelZoom={true}
+                    mouseEvents={false}
+                    // touchEvents={false}
+                    defaultCenter={[
+                      details.geometry.coordinates[1],
+                      details.geometry.coordinates[0],
+                    ]}
+                    defaultZoom={7}
+                  >
+                    <ZoomControl />
+                    <Marker
+                      color={details.properties.alert}
+                      width={30}
+                      hover={false}
+                      anchor={[
+                        details.geometry.coordinates[1],
+                        details.geometry.coordinates[0],
+                      ]}
+                    />
+                  </Map>
+                </div>
+              )}
+
               <div className='max-h-[600px] overflow-scroll p-4 mb-3 border border-stone-600 rounded-md bg-stone-200'>
                 {details.properties.products['impact-text'] ? (
                   <div className=''>
@@ -358,8 +359,17 @@ export default function FeaturedQuake() {
                           ></div>
                         </div>
                       )
+                    } else if (offshore.features.length > 0) {
+                      return (
+                        <div>
+                          <div className='text-2xl mb-1 font-bold'>
+                            Offshore Region
+                          </div>
+                          <div>{offshore[0].name.description}</div>
+                        </div>
+                      )
                     } else {
-                      return <div>No Information Found</div>
+                      return <div>No Information Available</div>
                     }
                   }
                 })()}
@@ -374,7 +384,23 @@ export default function FeaturedQuake() {
             </div>
           </div>
         )}
-      </section>
-    </section>
+      </main>
+      <footer className='w-full border-y border-stone-600 p-5 text-center text-lg bg-stone-100'>
+        <div>Data provided by the United States Geological Survey</div>
+        <a
+          href='https://earthquake.usgs.gov/fdsnws/event/1/'
+          target='_blank'
+          className='underline text-blue-600 hover:text-blue-900'
+        >
+          API Documentation
+        </a>
+      </footer>
+    </div>
   )
+}
+
+export async function getServerSideProps(context) {
+  return {
+    props: {},
+  }
 }
