@@ -6,7 +6,7 @@ export default function FeatureQuakeWrapper() {
   const [loading, isLoading] = useState(false)
 
   const fetchString =
-    'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&minmagnitude=2&limit=10'
+    'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&minmagnitude=2.5&limit=10'
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,7 +25,7 @@ export default function FeatureQuakeWrapper() {
   return (
     <div className='block columns-1 px-2 pt-0 w-full lg:w-2/5 xl:w-2/5 mt-5'>
       <div className='w-full text-center bg-amber-400 border border-stone-600 rounded-lg mb-2.5 md:text-2xl uppercase p-1 text-xl'>
-        10 Most Recent Quakes: M {'>'} 2
+        10 Most Recent Quakes: M {'>'} 2.5
       </div>
       {loading ? (
         <div className='w-full border mb-4 border-stone-600 bg-stone-100 text-center align-middle'>

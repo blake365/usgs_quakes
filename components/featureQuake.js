@@ -51,14 +51,6 @@ export default function FeaturedQuake() {
             return response.json()
           })
           .then(function (data) {
-            // console.log(data.properties)
-            // console.log(
-            //   data.properties.products['general-text'][0].contents[''].bytes
-            //     .split('Tectonic Summary')[1]
-            //     .split('\n')
-            //     .filter(n => n)
-            // )
-
             if (data.properties.products['general-text']) {
               setDetails(data)
             } else {
@@ -87,24 +79,6 @@ export default function FeaturedQuake() {
   }, [])
 
   let now = new Date()
-
-  // console.log(tectonic)
-
-  // console.log(details.properties)
-
-  //earthquake.usgs.gov/product/shakemap/us7000f93v/us/1632532448210/download/intensity.jpg
-  //earthquake.usgs.gov/product/shakemap/us7000f93v/us/1632532514552/download/intensity.jpg
-  //earthquake.usgs.gov/product/shakemap/us7000f93v/us/1640260509523/download/intensity.jpg
-
-  //earthquake.usgs.gov/realtime/product/shakemap/021gbh4rso/ak/1640127973752/download/intensity.jpg
-  // "021gbh4rso" 1640127973752
-
-  //earthquake.usgs.gov/ws/geoserve/regions.json?latitude=39.5&longitude=-105
-
-  // details.properties.products.shakemap[0].code
-  // details.properties.products.shakemap[0].updateTime
-
-  // let quakeTime = new Date(quakes.properties.time)
 
   //*** This code is copyright 2002-2016 by Gavin Kistner, !@phrogz.net
   //*** It is covered under the license viewable at http://phrogz.net/JS/_ReuseLicense.txt
@@ -207,85 +181,104 @@ export default function FeaturedQuake() {
           Featured quake
         </div>
         {details.properties ? (
-          <div className='px-5 text-left w-full py-2 '>
-            <div className='text-sm text-stone-800 flex columns-2 justify-between'>
-              <div className=''>
-                {new Date(details.properties.time).customFormat(
-                  '#MM#/#DD#/#YYYY# #hh#:#mm#:#ss# #AMPM#'
+          <div className=' text-left w-full py-2 '>
+            <div className='border-b border-stone-600 mb-3 w-full px-5 pb-1 shadow-md'>
+              <div className='text-sm text-stone-800 flex columns-2 justify-between'>
+                <div className=''>
+                  {new Date(details.properties.time).customFormat(
+                    '#MM#/#DD#/#YYYY# #hh#:#mm#:#ss# #AMPM#'
+                  )}
+                </div>
+                {details.properties.status === 'reviewed' ? (
+                  <div className='pr-1 text-green-700'>
+                    {details.properties.status}
+                  </div>
+                ) : (
+                  <div className='pr-1 text-stone-700'>
+                    {details.properties.status.substring(0, 4)}
+                  </div>
                 )}
               </div>
-              {details.properties.status === 'reviewed' ? (
-                <div className='pr-1 text-green-700'>
-                  {details.properties.status}
-                </div>
-              ) : (
-                <div className='pr-1 text-stone-700'>
-                  {details.properties.status.substring(0, 4)}
-                </div>
-              )}
-            </div>
-            {details.properties.alert === 'orange' ? (
-              <a
-                className='text-3xl font-bold  hover:text-orange-800 hover:underline pr-3 text-orange-600'
-                href={details.properties.url}
-                target='_blank'
-              >
-                {details.properties.title}
-              </a>
-            ) : details.properties.alert === 'red' ? (
-              <a
-                className='text-3xl font-bold  hover:text-red-900 hover:underline pr-3 text-red-700'
-                href={details.properties.url}
-                target='_blank'
-              >
-                {details.properties.title}
-              </a>
-            ) : details.properties.alert === 'yellow' ? (
-              <a
-                className='text-3xl font-bold  hover:text-amber-600 hover:underline pr-3 text-amber-400'
-                href={details.properties.url}
-                target='_blank'
-              >
-                {details.properties.title}
-              </a>
-            ) : (
-              <a
-                className='text-3xl font-bold  hover:text-green-900 hover:underline pr-3 text-green-700'
-                href={details.properties.url}
-                target='_blank'
-              >
-                {details.properties.title}
-              </a>
-            )}
-
-            <div className='md:text-lg leading-8 align-middle text-md'>
-              <div className='text-lg inline align-middle'>🗺 </div>
-              {Math.round(Math.abs(details.geometry.coordinates[1]) * 1000) /
-                1000}
-              &deg;
-              {details.geometry.coordinates[1] < 0 ? 'S' : 'N'},{' '}
-              {Math.round(Math.abs(details.geometry.coordinates[0]) * 1000) /
-                1000}
-              &deg;
-              {details.geometry.coordinates[0] < 0 ? 'W' : 'E'},{' '}
-              {Math.round(details.geometry.coordinates[2] * 100) / 100} km deep
-            </div>
-            <div className='leading-8 align-middle text-lg mb-2'>
-              📝 {details.properties.felt != null ? details.properties.felt : 0}{' '}
-              reports{' '}
-              {(now - details.properties.time) / (1000 * 60 * 60 * 24) > 30 ? (
-                ''
-              ) : (
+              {details.properties.alert === 'orange' ? (
                 <a
-                  className='text-sm text-blue-600 hover:text-blue-800 hover:underline'
-                  href={details.properties.url + '/tellus'}
+                  className='text-3xl font-bold  hover:text-orange-800 hover:underline pr-3 text-orange-600'
+                  href={details.properties.url}
                   target='_blank'
                 >
-                  Did you feel it?
+                  {details.properties.title}
+                </a>
+              ) : details.properties.alert === 'red' ? (
+                <a
+                  className='text-3xl font-bold  hover:text-red-900 hover:underline pr-3 text-red-700'
+                  href={details.properties.url}
+                  target='_blank'
+                >
+                  {details.properties.title}
+                </a>
+              ) : details.properties.alert === 'yellow' ? (
+                <a
+                  className='text-3xl font-bold  hover:text-amber-600 hover:underline pr-3 text-amber-400'
+                  href={details.properties.url}
+                  target='_blank'
+                >
+                  {details.properties.title}
+                </a>
+              ) : (
+                <a
+                  className='text-3xl font-bold  hover:text-green-900 hover:underline pr-3 text-green-700'
+                  href={details.properties.url}
+                  target='_blank'
+                >
+                  {details.properties.title}
                 </a>
               )}
+
+              <div className='md:text-lg leading-8 align-middle text-md'>
+                <div className='text-lg inline align-middle'>🗺 </div>
+                {Math.round(Math.abs(details.geometry.coordinates[1]) * 1000) /
+                  1000}
+                &deg;
+                {details.geometry.coordinates[1] < 0 ? 'S' : 'N'},{' '}
+                {Math.round(Math.abs(details.geometry.coordinates[0]) * 1000) /
+                  1000}
+                &deg;
+                {details.geometry.coordinates[0] < 0 ? 'W' : 'E'},{' '}
+                {Math.round(details.geometry.coordinates[2] * 100) / 100} km
+                deep
+              </div>
+              <div className='text-sm text-stone-800 flex columns-2 justify-between leading-8'>
+                <div className='pb-1 text-lg'>
+                  📝{' '}
+                  {details.properties.felt != null
+                    ? details.properties.felt
+                    : 0}{' '}
+                  reports{' '}
+                  {(now - details.properties.time) / (1000 * 60 * 60 * 24) >
+                  30 ? (
+                    ''
+                  ) : (
+                    <a
+                      className='text-sm text-blue-600 hover:text-blue-800 hover:underline'
+                      href={details.properties.url + '/tellus'}
+                      target='_blank'
+                    >
+                      Did you feel it?
+                    </a>
+                  )}
+                </div>
+                <div className='place-self-center pr-1 text-sm sm:text-lg '>
+                  <a
+                    href={details.properties.url}
+                    className=' text-green-800 font-bold border border-green-800 rounded-sm px-1 hover:bg-green-800 hover:text-white hover:no-underline'
+                    target='_blank'
+                    rel='noreffer'
+                  >
+                    USGS
+                  </a>
+                </div>
+              </div>
             </div>
-            <div className='w-full'>
+            <div className='w-full px-5'>
               <img
                 className='max-h-[95vh] max-w-full h-auto object-cover m-auto border border-stone-600 mb-5 rounded-md'
                 src={`https://earthquake.usgs.gov/product/shakemap/${details.properties.products.shakemap[0].code}/${details.properties.products.shakemap[0].source}/${details.properties.products.shakemap[0].updateTime}/download/intensity.jpg`}

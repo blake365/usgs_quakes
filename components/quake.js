@@ -134,14 +134,11 @@ export default function Quake(props) {
             </div>
           )}
         </div>
-        <a
-          className='text-lg font-bold hover:text-blue-900 hover:underline pr-3 text-blue-700'
-          href={props.quakeData.properties.url}
-          target='_blank'
-        >
-          {props.quakeData.properties.title}
-        </a>
-
+        <Link href={`/details/${props.quakeData.id}`}>
+          <a className='text-lg font-bold hover:text-blue-900 hover:underline pr-3 text-blue-700'>
+            {props.quakeData.properties.title}
+          </a>
+        </Link>
         <div className='md:text-lg leading-8 align-middle text-sm'>
           <div className='text-lg inline align-middle'>🗺 </div>
           {Math.round(
@@ -161,7 +158,7 @@ export default function Quake(props) {
           <img src='/icons/waveform 1.svg' className='w-7 h-7 inline' />{' '}
           {props.quakeData.properties.mag} {props.quakeData.properties.magType}
           </div>*/}
-        <div className='text-sm text-stone-800 flex columns-2 justify-between leading-8 align-middle'>
+        <div className='text-sm text-stone-800 flex columns-2 justify-between leading-8'>
           <div className='pb-1 text-lg'>
             📝{' '}
             {props.quakeData.properties.felt != null
@@ -181,12 +178,15 @@ export default function Quake(props) {
               </a>
             )}
           </div>
-          <div className='align-middle pb-0 pr-2 text-sm sm:text-lg '>
-            <Link className='' href={`/details/${props.quakeData.id}`}>
-              <a className=' text-stone-600 hover:text-stone-800 underline'>
-                show details
-              </a>
-            </Link>
+          <div className='place-self-center pr-1 text-sm sm:text-lg '>
+            <a
+              href={props.quakeData.properties.url}
+              className=' text-green-800 font-bold border border-green-800 rounded-sm px-1 hover:bg-green-800 hover:text-white hover:no-underline'
+              target='_blank'
+              rel='noreffer'
+            >
+              USGS
+            </a>
           </div>
         </div>
       </div>

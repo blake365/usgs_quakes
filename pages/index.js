@@ -23,7 +23,7 @@ export default function Home() {
           />
         </h1>
       </div>
-      <main className='w-11/12'>
+      <main className='sm:w-11/12 w-full'>
         <div className='flex lg:flex-row flex-col'>
           <FeaturedQuake />
           <FeatureQuakeWrapper />

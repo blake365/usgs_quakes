@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react'
 import { Map, Marker, ZoomControl } from 'pigeon-maps'
 import { stamenTerrain } from 'pigeon-maps/providers'
 
+import { maptiler } from 'pigeon-maps/providers'
+
 export default function Details() {
   const router = useRouter()
   const quakeID = router.query.id
@@ -55,6 +57,8 @@ export default function Details() {
   }, [])
 
   let now = new Date()
+
+  const maptilerProvider = maptiler('MaTKi78CrHEEExK4dS8x', 'topo')
 
   // console.log(details.properties.products)
   // console.log(offshore)
@@ -176,87 +180,106 @@ export default function Details() {
           />
         </h1>
       </div>
-      <main className=' md:max-w-4xl w-11/12 border my-5  border-stone-600 bg-stone-100 rounded-lg overflow-hidden shadow-lg m-auto'>
+      <main className=' md:max-w-4xl sm:w-11/12 mx-2 border my-5 sm:mx-auto border-stone-600 bg-stone-100 rounded-lg overflow-hidden shadow-lg m-auto'>
         {details.properties ? (
-          <div className='px-5 text-left w-full py-2 '>
-            <div className='text-sm text-stone-800 flex columns-2 justify-between'>
-              <div className=''>
-                {new Date(details.properties.time).customFormat(
-                  '#MM#/#DD#/#YYYY# #hh#:#mm#:#ss# #AMPM#'
+          <div className='text-left w-full py-2 '>
+            <div className='border-b border-stone-600 mb-3 w-full px-5 pb-1 shadow-md'>
+              <div className='text-sm text-stone-800 flex columns-2 justify-between'>
+                <div className=''>
+                  {new Date(details.properties.time).customFormat(
+                    '#MM#/#DD#/#YYYY# #hh#:#mm#:#ss# #AMPM#'
+                  )}
+                </div>
+                {details.properties.status === 'reviewed' ? (
+                  <div className='pr-1 text-green-700'>
+                    {details.properties.status}
+                  </div>
+                ) : (
+                  <div className='pr-1 text-stone-700'>
+                    {details.properties.status.substring(0, 4)}
+                  </div>
                 )}
               </div>
-              {details.properties.status === 'reviewed' ? (
-                <div className='pr-1 text-green-700'>
-                  {details.properties.status}
-                </div>
-              ) : (
-                <div className='pr-1 text-stone-700'>
-                  {details.properties.status.substring(0, 4)}
-                </div>
-              )}
-            </div>
-            {details.properties.alert === 'orange' ? (
-              <a
-                className='text-3xl font-bold  hover:text-orange-800 hover:underline pr-3 text-orange-600'
-                href={details.properties.url}
-                target='_blank'
-              >
-                {details.properties.title}
-              </a>
-            ) : details.properties.alert === 'red' ? (
-              <a
-                className='text-3xl font-bold  hover:text-red-900 hover:underline pr-3 text-red-700'
-                href={details.properties.url}
-                target='_blank'
-              >
-                {details.properties.title}
-              </a>
-            ) : details.properties.alert === 'yellow' ? (
-              <a
-                className='text-3xl font-bold  hover:text-amber-600 hover:underline pr-3 text-amber-400'
-                href={details.properties.url}
-                target='_blank'
-              >
-                {details.properties.title}
-              </a>
-            ) : (
-              <a
-                className='text-3xl font-bold  hover:text-green-900 hover:underline pr-3 text-green-700'
-                href={details.properties.url}
-                target='_blank'
-              >
-                {details.properties.title}
-              </a>
-            )}
-
-            <div className='md:text-lg leading-8 align-middle text-md'>
-              <div className='text-lg inline align-middle'>🗺 </div>
-              {Math.round(Math.abs(details.geometry.coordinates[1]) * 1000) /
-                1000}
-              &deg;
-              {details.geometry.coordinates[1] < 0 ? 'S' : 'N'},{' '}
-              {Math.round(Math.abs(details.geometry.coordinates[0]) * 1000) /
-                1000}
-              &deg;
-              {details.geometry.coordinates[0] < 0 ? 'W' : 'E'},{' '}
-              {Math.round(details.geometry.coordinates[2] * 100) / 100} km deep
-            </div>
-            <div className='leading-8 align-middle text-lg mb-2'>
-              📝 {details.properties.felt != null ? details.properties.felt : 0}{' '}
-              reports{' '}
-              {(now - details.properties.time) / (1000 * 60 * 60 * 24) > 30 ? (
-                ''
-              ) : (
+              {details.properties.alert === 'orange' ? (
                 <a
-                  className='text-sm text-blue-600 hover:text-blue-800 hover:underline'
-                  href={details.properties.url + '/tellus'}
+                  className='text-3xl font-bold  hover:text-orange-800 hover:underline pr-3 text-orange-600'
+                  href={details.properties.url}
                   target='_blank'
                 >
-                  Did you feel it?
+                  {details.properties.title}
+                </a>
+              ) : details.properties.alert === 'red' ? (
+                <a
+                  className='text-3xl font-bold  hover:text-red-900 hover:underline pr-3 text-red-700'
+                  href={details.properties.url}
+                  target='_blank'
+                >
+                  {details.properties.title}
+                </a>
+              ) : details.properties.alert === 'yellow' ? (
+                <a
+                  className='text-3xl font-bold  hover:text-amber-600 hover:underline pr-3 text-amber-400'
+                  href={details.properties.url}
+                  target='_blank'
+                >
+                  {details.properties.title}
+                </a>
+              ) : (
+                <a
+                  className='text-3xl font-bold  hover:text-green-900 hover:underline pr-3 text-green-700'
+                  href={details.properties.url}
+                  target='_blank'
+                >
+                  {details.properties.title}
                 </a>
               )}
+
+              <div className='md:text-lg leading-8 align-middle text-md'>
+                <div className='text-lg inline align-middle'>🗺 </div>
+                {Math.round(Math.abs(details.geometry.coordinates[1]) * 1000) /
+                  1000}
+                &deg;
+                {details.geometry.coordinates[1] < 0 ? 'S' : 'N'},{' '}
+                {Math.round(Math.abs(details.geometry.coordinates[0]) * 1000) /
+                  1000}
+                &deg;
+                {details.geometry.coordinates[0] < 0 ? 'W' : 'E'},{' '}
+                {Math.round(details.geometry.coordinates[2] * 100) / 100} km
+                deep
+              </div>
+              <div className='text-sm text-stone-800 flex columns-2 justify-between leading-8'>
+                <div className='pb-1 text-lg'>
+                  📝{' '}
+                  {details.properties.felt != null
+                    ? details.properties.felt
+                    : 0}{' '}
+                  reports{' '}
+                  {(now - details.properties.time) / (1000 * 60 * 60 * 24) >
+                  30 ? (
+                    ''
+                  ) : (
+                    <a
+                      className='text-sm text-blue-600 hover:text-blue-800 hover:underline'
+                      href={details.properties.url + '/tellus'}
+                      target='_blank'
+                    >
+                      Did you feel it?
+                    </a>
+                  )}
+                </div>
+                <div className='place-self-center pr-1 text-sm sm:text-lg '>
+                  <a
+                    href={details.properties.url}
+                    className=' text-green-800 font-bold border border-green-800 rounded-sm px-1 hover:bg-green-800 hover:text-white hover:no-underline'
+                    target='_blank'
+                    rel='noreffer'
+                  >
+                    USGS
+                  </a>
+                </div>
+              </div>
             </div>
-            <div className='w-full'>
+            <div className='w-full px-5'>
               {details.properties.products['shakemap'] ? (
                 <img
                   className='max-h-[95vh] max-w-full h-auto object-cover m-auto border border-stone-600 mb-5 rounded-md'
@@ -265,7 +288,7 @@ export default function Details() {
               ) : (
                 <div className='border border-stone-600 rounded-lg overflow-hidden m-auto mb-5 w-11/12 h-[400px] justify-center'>
                   <Map
-                    provider={stamenTerrain}
+                    provider={maptilerProvider}
                     dprs={[1, 2]}
                     height={400}
                     metaWheelZoom={true}
@@ -279,7 +302,11 @@ export default function Details() {
                   >
                     <ZoomControl />
                     <Marker
-                      color={details.properties.alert}
+                      color={
+                        details.properties.alert === null
+                          ? 'green'
+                          : details.properties.alert
+                      }
                       width={30}
                       hover={false}
                       anchor={[
