@@ -286,8 +286,9 @@ export default function Details() {
                   src={`https://earthquake.usgs.gov/product/shakemap/${details.properties.products.shakemap[0].code}/${details.properties.products.shakemap[0].source}/${details.properties.products.shakemap[0].updateTime}/download/intensity.jpg`}
                 />
               ) : (
-                <div className='border border-stone-600 rounded-lg overflow-hidden m-auto mb-5 w-11/12 h-[400px] justify-center'>
+                <div className='border border-stone-600 rounded-lg overflow-hidden m-auto mb-5 w-11/12 h-[400px] justify-center safari-rounded'>
                   <Map
+                    className=''
                     provider={maptilerProvider}
                     dprs={[1, 2]}
                     height={400}

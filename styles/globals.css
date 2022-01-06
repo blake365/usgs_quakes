@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .safari-rounded {
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
+  }
+}
+
 html {
   background-color: rgb(214 211 209)
 }
