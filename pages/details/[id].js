@@ -1,8 +1,9 @@
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 
 import { Map, Marker, ZoomControl } from 'pigeon-maps'
-import { stamenTerrain } from 'pigeon-maps/providers'
+// import { stamenTerrain } from 'pigeon-maps/providers'
 
 import { maptiler } from 'pigeon-maps/providers'
 
@@ -165,15 +166,12 @@ export default function Details() {
             src='/icons/waveform 1.svg'
             className='md:w-20 md:h-20 w-10 h-10 hidden sm:inline'
           />
-
-          <a
-            href='/'
-            className='lg:text-6xl md:text-5xl sm:text-3xl text-2xl w-full uppercase text-black hover:no-underline'
-          >
-            {' '}
-            USGS Earthquake Feed{' '}
-          </a>
-
+          <Link href='/'>
+            <a className='lg:text-6xl md:text-5xl sm:text-3xl text-2xl w-full uppercase text-black hover:no-underline'>
+              {' '}
+              USGS Earthquake Feed{' '}
+            </a>
+          </Link>
           <img
             src='/icons/waveform 1.svg'
             className='md:w-20 md:h-20 w-10 h-10 hidden sm:inline'
