@@ -97,7 +97,7 @@ export default function QuakeWrapper() {
 
 	const handleResetFields = (evt) => {
 		evt.preventDefault()
-		sessionStorage.clear()
+		// sessionStorage.clear()
 		setMinMag(0)
 		sessionStorage.setItem('min', 0)
 		setMaxMag(10)
@@ -196,7 +196,7 @@ export default function QuakeWrapper() {
 						className='invisible px-1 m-1 text-center bg-orange-200 border border-orange-700 rounded-md hover:bg-orange-50'
 						onClick={handleResetFields}
 					>
-						Reset
+						Clear
 					</button>
 					<div>
 						<h3 className='block text-2xl uppercase '>
@@ -212,7 +212,7 @@ export default function QuakeWrapper() {
 							className='px-1 m-1 text-center border rounded-md bg-stone-200 border-stone-700 hover:bg-stone-50'
 							onClick={handleResetFields}
 						>
-							Reset
+							Clear
 						</button>
 					</div>
 				</div>

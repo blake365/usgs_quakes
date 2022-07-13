@@ -42,49 +42,68 @@ export default function FeaturedQuake() {
 	let tectonicSearch = 'https://earthquake.usgs.gov/ws/geoserve/regions.json?'
 
 	useEffect(() => {
-		fetch(fetchStrings[randomFetchString()])
-			.then(function (response) {
-				return response.json()
-			})
-			.then(function (data) {
-				// console.log(data)
-				fetch(
-					data.features[randomFeature(data.features.length)].properties.detail
-				)
-					.then(function (response) {
-						return response.json()
-					})
-					.then(function (data) {
-						if (data.properties.products['general-text']) {
-							setDetails(data)
-						} else {
-							tectonicSearch =
-								tectonicSearch +
-								'latitude=' +
-								data.geometry.coordinates[1] +
-								'&longitude=' +
-								data.geometry.coordinates[0]
+		let featureDetails = JSON.parse(sessionStorage.getItem('feature'))
+		let tectonicDetails = JSON.parse(sessionStorage.getItem('tectonic'))
 
-							// console.log(tectonicSearch)
+		if (featureDetails) {
+			setDetails(featureDetails)
+			if (tectonicDetails) {
+				setTectonic(tectonicDetails)
+			}
+		} else {
+			fetch(fetchStrings[randomFetchString()])
+				.then(function (response) {
+					return response.json()
+				})
+				.then(function (data) {
+					// console.log(data)
+					fetch(
+						data.features[randomFeature(data.features.length)].properties.detail
+					)
+						.then(function (response) {
+							return response.json()
+						})
+						.then(function (data) {
+							if (data.properties.products['general-text']) {
+								setDetails(data)
+								sessionStorage.setItem('feature', JSON.stringify(data))
+							} else {
+								tectonicSearch =
+									tectonicSearch +
+									'latitude=' +
+									data.geometry.coordinates[1] +
+									'&longitude=' +
+									data.geometry.coordinates[0]
 
-							const fetchData = async () => {
-								isLoading(true)
-								const res = await fetch(tectonicSearch)
-								const json = await res.json()
-								// console.log(json)
-								setTectonic(json.tectonic.features)
-								isLoading(false)
+								// console.log(tectonicSearch)
+
+								const fetchData = async () => {
+									isLoading(true)
+									const res = await fetch(tectonicSearch)
+									const json = await res.json()
+									// console.log(json)
+									setTectonic(json.tectonic.features)
+									sessionStorage.setItem(
+										'tectonic',
+										JSON.stringify(json.tectonic.features)
+									)
+									isLoading(false)
+								}
+								fetchData()
+
+								setDetails(data)
+								sessionStorage.setItem('feature', JSON.stringify(data))
 							}
-							fetchData()
-							setDetails(data)
-						}
-					})
-			})
+						})
+				})
+		}
 	}, [version])
 
 	let now = new Date()
 
 	const refresh = useCallback(() => {
+		sessionStorage.removeItem('feature')
+		sessionStorage.removeItem('tectonic')
 		upVersion((s) => s + 1)
 	}, [])
 
