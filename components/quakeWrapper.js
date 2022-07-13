@@ -27,7 +27,8 @@ export default function QuakeWrapper() {
 	const [radius, setRadius] = useState(500)
 	const [start, setStart] = useState('')
 	const [end, setEnd] = useState(today)
-	// const [sort, setSort] = useState('time')
+	const [sort, setSort] = useState('date')
+	const [direction, setDir] = useState('desc')
 
 	const [fetchString, setFetch] = useState(
 		'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&minmagnitude=6&limit=10&orderby=magnitude'
@@ -66,6 +67,8 @@ export default function QuakeWrapper() {
 		let rad = sessionStorage.getItem('radius')
 		let start = sessionStorage.getItem('start')
 		let end = sessionStorage.getItem('end')
+		let sort = sessionStorage.getItem('sort')
+		let dir = sessionStorage.getItem('dir')
 
 		min ? setMinMag(min) : setMinMag(6)
 		max ? setMaxMag(max) : setMaxMag(10)
@@ -74,6 +77,8 @@ export default function QuakeWrapper() {
 		rad ? setRadius(rad) : setRadius(500)
 		start ? setStart(start) : setStart('')
 		end ? setEnd(end) : setEnd(today)
+		sort ? setSort(sort) : setSort('date')
+		dir ? setDir(dir) : setDir('desc')
 
 		if (
 			sessionStorage.getItem('quakes') &&
@@ -87,13 +92,19 @@ export default function QuakeWrapper() {
 		}
 	}, [fetchString])
 
-	// const handleSortChange = e => {
-	//   const { sort, value } = e.target
+	const handleSortChange = (e) => {
+		// console.log(e.target)
+		const { value } = e.target
+		setSort(value)
+		sessionStorage.setItem('sort', value)
+	}
 
-	//   setSort({
-	//     sort: value,
-	//   })
-	// }
+	const handleDirChange = (e) => {
+		// console.log(e.target)
+		const { value } = e.target
+		setDir(value)
+		sessionStorage.setItem('dir', value)
+	}
 
 	const handleResetFields = (evt) => {
 		evt.preventDefault()
@@ -158,15 +169,26 @@ export default function QuakeWrapper() {
 		}
 		if (start != '') {
 			startDateString = '&starttime=' + start
-			orderString = '&orderby=time-asc'
+			// orderString = '&orderby=time-asc'
 		} else {
 			startDateString = ''
-			orderString = '&orderby=magnitude'
+			// orderString = '&orderby=magnitude'
 		}
 		if (end != null) {
 			endDateString = '&endtime=' + end
 		} else {
 			endDateString = ''
+		}
+		if (sort == 'date') {
+			orderString = '&orderby=time'
+			if (direction == 'asc') {
+				orderString += '-asc'
+			}
+		} else if (sort == 'magnitude') {
+			orderString = '&orderby=magnitude'
+			if (direction == 'asc') {
+				orderString += '-asc'
+			}
 		}
 
 		let fetchString =
@@ -351,29 +373,55 @@ export default function QuakeWrapper() {
 							Defaults to previous 30 days
 						</p>
 					</div>
-					{/*
-          <div className='block pb-2 m-2 text-center border-b border-stone-600'>
-            <p>Order By:</p>
-            <label className='p-1'>
-              Time:{' '}
-              <input
-                type='radio'
-                name='order'
-                value='time'
-                checked
-                onChange={handleSortChange}
-              />
-            </label>
-            <label className='p-1'>
-              Magnitude:{' '}
-              <input
-                type='radio'
-                name='order'
-                value='magnitude'
-                onChange={handleSortChange}
-              />
-            </label>
-          </div> */}
+
+					<div className='flex pb-2 m-2 text-center border-b justify-evenly border-stone-600'>
+						<div>
+							<div>Order By:</div>
+							<label className='p-1 font-normal'>
+								Date:{' '}
+								<input
+									type='radio'
+									name='order'
+									value='date'
+									checked={sort === 'date'}
+									onChange={handleSortChange}
+								/>
+							</label>
+							<label className='p-1 font-normal'>
+								Magnitude:{' '}
+								<input
+									type='radio'
+									name='order'
+									value='magnitude'
+									checked={sort === 'magnitude'}
+									onChange={handleSortChange}
+								/>
+							</label>
+						</div>
+						<div>
+							<div>Direction:</div>
+							<label className='p-1 font-normal'>
+								Descending:{' '}
+								<input
+									type='radio'
+									name='direction'
+									value='desc'
+									checked={direction === 'desc'}
+									onChange={handleDirChange}
+								/>
+							</label>
+							<label className='p-1 font-normal'>
+								Ascending:{' '}
+								<input
+									type='radio'
+									name='direction'
+									value='asc'
+									checked={direction === 'asc'}
+									onChange={handleDirChange}
+								/>
+							</label>
+						</div>
+					</div>
 					<div className='block m-2 mb-1 text-center'>
 						<button
 							type='submit'
