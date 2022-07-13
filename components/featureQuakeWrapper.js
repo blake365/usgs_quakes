@@ -42,7 +42,7 @@ export default function FeatureQuakeWrapper() {
 
 	// }, [])
 
-	console.log(quakes)
+	// console.log(quakes)
 
 	return (
 		<div className='block w-full px-2 pt-0 mt-5 columns-1 lg:w-2/5 xl:w-2/5'>

@@ -88,7 +88,7 @@ export default function FeaturedQuake() {
 		upVersion((s) => s + 1)
 	}, [])
 
-	console.log(version)
+	// console.log(version)
 
 	//*** This code is copyright 2002-2016 by Gavin Kistner, !@phrogz.net
 	//*** It is covered under the license viewable at http://phrogz.net/JS/_ReuseLicense.txt

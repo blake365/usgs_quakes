@@ -27,26 +27,64 @@ export default function QuakeWrapper() {
 	const [radius, setRadius] = useState(500)
 	const [start, setStart] = useState('')
 	const [end, setEnd] = useState(today)
-	const [sort, setSort] = useState('time')
+	// const [sort, setSort] = useState('time')
 
 	const [fetchString, setFetch] = useState(
 		'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&minmagnitude=6&limit=10&orderby=magnitude'
 	)
+
 	const [quakes, setQuakes] = useState([])
 	const [meta, setMeta] = useState([])
 	const [loading, isLoading] = useState(false)
 
 	useEffect(() => {
-		const fetchData = async () => {
+		const fetchData = async (string) => {
 			isLoading(true)
-			const res = await fetch(fetchString)
+			const res = await fetch(string)
 			const json = await res.json()
 			// console.log(json)
 			setQuakes(json.features)
+			sessionStorage.setItem('quakes', JSON.stringify(json.features))
 			setMeta(json.metadata)
+			sessionStorage.setItem('metadata', JSON.stringify(json.metadata))
 			isLoading(false)
 		}
-		fetchData()
+
+		// if (
+		// 	sessionStorage.getItem('url') !== '' &&
+		// 	sessionStorage.getItem('url') !== fetchString
+		// ) {
+		// 	fetchData(sessionStorage.getItem('url'))
+		// } else {
+		// 	fetchData(fetchString)
+		// }
+
+		let min = sessionStorage.getItem('min')
+		let max = sessionStorage.getItem('max')
+		let lat = sessionStorage.getItem('lat')
+		let long = sessionStorage.getItem('long')
+		let rad = sessionStorage.getItem('radius')
+		let start = sessionStorage.getItem('start')
+		let end = sessionStorage.getItem('end')
+
+		min ? setMinMag(min) : setMinMag(6)
+		max ? setMaxMag(max) : setMaxMag(10)
+		lat ? setLat(lat) : setLat('')
+		long ? setLong(long) : setLong('')
+		rad ? setRadius(rad) : setRadius(500)
+		start ? setStart(start) : setStart('')
+		end ? setEnd(end) : setEnd(today)
+
+		if (
+			sessionStorage.getItem('quakes') &&
+			sessionStorage.getItem('metadata') &&
+			sessionStorage.getItem('url') !== fetchString
+		) {
+			setQuakes(JSON.parse(sessionStorage.getItem('quakes')))
+			setMeta(JSON.parse(sessionStorage.getItem('metadata')))
+		} else {
+			fetchData(fetchString)
+		}
 	}, [fetchString])
 
 	// const handleSortChange = e => {
@@ -59,13 +97,21 @@ export default function QuakeWrapper() {
 
 	const handleResetFields = (evt) => {
 		evt.preventDefault()
+		sessionStorage.clear()
 		setMinMag(0)
+		sessionStorage.setItem('min', 0)
 		setMaxMag(10)
+		sessionStorage.setItem('max', 10)
 		setLat('')
+		sessionStorage.setItem('lat', '')
 		setLong('')
+		sessionStorage.setItem('long', '')
 		setRadius('')
+		sessionStorage.setItem('radius', '')
 		setStart('')
+		sessionStorage.setItem('start', '')
 		setEnd(today)
+		sessionStorage.setItem('end', today)
 	}
 
 	const handleLocationRequest = (evt) => {
@@ -82,6 +128,7 @@ export default function QuakeWrapper() {
 
 	const handleFetchChange = (evt) => {
 		evt.preventDefault()
+		sessionStorage.removeItem('url')
 		let latString = ''
 		let longString = ''
 		let radiusString = ''
@@ -134,7 +181,8 @@ export default function QuakeWrapper() {
 			orderString +
 			'&jsonerror=true'
 
-		console.log(fetchString)
+		// console.log(fetchString)
+		sessionStorage.setItem('url', fetchString)
 
 		setFetch(fetchString)
 	}
@@ -180,7 +228,10 @@ export default function QuakeWrapper() {
 								max='10'
 								step='0.25'
 								placeholder='3'
-								onChange={(e) => setMinMag(e.target.value)}
+								onChange={(e) => {
+									setMinMag(e.target.value)
+									sessionStorage.setItem('min', e.target.value)
+								}}
 							/>
 						</label>
 						<label className='inline-block p-1 xs:block'>
@@ -193,7 +244,10 @@ export default function QuakeWrapper() {
 								max='10'
 								step='0.25'
 								placeholder='8'
-								onChange={(e) => setMaxMag(e.target.value)}
+								onChange={(e) => {
+									setMaxMag(e.target.value)
+									sessionStorage.setItem('max', e.target.value)
+								}}
 							/>
 						</label>
 					</div>
@@ -208,7 +262,10 @@ export default function QuakeWrapper() {
 								min='-90'
 								max='90'
 								placeholder='0'
-								onChange={(e) => setLat(e.target.value)}
+								onChange={(e) => {
+									setLat(e.target.value)
+									sessionStorage.setItem('lat', e.target.value)
+								}}
 							/>
 						</label>
 						<label className='inline-block p-1 xs:block'>
@@ -221,7 +278,10 @@ export default function QuakeWrapper() {
 								min='-180'
 								max='180'
 								placeholder='0'
-								onChange={(e) => setLong(e.target.value)}
+								onChange={(e) => {
+									setLong(e.target.value)
+									sessionStorage.setItem('long', e.target.value)
+								}}
 							/>
 						</label>
 
@@ -234,7 +294,10 @@ export default function QuakeWrapper() {
 								min='100'
 								max='20000'
 								placeholder='500'
-								onChange={(e) => setRadius(e.target.value)}
+								onChange={(e) => {
+									setRadius(e.target.value)
+									sessionStorage.setItem('radius', e.target.value)
+								}}
 							/>
 						</label>
 						<div className='inline mb-1 text-center '>
@@ -260,7 +323,10 @@ export default function QuakeWrapper() {
 								//   min='1'
 								//   max='10000'
 								placeholder=''
-								onChange={(e) => setStart(e.target.value)}
+								onChange={(e) => {
+									setStart(e.target.value)
+									sessionStorage.setItem('start', e.target.value)
+								}}
 							/>
 						</label>
 						<label className='inline-block p-1 xs:block'>
@@ -272,7 +338,10 @@ export default function QuakeWrapper() {
 								//   min='1'
 								//   max='10000'
 								placeholder={today}
-								onChange={(e) => setEnd(e.target.value)}
+								onChange={(e) => {
+									setEnd(e.target.value)
+									sessionStorage.setItem('end', e.target.value)
+								}}
 							/>
 						</label>
 						<p className='text-sm font-normal text-stone-600'>
