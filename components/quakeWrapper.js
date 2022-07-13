@@ -118,8 +118,11 @@ export default function QuakeWrapper() {
 		evt.preventDefault()
 		navigator.geolocation.getCurrentPosition((position) => {
 			setLat(position.coords.latitude)
+			sessionStorage.setItem('lat', position.coords.latitude)
 			setLong(position.coords.longitude)
-			setRadius(100)
+			sessionStorage.setItem('long', position.coords.longitude)
+			setRadius(500)
+			sessionStorage.setItem('radius', 500)
 		})
 	}
 
