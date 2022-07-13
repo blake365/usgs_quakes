@@ -3,6 +3,10 @@ import { Map, Marker, ZoomControl } from 'pigeon-maps'
 import { stamenTerrain } from 'pigeon-maps/providers'
 import { maptiler } from 'pigeon-maps/providers'
 
+import { BiRefresh } from 'react-icons/bi'
+import { BsPinMapFill } from 'react-icons/bs'
+import { GoReport } from 'react-icons/go'
+
 export default function FeaturedQuake() {
 	const [details, setDetails] = useState({})
 	const [tectonic, setTectonic] = useState({})
@@ -210,10 +214,10 @@ export default function FeaturedQuake() {
 					<div className='flex-none invisible place-self-right'>
 						<button
 							type='submit'
-							className='px-1 m-1 text-xl text-center'
+							className='px-1 py-1 m-1 text-2xl text-center border rounded-md hover:bg-stone-50 bg-stone-200 border-stone-700'
 							onClick={refresh}
 						>
-							🔀
+							<BiRefresh />
 						</button>
 					</div>
 					<div className='flex-grow text-2xl text-center uppercase place-self-center'>
@@ -222,10 +226,10 @@ export default function FeaturedQuake() {
 					<div className='flex-none place-self-right'>
 						<button
 							type='submit'
-							className='px-1 m-1 text-xl text-center'
+							className='px-1 py-1 m-1 text-2xl text-center border rounded-md hover:bg-stone-50 bg-stone-200 border-stone-700'
 							onClick={refresh}
 						>
-							🔀
+							<BiRefresh />
 						</button>
 					</div>
 				</div>
@@ -282,22 +286,30 @@ export default function FeaturedQuake() {
 								</a>
 							)}
 
-							<div className='leading-8 align-middle md:text-lg text-md'>
-								<div className='inline text-lg align-middle'>🗺 </div>
-								{Math.round(Math.abs(details.geometry.coordinates[1]) * 1000) /
-									1000}
-								&deg;
-								{details.geometry.coordinates[1] < 0 ? 'S' : 'N'},{' '}
-								{Math.round(Math.abs(details.geometry.coordinates[0]) * 1000) /
-									1000}
-								&deg;
-								{details.geometry.coordinates[0] < 0 ? 'W' : 'E'},{' '}
-								{Math.round(details.geometry.coordinates[2] * 100) / 100} km
-								deep
+							<div className='flex items-center leading-8 align-middle md:text-lg'>
+								<div className='pr-2 text-lg text-green-700 align-middle'>
+									<BsPinMapFill />
+								</div>
+								<div className='font-normal text-md'>
+									{Math.round(
+										Math.abs(details.geometry.coordinates[1]) * 1000
+									) / 1000}
+									&deg;
+									{details.geometry.coordinates[1] < 0 ? 'S' : 'N'},{' '}
+									{Math.round(
+										Math.abs(details.geometry.coordinates[0]) * 1000
+									) / 1000}
+									&deg;
+									{details.geometry.coordinates[0] < 0 ? 'W' : 'E'},{' '}
+									{Math.round(details.geometry.coordinates[2] * 100) / 100} km
+									deep
+								</div>
 							</div>
-							<div className='flex justify-between text-sm leading-8 text-stone-800 columns-2'>
-								<div className='pb-1 text-lg'>
-									📝{' '}
+							<div className='flex justify-between leading-8 text-stone-800 columns-2'>
+								<div className='flex items-center pb-1 font-normal text-md'>
+									<div className='pr-2 text-lg text-purple-700 '>
+										<GoReport />
+									</div>
 									{details.properties.felt != null
 										? details.properties.felt
 										: 0}{' '}
@@ -307,7 +319,7 @@ export default function FeaturedQuake() {
 										''
 									) : (
 										<a
-											className='text-sm text-blue-600 hover:text-blue-800 hover:underline'
+											className='pl-2 text-blue-600 hover:text-blue-800 hover:underline'
 											href={details.properties.url + '/tellus'}
 											target='_blank'
 										>
