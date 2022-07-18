@@ -228,6 +228,7 @@ export default function FeaturedQuake() {
 							type='submit'
 							className='px-1 py-1 m-1 text-2xl text-center border rounded-md hover:bg-stone-50 bg-stone-200 border-stone-700'
 							onClick={refresh}
+							aria-label='Refresh featured earthquake'
 						>
 							<BiRefresh />
 						</button>
@@ -344,6 +345,7 @@ export default function FeaturedQuake() {
 								<img
 									className='max-h-[95vh] max-w-full h-auto object-cover m-auto border border-stone-600 mb-5 rounded-md'
 									src={`https://earthquake.usgs.gov/product/shakemap/${details.properties.products.shakemap[0].code}/${details.properties.products.shakemap[0].source}/${details.properties.products.shakemap[0].updateTime}/download/intensity.jpg`}
+									alt={`Shake map for ${details.properties.title} showing shaking intensity and report locations around the epicenter.`}
 								/>
 							) : (
 								<div className='border border-stone-600 rounded-lg overflow-hidden m-auto mb-5 w-11/12 h-[400px] justify-center safari-rounded'>

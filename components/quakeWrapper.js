@@ -224,9 +224,9 @@ export default function QuakeWrapper() {
 						Clear
 					</button>
 					<div>
-						<h3 className='block text-2xl uppercase '>
+						<h4 className='block text-2xl uppercase '>
 							Earthquake Search Filter
-						</h3>
+						</h4>
 						<p className='block text-sm text-stone-600'>
 							Limited to 100 results
 						</p>

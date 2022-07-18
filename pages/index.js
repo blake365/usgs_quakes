@@ -7,8 +7,12 @@ export default function Home() {
 	return (
 		<div className='flex flex-col items-center justify-center min-h-screen py-2 bg-stone-300'>
 			<Head>
-				<title>USGS Earthquakes</title>
-				<link rel='icon' href='/icons/waveform 1.ico' />
+				<title>USGS Earthquake Feed</title>
+				<link rel='icon' href='/icons/waveform 1.svg' />
+				<meta
+					name='description'
+					content='A feed of recent earthquakes and search filter for past earthquakes using data provided by the US Geological Survey. Detailed descriptions for each earthquake show the shake map, human impacts, and tectonic summary which explains the geology behind the earthquake.'
+				/>
 			</Head>
 			<div className='flex w-full h-20 p-2 mt-5 overflow-hidden font-semibold text-center align-middle border-y border-stone-600 bg-stone-100'>
 				<h1 className='w-full my-auto text-2xl uppercase lg:text-6xl md:text-4xl sm:text-3xl'>

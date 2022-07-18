@@ -181,7 +181,7 @@ export default function Details() {
 					/>
 				</h1>
 			</div>
-			<main className='m-auto mx-2 my-5 overflow-hidden border rounded-lg shadow-lg  md:max-w-4xl sm:w-11/12 sm:mx-auto border-stone-600 bg-stone-100'>
+			<main className='m-auto mx-2 my-5 overflow-hidden border rounded-lg shadow-lg md:max-w-4xl sm:w-11/12 sm:mx-auto border-stone-600 bg-stone-100'>
 				{details.properties ? (
 					<div className='w-full py-2 text-left '>
 						<div className='w-full px-5 pb-1 mb-3 border-b shadow-md border-stone-600'>
@@ -293,6 +293,7 @@ export default function Details() {
 								<img
 									className='max-h-[95vh] max-w-full h-auto object-cover m-auto border border-stone-600 mb-5 rounded-md'
 									src={`https://earthquake.usgs.gov/product/shakemap/${details.properties.products.shakemap[0].code}/${details.properties.products.shakemap[0].source}/${details.properties.products.shakemap[0].updateTime}/download/intensity.jpg`}
+									alt={`Shake map for ${details.properties.title} showing shaking intensity and report locations around the epicenter.`}
 								/>
 							) : (
 								<div className='border border-stone-600 rounded-lg overflow-hidden m-auto mb-5 w-11/12 h-[400px] justify-center safari-rounded'>
