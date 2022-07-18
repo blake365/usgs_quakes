@@ -9,6 +9,7 @@ import { maptiler } from 'pigeon-maps/providers'
 
 import { BsPinMapFill } from 'react-icons/bs'
 import { GoReport } from 'react-icons/go'
+import { BiLinkExternal } from 'react-icons/bi'
 
 export default function Details() {
 	const router = useRouter()
@@ -203,35 +204,39 @@ export default function Details() {
 							</div>
 							{details.properties.alert === 'orange' ? (
 								<a
-									className='pr-3 text-3xl font-bold text-orange-600 hover:text-orange-800 hover:underline'
+									className='flex text-3xl font-bold text-orange-600 hover:text-orange-800 hover:underline'
 									href={details.properties.url}
 									target='_blank'
 								>
 									{details.properties.title}
+									<BiLinkExternal className='self-start w-5 h-5' />
 								</a>
 							) : details.properties.alert === 'red' ? (
 								<a
-									className='pr-3 text-3xl font-bold text-red-700 hover:text-red-900 hover:underline'
+									className='flex text-3xl font-bold text-red-700 hover:text-red-900 hover:underline'
 									href={details.properties.url}
 									target='_blank'
 								>
 									{details.properties.title}
+									<BiLinkExternal className='self-start w-5 h-5' />
 								</a>
 							) : details.properties.alert === 'yellow' ? (
 								<a
-									className='pr-3 text-3xl font-bold hover:text-amber-600 hover:underline text-amber-400'
+									className='flex text-3xl font-bold hover:text-amber-600 hover:underline text-amber-400'
 									href={details.properties.url}
 									target='_blank'
 								>
 									{details.properties.title}
+									<BiLinkExternal className='self-start w-5 h-5' />
 								</a>
 							) : (
 								<a
-									className='pr-3 text-3xl font-bold text-green-700 hover:text-green-900 hover:underline'
+									className='flex text-3xl font-bold text-green-700 hover:text-green-900 hover:underline'
 									href={details.properties.url}
 									target='_blank'
 								>
 									{details.properties.title}
+									<BiLinkExternal className='self-start w-5 h-5' />
 								</a>
 							)}
 
