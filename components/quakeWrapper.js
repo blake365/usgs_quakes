@@ -451,10 +451,14 @@ export default function QuakeWrapper() {
 						<div></div>
 					</div>
 				</div>
-			) : (
+			) : quakes.length > 0 ? (
 				quakes.map((quake) => {
 					return <Quake quakeData={quake} key={quake.id} />
 				})
+			) : (
+				<div className='block w-full p-5 mt-5 mb-4 text-center align-middle border rounded-lg shadow-md border-stone-600 bg-stone-100'>
+					No Earthquakes Found
+				</div>
 			)}
 		</div>
 	)

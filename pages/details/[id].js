@@ -9,7 +9,8 @@ import { maptiler } from 'pigeon-maps/providers'
 
 import { BsPinMapFill } from 'react-icons/bs'
 import { GoReport } from 'react-icons/go'
-import { BiLinkExternal } from 'react-icons/bi'
+// import { BiLinkExternal } from 'react-icons/bi'
+import NearbyQuakes from '../../components/nearbyQuakes'
 
 export default function Details() {
 	const router = useRouter()
@@ -28,6 +29,7 @@ export default function Details() {
 	let tectonicSearch = 'https://earthquake.usgs.gov/ws/geoserve/regions.json?'
 
 	useEffect(() => {
+		setDetails({})
 		fetch(detailSearch)
 			.then(function (response) {
 				return response.json()
@@ -59,7 +61,7 @@ export default function Details() {
 					setDetails(data)
 				}
 			})
-	}, [])
+	}, [quakeID])
 
 	let now = new Date()
 
@@ -162,8 +164,14 @@ export default function Details() {
 			.replace('#AMPM#', AMPM)
 	}
 
+	// console.log(details.geometry.coordinates[0])
+	// if (details.geometry) {
+	// 	console.log(details.geometry.coordinates[1])
+	// 	console.log(details.geometry.coordinates[0])
+	// }
+
 	return (
-		<div className='w-full py-2 bg-stone-300'>
+		<div className='flex flex-col items-center justify-center min-h-screen py-2 bg-stone-300'>
 			<div className='flex w-full h-20 p-2 mt-5 overflow-hidden font-semibold text-center align-middle border-y border-stone-600 bg-stone-100'>
 				<h1 className='w-full my-auto text-2xl uppercase lg:text-6xl md:text-5xl sm:text-3xl'>
 					<img
@@ -182,252 +190,271 @@ export default function Details() {
 					/>
 				</h1>
 			</div>
-			<main className='m-auto mx-2 my-5 overflow-hidden border rounded-lg shadow-lg md:max-w-4xl sm:w-11/12 sm:mx-auto border-stone-600 bg-stone-100'>
-				{details.properties ? (
-					<div className='w-full py-2 text-left '>
-						<div className='w-full px-5 pb-1 mb-3 border-b shadow-md border-stone-600'>
-							<div className='flex justify-between text-sm text-stone-800 columns-2'>
-								<div className=''>
-									{new Date(details.properties.time).customFormat(
-										'#MM#/#DD#/#YYYY# #hh#:#mm#:#ss# #AMPM#'
-									)}
-								</div>
-								{details.properties.status === 'reviewed' ? (
-									<div className='pr-1 text-green-700'>
-										{details.properties.status}
-									</div>
-								) : (
-									<div className='pr-1 text-stone-700'>
-										{details.properties.status.substring(0, 4)}
-									</div>
-								)}
-							</div>
-							{details.properties.alert === 'orange' ? (
-								<a
-									className='flex text-3xl font-bold text-orange-600 hover:text-orange-800 hover:underline'
-									href={details.properties.url}
-									target='_blank'
-								>
-									{details.properties.title}
-									<BiLinkExternal className='self-start w-5 h-5' />
-								</a>
-							) : details.properties.alert === 'red' ? (
-								<a
-									className='flex text-3xl font-bold text-red-700 hover:text-red-900 hover:underline'
-									href={details.properties.url}
-									target='_blank'
-								>
-									{details.properties.title}
-									<BiLinkExternal className='self-start w-5 h-5' />
-								</a>
-							) : details.properties.alert === 'yellow' ? (
-								<a
-									className='flex text-3xl font-bold hover:text-amber-600 hover:underline text-amber-400'
-									href={details.properties.url}
-									target='_blank'
-								>
-									{details.properties.title}
-									<BiLinkExternal className='self-start w-5 h-5' />
-								</a>
-							) : (
-								<a
-									className='flex text-3xl font-bold text-green-700 hover:text-green-900 hover:underline'
-									href={details.properties.url}
-									target='_blank'
-								>
-									{details.properties.title}
-									<BiLinkExternal className='self-start w-5 h-5' />
-								</a>
-							)}
-
-							<div className='flex items-center leading-8 align-middle md:text-lg'>
-								<div className='pr-2 text-lg text-green-700 align-middle'>
-									<BsPinMapFill />
-								</div>
-								<div className='font-normal text-md'>
-									{Math.round(
-										Math.abs(details.geometry.coordinates[1]) * 1000
-									) / 1000}
-									&deg;
-									{details.geometry.coordinates[1] < 0 ? 'S' : 'N'},{' '}
-									{Math.round(
-										Math.abs(details.geometry.coordinates[0]) * 1000
-									) / 1000}
-									&deg;
-									{details.geometry.coordinates[0] < 0 ? 'W' : 'E'},{' '}
-									{Math.round(details.geometry.coordinates[2] * 100) / 100} km
-									deep
-								</div>
-							</div>
-							<div className='flex justify-between leading-8 text-stone-800 columns-2'>
-								<div className='flex items-center pb-1 font-normal text-md'>
-									<div className='pr-2 text-lg text-purple-700 '>
-										<GoReport />
-									</div>
-									{details.properties.felt != null
-										? details.properties.felt
-										: 0}{' '}
-									reports{' '}
-									{(now - details.properties.time) / (1000 * 60 * 60 * 24) >
-									30 ? (
-										''
-									) : (
-										<a
-											className='pl-2 text-blue-600 hover:text-blue-800 hover:underline'
-											href={details.properties.url + '/tellus'}
-											target='_blank'
-										>
-											Did you feel it?
-										</a>
-									)}
-								</div>
-								<div className='pr-1 text-sm place-self-center sm:text-lg '>
-									<a
-										href={details.properties.url}
-										className='px-1 font-bold text-green-800 border border-green-800 rounded-sm hover:bg-green-800 hover:text-white hover:no-underline'
-										target='_blank'
-										rel='noreffer'
-									>
-										USGS
-									</a>
-								</div>
-							</div>
-						</div>
-						<div className='w-full px-5'>
-							{details.properties.products['shakemap'] ? (
-								<img
-									className='max-h-[95vh] max-w-full h-auto object-cover m-auto border border-stone-600 mb-5 rounded-md'
-									src={`https://earthquake.usgs.gov/product/shakemap/${details.properties.products.shakemap[0].code}/${details.properties.products.shakemap[0].source}/${details.properties.products.shakemap[0].updateTime}/download/intensity.jpg`}
-									alt={`Shake map for ${details.properties.title} showing shaking intensity and report locations around the epicenter.`}
-								/>
-							) : (
-								<div className='border border-stone-600 rounded-lg overflow-hidden m-auto mb-5 w-11/12 h-[400px] justify-center safari-rounded'>
-									<Map
-										className=''
-										provider={maptilerProvider}
-										dprs={[1, 2]}
-										height={400}
-										metaWheelZoom={true}
-										mouseEvents={false}
-										// touchEvents={false}
-										defaultCenter={[
-											details.geometry.coordinates[1],
-											details.geometry.coordinates[0],
-										]}
-										defaultZoom={7}
-									>
-										<ZoomControl />
-										<Marker
-											color={
-												details.properties.alert === null
-													? 'green'
-													: details.properties.alert
-											}
-											width={30}
-											hover={false}
-											anchor={[
-												details.geometry.coordinates[1],
-												details.geometry.coordinates[0],
-											]}
-										/>
-									</Map>
-								</div>
-							)}
-
-							<div className='max-h-[600px] overflow-scroll p-4 mb-3 border border-stone-600 rounded-md bg-stone-200'>
-								{details.properties.products['impact-text'] ? (
-									<div className=''>
-										<div className='mb-1 text-2xl font-bold'>Human Impact</div>
-										<div
-											className='mb-1 text-sm'
-											dangerouslySetInnerHTML={{
-												__html:
-													details.properties.products['impact-text'][0]
-														.contents[''].bytes,
-											}}
-										></div>
-									</div>
-								) : (
-									''
-								)}
-
-								{(() => {
-									if (details.properties.products['general-text']) {
-										return (
-											<div>
-												<div className='mb-1 text-2xl font-bold'>
-													Tectonic Summary
-												</div>
-												{details.properties.products[
-													'general-text'
-												][0].contents[''].bytes
-													.split('Tectonic Summary')[1]
-													.split('\n')
-													.filter((n) => n)
-													.map((item, index) => {
-														return (
-															<div
-																key={index}
-																className='text-sm mb-1.5'
-																dangerouslySetInnerHTML={{
-																	__html: item,
-																}}
-															></div>
-														)
-													})}
+			<main className='w-full min-h-screen sm:w-11/12'>
+				<div className='flex flex-col lg:flex-row'>
+					{/* selected quake */}
+					<section className='px-2 min-h-max lg:w-3/5 xl:w-3/5'>
+						<div className='w-full mt-5 overflow-hidden border rounded-lg shadow-lg columns-1 border-stone-600 bg-stone-100'>
+							{details.properties ? (
+								<div className='w-full py-2 m-0 text-left'>
+									<div className='w-full px-5 pb-1 mb-3 border-b shadow-md border-stone-600'>
+										{/* time */}
+										<div className='flex justify-between text-sm text-stone-800 columns-2'>
+											<div className=''>
+												{new Date(details.properties.time).customFormat(
+													'#MM#/#DD#/#YYYY# #hh#:#mm#:#ss# #AMPM#'
+												)}
 											</div>
-										)
-									} else {
-										if (loading) {
-											return (
-												<div className='w-full mb-4 text-center align-middle border border-stone-600 bg-stone-100'>
-													<div className='mt-5 ldsripple'>
-														<div></div>
-														<div></div>
-													</div>
+											{details.properties.status === 'reviewed' ? (
+												<div className='pr-1 text-green-700'>
+													{details.properties.status}
 												</div>
-											)
-										} else if (tectonic.length > 0) {
-											// console.log(tectonic[0].properties.summary.length)
-											return (
-												<div>
+											) : (
+												<div className='pr-1 text-stone-700'>
+													{details.properties.status.substring(0, 4)}
+												</div>
+											)}
+										</div>
+										{/* title */}
+										{details.properties.alert === 'orange' ? (
+											<div className='text-3xl font-bold text-orange-600 '>
+												{details.properties.title}
+											</div>
+										) : details.properties.alert === 'red' ? (
+											<div className='flex text-3xl font-bold text-red-700 '>
+												{details.properties.title}
+											</div>
+										) : details.properties.alert === 'yellow' ? (
+											<div className='flex text-3xl font-bold text-amber-400'>
+												{details.properties.title}
+											</div>
+										) : (
+											<div className='flex text-3xl font-bold text-green-700 '>
+												{details.properties.title}
+											</div>
+										)}
+
+										<div className='flex items-center leading-8 align-middle md:text-lg'>
+											<div className='pr-2 text-lg text-green-700 align-middle'>
+												<BsPinMapFill />
+											</div>
+											<div className='font-normal text-md'>
+												{Math.round(
+													Math.abs(details.geometry.coordinates[1]) * 1000
+												) / 1000}
+												&deg;
+												{details.geometry.coordinates[1] < 0 ? 'S' : 'N'},{' '}
+												{Math.round(
+													Math.abs(details.geometry.coordinates[0]) * 1000
+												) / 1000}
+												&deg;
+												{details.geometry.coordinates[0] < 0 ? 'W' : 'E'},{' '}
+												{Math.round(details.geometry.coordinates[2] * 100) /
+													100}{' '}
+												km deep
+											</div>
+										</div>
+										<div className='flex justify-between leading-8 text-stone-800 columns-2'>
+											<div className='flex items-center pb-1 font-normal text-md'>
+												<div className='pr-2 text-lg text-purple-700 '>
+													<GoReport />
+												</div>
+												{details.properties.felt != null
+													? details.properties.felt
+													: 0}{' '}
+												reports{' '}
+												{(now - details.properties.time) /
+													(1000 * 60 * 60 * 24) >
+												30 ? (
+													''
+												) : (
+													<a
+														className='pl-2 text-blue-600 hover:text-blue-800 hover:underline'
+														href={details.properties.url + '/tellus'}
+														target='_blank'
+													>
+														Did you feel it?
+													</a>
+												)}
+											</div>
+											<div className='pr-1 text-sm place-self-center sm:text-lg '>
+												<a
+													href={details.properties.url}
+													className='px-1 font-bold text-green-800 border border-green-800 rounded-sm hover:bg-green-800 hover:text-white hover:no-underline'
+													target='_blank'
+													rel='noreffer'
+												>
+													USGS
+												</a>
+											</div>
+										</div>
+									</div>
+									<div className='w-full px-5'>
+										{details.properties.products['shakemap'] ? (
+											<img
+												className='max-h-[95vh] max-w-full h-auto object-cover m-auto border border-stone-600 mb-5 rounded-md'
+												src={`https://earthquake.usgs.gov/product/shakemap/${details.properties.products.shakemap[0].code}/${details.properties.products.shakemap[0].source}/${details.properties.products.shakemap[0].updateTime}/download/intensity.jpg`}
+												alt={`Shake map for ${details.properties.title} showing shaking intensity and report locations around the epicenter.`}
+											/>
+										) : (
+											<div className='border border-stone-600 rounded-lg overflow-hidden m-auto mb-5 w-11/12 h-[400px] justify-center safari-rounded'>
+												<Map
+													className=''
+													provider={maptilerProvider}
+													dprs={[1, 2]}
+													height={400}
+													metaWheelZoom={true}
+													mouseEvents={false}
+													// touchEvents={false}
+													defaultCenter={[
+														details.geometry.coordinates[1],
+														details.geometry.coordinates[0],
+													]}
+													defaultZoom={7}
+												>
+													<ZoomControl />
+													<Marker
+														color={
+															details.properties.alert === null
+																? 'green'
+																: details.properties.alert
+														}
+														width={30}
+														hover={false}
+														anchor={[
+															details.geometry.coordinates[1],
+															details.geometry.coordinates[0],
+														]}
+													/>
+												</Map>
+											</div>
+										)}
+
+										<div className='max-h-[600px] overflow-scroll p-4 mb-3 border border-stone-600 rounded-md bg-stone-200'>
+											{details.properties.products['impact-text'] ? (
+												<div className=''>
 													<div className='mb-1 text-2xl font-bold'>
-														Tectonic Summary
+														Human Impact
 													</div>
 													<div
 														className='mb-1 text-sm'
 														dangerouslySetInnerHTML={{
-															__html: tectonic[0].properties.summary,
+															__html:
+																details.properties.products['impact-text'][0]
+																	.contents[''].bytes,
 														}}
 													></div>
 												</div>
-											)
-										} else if (offshore.features.length > 0) {
-											return (
-												<div>
-													<div className='mb-1 text-2xl font-bold'>
-														Offshore Region
-													</div>
-													<div>{offshore[0].name.description}</div>
-												</div>
-											)
-										} else {
-											return <div>No Information Available</div>
-										}
-									}
-								})()}
+											) : (
+												''
+											)}
+
+											{(() => {
+												if (details.properties.products['general-text']) {
+													return (
+														<div>
+															<div className='mb-1 text-2xl font-bold'>
+																Tectonic Summary
+															</div>
+															{details.properties.products[
+																'general-text'
+															][0].contents[''].bytes
+																.split('Tectonic Summary')[1]
+																.split('\n')
+																.filter((n) => n)
+																.map((item, index) => {
+																	return (
+																		<div
+																			key={index}
+																			className='text-sm mb-1.5'
+																			dangerouslySetInnerHTML={{
+																				__html: item,
+																			}}
+																		></div>
+																	)
+																})}
+														</div>
+													)
+												} else {
+													if (loading) {
+														return (
+															<div className='w-full mb-4 text-center align-middle border border-stone-600 bg-stone-100'>
+																<div className='mt-5 ldsripple'>
+																	<div></div>
+																	<div></div>
+																</div>
+															</div>
+														)
+													} else if (tectonic.length > 0) {
+														// console.log(tectonic[0].properties.summary.length)
+														return (
+															<div>
+																<div className='mb-1 text-2xl font-bold'>
+																	Tectonic Summary
+																</div>
+																<div
+																	className='mb-1 text-sm'
+																	dangerouslySetInnerHTML={{
+																		__html: tectonic[0].properties.summary,
+																	}}
+																></div>
+															</div>
+														)
+													} else if (offshore.features.length > 0) {
+														return (
+															<div>
+																<div className='mb-1 text-2xl font-bold'>
+																	Offshore Region
+																</div>
+																<div>{offshore[0].name.description}</div>
+															</div>
+														)
+													} else {
+														return <div>No Information Available</div>
+													}
+												}
+											})()}
+										</div>
+									</div>
+								</div>
+							) : (
+								<div className='w-full mb-4 text-center align-middle border border-stone-600 bg-stone-100'>
+									<div className='mt-5 ldsripple'>
+										<div></div>
+										<div></div>
+									</div>
+								</div>
+							)}
+						</div>
+					</section>
+					{/* nearby quakes component */}
+					<div className='block w-full px-2 pt-0 mt-5 columns-1 lg:w-2/5 xl:w-2/5'>
+						<div className='w-full text-center bg-amber-400 border border-stone-600 rounded-lg mb-2.5 p-1 '>
+							<div className='text-xl uppercase md:text-2xl'>
+								Recent Nearby Earthquakes
+							</div>
+							<div className='block text-sm text-stone-600'>
+								Searches a 100 km radius in the past month
 							</div>
 						</div>
+						{details.geometry ? (
+							<NearbyQuakes
+								latitude={details.geometry.coordinates[1]}
+								longitude={details.geometry.coordinates[0]}
+								currentId={details.id}
+							/>
+						) : (
+							<div className='block w-full px-2 pt-0 mt-5 mb-4 text-center align-middle border rounded-lg border-stone-600 bg-stone-100'>
+								<div className='w-full mt-5 ldsripple'>
+									<div></div>
+									<div></div>
+								</div>
+							</div>
+						)}
 					</div>
-				) : (
-					<div className='w-full mb-4 text-center align-middle border border-stone-600 bg-stone-100'>
-						<div className='mt-5 ldsripple'>
-							<div></div>
-							<div></div>
-						</div>
-					</div>
-				)}
+				</div>
 			</main>
+			<div className='h-4'></div>
 			<footer className='w-full p-5 text-lg text-center border-y border-stone-600 bg-stone-100'>
 				<div>Data provided by the United States Geological Survey</div>
 				<a

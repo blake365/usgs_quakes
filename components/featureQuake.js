@@ -255,39 +255,35 @@ export default function FeaturedQuake() {
 							</div>
 							{details.properties.alert === 'orange' ? (
 								<a
-									className='flex text-3xl font-bold text-orange-600 hover:text-orange-800 hover:underline'
-									href={details.properties.url}
-									target='_blank'
+									className='text-3xl font-bold text-orange-600 hover:text-orange-800 hover:underline'
+									// href={details.properties.url}
+									href={`/details/${details.id}`}
 								>
 									{details.properties.title}{' '}
-									<BiLinkExternal className='self-start w-5 h-5' />
 								</a>
 							) : details.properties.alert === 'red' ? (
 								<a
-									className='flex text-3xl font-bold text-red-700 hover:text-red-900 hover:underline'
-									href={details.properties.url}
-									target='_blank'
+									className='text-3xl font-bold text-red-700 hover:text-red-900 hover:underline'
+									// href={details.properties.url}
+									href={`/details/${details.id}`}
 								>
 									{details.properties.title}{' '}
-									<BiLinkExternal className='self-start w-5 h-5' />
 								</a>
 							) : details.properties.alert === 'yellow' ? (
 								<a
-									className='flex text-3xl font-bold hover:text-amber-600 hover:underline text-amber-400'
-									href={details.properties.url}
-									target='_blank'
+									className='text-3xl font-bold hover:text-amber-600 hover:underline text-amber-500'
+									// href={details.properties.url}
+									href={`/details/${details.id}`}
 								>
 									{details.properties.title}{' '}
-									<BiLinkExternal className='self-start w-5 h-5' />
 								</a>
 							) : (
 								<a
-									className='flex text-3xl font-bold text-green-700 hover:text-green-900 hover:underline'
-									href={details.properties.url}
-									target='_blank'
+									className='text-3xl font-bold text-green-700 hover:text-green-900 hover:underline'
+									// href={details.properties.url}
+									href={`/details/${details.id}`}
 								>
 									{details.properties.title}{' '}
-									<BiLinkExternal className='self-start w-5 h-5' />
 								</a>
 							)}
 
