@@ -23,62 +23,9 @@ export default function Details({
 	tectonicDetails,
 	offshoreDetails,
 }) {
-	// const router = useRouter()
-	// const quakeID = router.query.id
-	// console.log()
-
-	// const [details, setDetails] = useState({})
-	// const [tectonic, setTectonic] = useState({})
-	// const [offshore, setOffshore] = useState({})
-	// const [loading, isLoading] = useState(false)
-
-	// let detailSearch =
-	// 	'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventid=' +
-	// 	quakeID
-
-	// let tectonicSearch = 'https://earthquake.usgs.gov/ws/geoserve/regions.json?'
-
-	// useEffect(() => {
-	// 	setDetails({})
-	// 	fetch(detailSearch)
-	// 		.then(function (response) {
-	// 			return response.json()
-	// 		})
-	// 		.then(function (data) {
-	// 			// console.log(data)
-	// 			if (data.properties.products['general-text']) {
-	// 				setDetails(data)
-	// 			} else {
-	// 				tectonicSearch =
-	// 					tectonicSearch +
-	// 					'latitude=' +
-	// 					data.geometry.coordinates[1] +
-	// 					'&longitude=' +
-	// 					data.geometry.coordinates[0]
-
-	// 				// console.log(tectonicSearch)
-
-	// 				const fetchData = async () => {
-	// 					isLoading(true)
-	// 					const res = await fetch(tectonicSearch)
-	// 					const json = await res.json()
-	// 					// console.log(json)
-	// 					setTectonic(json.tectonic.features)
-	// 					setOffshore(json.offshore)
-	// 					isLoading(false)
-	// 				}
-	// 				fetchData()
-	// 				setDetails(data)
-	// 			}
-	// 		})
-	// }, [quakeID])
-
 	let now = new Date()
 
 	const maptilerProvider = maptiler('MaTKi78CrHEEExK4dS8x', 'topo')
-
-	// console.log(details.properties.products)
-	// console.log(offshore)
 
 	//*** This code is copyright 2002-2016 by Gavin Kistner, !@phrogz.net
 	//*** It is covered under the license viewable at http://phrogz.net/JS/_ReuseLicense.txt
@@ -173,12 +120,6 @@ export default function Details({
 			.replace('#ampm#', ampm)
 			.replace('#AMPM#', AMPM)
 	}
-
-	// console.log(details.geometry.coordinates[0])
-	// if (details.geometry) {
-	// 	console.log(details.geometry.coordinates[1])
-	// 	console.log(details.geometry.coordinates[0])
-	// }
 
 	return (
 		<div className='flex flex-col items-center justify-center min-h-screen py-2 bg-stone-300'>
@@ -326,13 +267,16 @@ export default function Details({
 													provider={maptilerProvider}
 													dprs={[1, 2]}
 													height={400}
-													metaWheelZoom={true}
+													// metaWheelZoom={true}
 													mouseEvents={false}
 													// touchEvents={false}
-													defaultCenter={[
+													center={[
 														quakeDetails.geometry.coordinates[1],
 														quakeDetails.geometry.coordinates[0],
 													]}
+													onBoundsChanged={({ center }) => {
+														center = center
+													}}
 													defaultZoom={7}
 												>
 													<ZoomControl />
