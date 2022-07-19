@@ -1,6 +1,7 @@
-import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+// import { useRouter } from 'next/router'
+// import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import Head from 'next/head'
 
 import { Map, Marker, ZoomControl } from 'pigeon-maps'
 // import { stamenTerrain } from 'pigeon-maps/providers'
@@ -12,56 +13,65 @@ import { GoReport } from 'react-icons/go'
 // import { BiLinkExternal } from 'react-icons/bi'
 import NearbyQuakes from '../../components/nearbyQuakes'
 
-export default function Details() {
-	const router = useRouter()
-	const quakeID = router.query.id
+let detailSearch =
+	'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventid='
+
+let tectonicSearch = 'https://earthquake.usgs.gov/ws/geoserve/regions.json?'
+
+export default function Details({
+	quakeDetails,
+	tectonicDetails,
+	offshoreDetails,
+}) {
+	// const router = useRouter()
+	// const quakeID = router.query.id
 	// console.log()
 
-	const [details, setDetails] = useState({})
-	const [tectonic, setTectonic] = useState({})
-	const [offshore, setOffshore] = useState({})
-	const [loading, isLoading] = useState(false)
+	// const [details, setDetails] = useState({})
+	// const [tectonic, setTectonic] = useState({})
+	// const [offshore, setOffshore] = useState({})
+	// const [loading, isLoading] = useState(false)
 
-	let detailSearch =
-		'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventid=' +
-		quakeID
+	// let detailSearch =
+	// 	'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventid=' +
+	// 	quakeID
 
-	let tectonicSearch = 'https://earthquake.usgs.gov/ws/geoserve/regions.json?'
+	// let tectonicSearch = 'https://earthquake.usgs.gov/ws/geoserve/regions.json?'
 
-	useEffect(() => {
-		setDetails({})
-		fetch(detailSearch)
-			.then(function (response) {
-				return response.json()
-			})
-			.then(function (data) {
-				// console.log(data)
-				if (data.properties.products['general-text']) {
-					setDetails(data)
-				} else {
-					tectonicSearch =
-						tectonicSearch +
-						'latitude=' +
-						data.geometry.coordinates[1] +
-						'&longitude=' +
-						data.geometry.coordinates[0]
+	// useEffect(() => {
+	// 	setDetails({})
+	// 	fetch(detailSearch)
+	// 		.then(function (response) {
+	// 			return response.json()
+	// 		})
+	// 		.then(function (data) {
+	// 			// console.log(data)
+	// 			if (data.properties.products['general-text']) {
+	// 				setDetails(data)
+	// 			} else {
+	// 				tectonicSearch =
+	// 					tectonicSearch +
+	// 					'latitude=' +
+	// 					data.geometry.coordinates[1] +
+	// 					'&longitude=' +
+	// 					data.geometry.coordinates[0]
 
-					// console.log(tectonicSearch)
+	// 				// console.log(tectonicSearch)
 
-					const fetchData = async () => {
-						isLoading(true)
-						const res = await fetch(tectonicSearch)
-						const json = await res.json()
-						// console.log(json)
-						setTectonic(json.tectonic.features)
-						setOffshore(json.offshore)
-						isLoading(false)
-					}
-					fetchData()
-					setDetails(data)
-				}
-			})
-	}, [quakeID])
+	// 				const fetchData = async () => {
+	// 					isLoading(true)
+	// 					const res = await fetch(tectonicSearch)
+	// 					const json = await res.json()
+	// 					// console.log(json)
+	// 					setTectonic(json.tectonic.features)
+	// 					setOffshore(json.offshore)
+	// 					isLoading(false)
+	// 				}
+	// 				fetchData()
+	// 				setDetails(data)
+	// 			}
+	// 		})
+	// }, [quakeID])
 
 	let now = new Date()
 
@@ -172,6 +182,14 @@ export default function Details() {
 
 	return (
 		<div className='flex flex-col items-center justify-center min-h-screen py-2 bg-stone-300'>
+			<Head>
+				<title>{quakeDetails.properties.title}</title>
+				<link rel='icon' href='/icons/waveform 1.svg' />
+				<meta
+					name='description'
+					content={`Detailed description for the ${quakeDetails.properties.title} earthquake with the shake map, human impacts, and tectonic summary which explains the geology behind the earthquake (when available) . Also includes nearby earthquakes within the last month. Data provided by the United States Geological Survey.`}
+				/>
+			</Head>
 			<div className='flex w-full h-20 p-2 mt-5 overflow-hidden font-semibold text-center align-middle border-y border-stone-600 bg-stone-100'>
 				<h1 className='w-full my-auto text-2xl uppercase lg:text-6xl md:text-5xl sm:text-3xl'>
 					<img
@@ -195,42 +213,42 @@ export default function Details() {
 					{/* selected quake */}
 					<section className='px-2 min-h-max lg:w-3/5 xl:w-3/5'>
 						<div className='w-full mt-5 overflow-hidden border rounded-lg shadow-lg columns-1 border-stone-600 bg-stone-100'>
-							{details.properties ? (
+							{quakeDetails.properties ? (
 								<div className='w-full py-2 m-0 text-left'>
 									<div className='w-full px-5 pb-1 mb-3 border-b shadow-md border-stone-600'>
 										{/* time */}
 										<div className='flex justify-between text-sm text-stone-800 columns-2'>
 											<div className=''>
-												{new Date(details.properties.time).customFormat(
+												{new Date(quakeDetails.properties.time).customFormat(
 													'#MM#/#DD#/#YYYY# #hh#:#mm#:#ss# #AMPM#'
 												)}
 											</div>
-											{details.properties.status === 'reviewed' ? (
+											{quakeDetails.properties.status === 'reviewed' ? (
 												<div className='pr-1 text-green-700'>
-													{details.properties.status}
+													{quakeDetails.properties.status}
 												</div>
 											) : (
 												<div className='pr-1 text-stone-700'>
-													{details.properties.status.substring(0, 4)}
+													{quakeDetails.properties.status.substring(0, 4)}
 												</div>
 											)}
 										</div>
 										{/* title */}
-										{details.properties.alert === 'orange' ? (
+										{quakeDetails.properties.alert === 'orange' ? (
 											<div className='text-3xl font-bold text-orange-600 '>
-												{details.properties.title}
+												{quakeDetails.properties.title}
 											</div>
-										) : details.properties.alert === 'red' ? (
+										) : quakeDetails.properties.alert === 'red' ? (
 											<div className='flex text-3xl font-bold text-red-700 '>
-												{details.properties.title}
+												{quakeDetails.properties.title}
 											</div>
-										) : details.properties.alert === 'yellow' ? (
+										) : quakeDetails.properties.alert === 'yellow' ? (
 											<div className='flex text-3xl font-bold text-amber-400'>
-												{details.properties.title}
+												{quakeDetails.properties.title}
 											</div>
 										) : (
 											<div className='flex text-3xl font-bold text-green-700 '>
-												{details.properties.title}
+												{quakeDetails.properties.title}
 											</div>
 										)}
 
@@ -240,17 +258,22 @@ export default function Details() {
 											</div>
 											<div className='font-normal text-md'>
 												{Math.round(
-													Math.abs(details.geometry.coordinates[1]) * 1000
+													Math.abs(quakeDetails.geometry.coordinates[1]) * 1000
 												) / 1000}
 												&deg;
-												{details.geometry.coordinates[1] < 0 ? 'S' : 'N'},{' '}
+												{quakeDetails.geometry.coordinates[1] < 0
+													? 'S'
+													: 'N'},{' '}
 												{Math.round(
-													Math.abs(details.geometry.coordinates[0]) * 1000
+													Math.abs(quakeDetails.geometry.coordinates[0]) * 1000
 												) / 1000}
 												&deg;
-												{details.geometry.coordinates[0] < 0 ? 'W' : 'E'},{' '}
-												{Math.round(details.geometry.coordinates[2] * 100) /
-													100}{' '}
+												{quakeDetails.geometry.coordinates[0] < 0
+													? 'W'
+													: 'E'},{' '}
+												{Math.round(
+													quakeDetails.geometry.coordinates[2] * 100
+												) / 100}{' '}
 												km deep
 											</div>
 										</div>
@@ -259,18 +282,18 @@ export default function Details() {
 												<div className='pr-2 text-lg text-purple-700 '>
 													<GoReport />
 												</div>
-												{details.properties.felt != null
-													? details.properties.felt
+												{quakeDetails.properties.felt != null
+													? quakeDetails.properties.felt
 													: 0}{' '}
 												reports{' '}
-												{(now - details.properties.time) /
+												{(now - quakeDetails.properties.time) /
 													(1000 * 60 * 60 * 24) >
 												30 ? (
 													''
 												) : (
 													<a
 														className='pl-2 text-blue-600 hover:text-blue-800 hover:underline'
-														href={details.properties.url + '/tellus'}
+														href={quakeDetails.properties.url + '/tellus'}
 														target='_blank'
 													>
 														Did you feel it?
@@ -279,7 +302,7 @@ export default function Details() {
 											</div>
 											<div className='pr-1 text-sm place-self-center sm:text-lg '>
 												<a
-													href={details.properties.url}
+													href={quakeDetails.properties.url}
 													className='px-1 font-bold text-green-800 border border-green-800 rounded-sm hover:bg-green-800 hover:text-white hover:no-underline'
 													target='_blank'
 													rel='noreffer'
@@ -290,11 +313,11 @@ export default function Details() {
 										</div>
 									</div>
 									<div className='w-full px-5'>
-										{details.properties.products['shakemap'] ? (
+										{quakeDetails.properties.products['shakemap'] ? (
 											<img
 												className='max-h-[95vh] max-w-full h-auto object-cover m-auto border border-stone-600 mb-5 rounded-md'
-												src={`https://earthquake.usgs.gov/product/shakemap/${details.properties.products.shakemap[0].code}/${details.properties.products.shakemap[0].source}/${details.properties.products.shakemap[0].updateTime}/download/intensity.jpg`}
-												alt={`Shake map for ${details.properties.title} showing shaking intensity and report locations around the epicenter.`}
+												src={`https://earthquake.usgs.gov/product/shakemap/${quakeDetails.properties.products.shakemap[0].code}/${quakeDetails.properties.products.shakemap[0].source}/${quakeDetails.properties.products.shakemap[0].updateTime}/download/intensity.jpg`}
+												alt={`Shake map for ${quakeDetails.properties.title} showing shaking intensity and report locations around the epicenter.`}
 											/>
 										) : (
 											<div className='border border-stone-600 rounded-lg overflow-hidden m-auto mb-5 w-11/12 h-[400px] justify-center safari-rounded'>
@@ -307,23 +330,23 @@ export default function Details() {
 													mouseEvents={false}
 													// touchEvents={false}
 													defaultCenter={[
-														details.geometry.coordinates[1],
-														details.geometry.coordinates[0],
+														quakeDetails.geometry.coordinates[1],
+														quakeDetails.geometry.coordinates[0],
 													]}
 													defaultZoom={7}
 												>
 													<ZoomControl />
 													<Marker
 														color={
-															details.properties.alert === null
+															quakeDetails.properties.alert === null
 																? 'green'
-																: details.properties.alert
+																: quakeDetails.properties.alert
 														}
 														width={30}
 														hover={false}
 														anchor={[
-															details.geometry.coordinates[1],
-															details.geometry.coordinates[0],
+															quakeDetails.geometry.coordinates[1],
+															quakeDetails.geometry.coordinates[0],
 														]}
 													/>
 												</Map>
@@ -331,7 +354,7 @@ export default function Details() {
 										)}
 
 										<div className='max-h-[600px] overflow-scroll p-4 mb-3 border border-stone-600 rounded-md bg-stone-200'>
-											{details.properties.products['impact-text'] ? (
+											{quakeDetails.properties.products['impact-text'] ? (
 												<div className=''>
 													<div className='mb-1 text-2xl font-bold'>
 														Human Impact
@@ -340,8 +363,9 @@ export default function Details() {
 														className='mb-1 text-sm'
 														dangerouslySetInnerHTML={{
 															__html:
-																details.properties.products['impact-text'][0]
-																	.contents[''].bytes,
+																quakeDetails.properties.products[
+																	'impact-text'
+																][0].contents[''].bytes,
 														}}
 													></div>
 												</div>
@@ -350,13 +374,13 @@ export default function Details() {
 											)}
 
 											{(() => {
-												if (details.properties.products['general-text']) {
+												if (quakeDetails.properties.products['general-text']) {
 													return (
 														<div>
 															<div className='mb-1 text-2xl font-bold'>
 																Tectonic Summary
 															</div>
-															{details.properties.products[
+															{quakeDetails.properties.products[
 																'general-text'
 															][0].contents[''].bytes
 																.split('Tectonic Summary')[1]
@@ -376,16 +400,7 @@ export default function Details() {
 														</div>
 													)
 												} else {
-													if (loading) {
-														return (
-															<div className='w-full mb-4 text-center align-middle border border-stone-600 bg-stone-100'>
-																<div className='mt-5 ldsripple'>
-																	<div></div>
-																	<div></div>
-																</div>
-															</div>
-														)
-													} else if (tectonic.length > 0) {
+													if (tectonicDetails.length > 0) {
 														// console.log(tectonic[0].properties.summary.length)
 														return (
 															<div>
@@ -395,18 +410,19 @@ export default function Details() {
 																<div
 																	className='mb-1 text-sm'
 																	dangerouslySetInnerHTML={{
-																		__html: tectonic[0].properties.summary,
+																		__html:
+																			tectonicDetails[0].properties.summary,
 																	}}
 																></div>
 															</div>
 														)
-													} else if (offshore.features.length > 0) {
+													} else if (offshoreDetails.features.length > 0) {
 														return (
 															<div>
 																<div className='mb-1 text-2xl font-bold'>
 																	Offshore Region
 																</div>
-																<div>{offshore[0].name.description}</div>
+																<div>{offshoreDetails[0].name.description}</div>
 															</div>
 														)
 													} else {
@@ -437,11 +453,11 @@ export default function Details() {
 								Searches a 100 km radius in the past month
 							</div>
 						</div>
-						{details.geometry ? (
+						{quakeDetails.geometry ? (
 							<NearbyQuakes
-								latitude={details.geometry.coordinates[1]}
-								longitude={details.geometry.coordinates[0]}
-								currentId={details.id}
+								latitude={quakeDetails.geometry.coordinates[1]}
+								longitude={quakeDetails.geometry.coordinates[0]}
+								currentId={quakeDetails.id}
 							/>
 						) : (
 							<div className='block w-full px-2 pt-0 mt-5 mb-4 text-center align-middle border rounded-lg border-stone-600 bg-stone-100'>
@@ -470,7 +486,33 @@ export default function Details() {
 }
 
 export async function getServerSideProps(context) {
+	// console.log(context.params.id)
+	let pageId = context.params.id
+
+	let search = detailSearch + pageId
+
+	const quakeRes = await fetch(search)
+	const quakeDetails = await quakeRes.json()
+
+	let tectonicDetails = null
+	let offshoreDetails = null
+
+	if (!quakeDetails.properties.products['general-text']) {
+		tectonicSearch =
+			tectonicSearch +
+			'latitude=' +
+			quakeDetails.geometry.coordinates[1] +
+			'&longitude=' +
+			quakeDetails.geometry.coordinates[0]
+		const tectonicRes = await fetch(tectonicSearch)
+		const tectonicJson = await tectonicRes.json()
+		tectonicDetails = tectonicJson.tectonic.features
+		offshoreDetails = tectonicJson.offshore
+	}
+
+	// console.log(quakeDetails)
+
 	return {
-		props: {},
+		props: { quakeDetails, tectonicDetails, offshoreDetails },
 	}
 }
