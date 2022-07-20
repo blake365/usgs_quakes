@@ -1,9 +1,8 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Map, Marker, ZoomControl } from 'pigeon-maps'
-import { stamenTerrain } from 'pigeon-maps/providers'
 import { maptiler } from 'pigeon-maps/providers'
-
-import { BiRefresh, BiLinkExternal } from 'react-icons/bi'
+import Image from 'next/image'
+import { BiRefresh } from 'react-icons/bi'
 import { BsPinMapFill } from 'react-icons/bs'
 import { GoReport } from 'react-icons/go'
 
@@ -340,13 +339,22 @@ export default function FeaturedQuake() {
 								</div>
 							</div>
 						</div>
-						<div className='w-full px-5'>
+						<div className='w-full px-5 mt-4'>
 							{details.properties.products['shakemap'] ? (
-								<img
-									className='max-h-[95vh] max-w-full h-auto object-cover m-auto border border-stone-600 mb-5 rounded-md'
-									src={`https://earthquake.usgs.gov/product/shakemap/${details.properties.products.shakemap[0].code}/${details.properties.products.shakemap[0].source}/${details.properties.products.shakemap[0].updateTime}/download/intensity.jpg`}
-									alt={`Shake map for ${details.properties.title} showing shaking intensity and report locations around the epicenter.`}
-								/>
+								<div className='mx-auto mb-5 border rounded-md max-w-[700px] border-stone-600 bg-stone-500'>
+									<Image
+										layout='responsive'
+										width={787}
+										height={1003}
+										priority
+										loading='eager'
+										// placeholder='blur'
+										// blurDataURL={blurDataURL}
+										className='mx-auto border rounded-md border-stone-600'
+										src={`https://earthquake.usgs.gov/product/shakemap/${details.properties.products.shakemap[0].code}/${details.properties.products.shakemap[0].source}/${details.properties.products.shakemap[0].updateTime}/download/intensity.jpg`}
+										alt={`Shake map for ${details.properties.title} showing shaking intensity and report locations around the epicenter.`}
+									/>
+								</div>
 							) : (
 								<div className='border border-stone-600 rounded-lg overflow-hidden m-auto mb-5 w-11/12 h-[400px] justify-center safari-rounded'>
 									<Map

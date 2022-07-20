@@ -1,7 +1,10 @@
 // import { useRouter } from 'next/router'
-// import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import Head from 'next/head'
+import Image from 'next/image'
+
+// import intensity from '../../public/images/intensity.jpeg'
 
 import { Map, Marker, ZoomControl } from 'pigeon-maps'
 // import { stamenTerrain } from 'pigeon-maps/providers'
@@ -22,8 +25,11 @@ export default function Details({
 	quakeDetails,
 	tectonicDetails,
 	offshoreDetails,
+	// blurDataURL,
 }) {
 	let now = new Date()
+
+	const [loaded, setLoaded] = useState(true)
 
 	const maptilerProvider = maptiler('MaTKi78CrHEEExK4dS8x', 'topo')
 
@@ -253,13 +259,23 @@ export default function Details({
 											</div>
 										</div>
 									</div>
-									<div className='w-full px-5'>
+									<div className='w-full px-5 mt-4'>
 										{quakeDetails.properties.products['shakemap'] ? (
-											<img
-												className='max-h-[95vh] max-w-full h-auto object-cover m-auto border border-stone-600 mb-5 rounded-md'
-												src={`https://earthquake.usgs.gov/product/shakemap/${quakeDetails.properties.products.shakemap[0].code}/${quakeDetails.properties.products.shakemap[0].source}/${quakeDetails.properties.products.shakemap[0].updateTime}/download/intensity.jpg`}
-												alt={`Shake map for ${quakeDetails.properties.title} showing shaking intensity and report locations around the epicenter.`}
-											/>
+											<div className='m-auto max-w-[700px] mb-5 border rounded-md border-stone-600 bg-stone-500'>
+												<Image
+													layout='responsive'
+													width={787}
+													height={1003}
+													priority
+													loading='eager'
+													// placeholder='blur'
+													// blurDataURL={blurDataURL}
+													className='border rounded-md border-stone-600'
+													// onLoad={() => setLoaded(true)}
+													src={`https://earthquake.usgs.gov/product/shakemap/${quakeDetails.properties.products.shakemap[0].code}/${quakeDetails.properties.products.shakemap[0].source}/${quakeDetails.properties.products.shakemap[0].updateTime}/download/intensity.jpg`}
+													alt={`Shake map for ${quakeDetails.properties.title} showing shaking intensity and report locations around the epicenter.`}
+												/>
+											</div>
 										) : (
 											<div className='border border-stone-600 rounded-lg overflow-hidden m-auto mb-5 w-11/12 h-[400px] justify-center safari-rounded'>
 												<Map
@@ -460,3 +476,15 @@ export async function getServerSideProps(context) {
 		props: { quakeDetails, tectonicDetails, offshoreDetails },
 	}
 }
+
+// export const getStaticProps = async () => {
+// 	const { base64, img } = await getPlaiceholder(
+// 		'../../public/images/intensity.jpeg'
+// 	)
+
+// 	return {
+// 		props: {
+// 			blurDataURL: base64,
+// 		},
+// 	}
+// }
