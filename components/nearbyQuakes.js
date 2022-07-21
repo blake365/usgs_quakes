@@ -1,23 +1,5 @@
 import { useState, useEffect } from 'react'
 import Quake from './quake'
-// import useSWR from 'swr'
-
-// const fetcher = (...args) => fetch(...args).then((res) => res.json())
-
-// const fetchString =
-// 	'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&minmagnitude=2.5&limit=10'
-
-// function useQuakes() {
-// 	const { data, error } = useSWR(fetchString, fetcher, {
-// 		refreshInterval: 60000,
-// 	})
-
-// 	return {
-// 		quakes: data,
-// 		isLoading: !error && !data,
-// 		isError: error,
-// 	}
-// }
 
 export default function NearbyQuakes({ latitude, longitude, currentId }) {
 	const [quakes, setQuakes] = useState([])
@@ -25,9 +7,7 @@ export default function NearbyQuakes({ latitude, longitude, currentId }) {
 
 	// console.log(data)
 
-	// const { quakes, isLoading, isError } = useQuakes()
-
-	const fetchString = `https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&latitude=${latitude}&longitude=${longitude}&minradiuskm=1&maxradiuskm=100&limit=10`
+	const fetchString = `https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&latitude=${latitude}&longitude=${longitude}&minradiuskm=1&maxradiuskm=160&limit=10`
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -42,19 +22,6 @@ export default function NearbyQuakes({ latitude, longitude, currentId }) {
 		}
 		fetchData()
 	}, [fetchString])
-
-	// console.log(quakes)
-
-	// const countQuakes = (id, arr) => {
-	// 	// console.log(quakesArr)
-	// 	let filtered = arr.filter((quake) => {
-	// 		quake.id !== id
-	// 	})
-	// 	console.log(filtered)
-	// 	let count = filtered.length
-	// 	console.log(count)
-	// 	return count
-	// }
 
 	return (
 		<div>

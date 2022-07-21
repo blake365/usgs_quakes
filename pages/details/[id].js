@@ -277,15 +277,26 @@ export default function Details({
 												/>
 											</div>
 										) : (
-											<div className='border border-stone-600 rounded-lg overflow-hidden m-auto mb-5 w-11/12 h-[400px] justify-center safari-rounded'>
+											<div className='border border-stone-600 rounded-lg overflow-hidden m-auto mb-5 w-11/12 h-[400px] md:h-[700px] justify-center safari-rounded bg-stone-500'>
 												<Map
 													className=''
 													provider={maptilerProvider}
 													dprs={[1, 2]}
-													height={400}
-													// metaWheelZoom={true}
+													metaWheelZoom={true}
 													mouseEvents={false}
-													// touchEvents={false}
+													attributionPrefix={false}
+													attribution={
+														<a
+															href='https://www.maptiler.com'
+															target='_blank'
+															style={{ display: 'inline-block' }}
+														>
+															<img
+																src='https://api.maptiler.com/resources/logo.svg'
+																alt='MapTiler logo'
+															/>
+														</a>
+													}
 													center={[
 														quakeDetails.geometry.coordinates[1],
 														quakeDetails.geometry.coordinates[0],
@@ -410,7 +421,7 @@ export default function Details({
 								Recent Nearby Earthquakes
 							</div>
 							<div className='block text-sm text-stone-600'>
-								Searches a 100 km radius in the past month
+								Searches a 160 km radius in the past month
 							</div>
 						</div>
 						{quakeDetails.geometry ? (

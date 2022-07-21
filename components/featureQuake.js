@@ -11,6 +11,7 @@ export default function FeaturedQuake() {
 	const [tectonic, setTectonic] = useState({})
 	const [loading, isLoading] = useState(false)
 	const [version, upVersion] = useState(1)
+	const [errors, setError] = useState(null)
 
 	let today = ''
 	function getDateString() {
@@ -56,7 +57,12 @@ export default function FeaturedQuake() {
 		} else {
 			fetch(fetchStrings[randomFetchString()])
 				.then(function (response) {
-					return response.json()
+					console.log(response)
+					if (response.ok) {
+						return response.json()
+					} else {
+						throw Error('Error while fetching data')
+					}
 				})
 				.then(function (data) {
 					// console.log(data)
@@ -93,11 +99,18 @@ export default function FeaturedQuake() {
 									isLoading(false)
 								}
 								fetchData()
-
 								setDetails(data)
 								sessionStorage.setItem('feature', JSON.stringify(data))
 							}
 						})
+						.catch((err) => {
+							// console.log(err.message)
+							setError(err.message)
+						})
+				})
+				.catch((err) => {
+					// console.log(err)
+					setError(err.message)
 				})
 		}
 	}, [version])
@@ -206,6 +219,7 @@ export default function FeaturedQuake() {
 			.replace('#AMPM#', AMPM)
 	}
 
+	// console.log(errors)
 	return (
 		<section className='px-2 lg:w-3/5 xl:w-3/5 '>
 			<section className='w-full mt-5 overflow-hidden border rounded-lg shadow-lg columns-1 border-stone-600 bg-stone-100'>
@@ -233,6 +247,13 @@ export default function FeaturedQuake() {
 						</button>
 					</div>
 				</div>
+				{errors && (
+					<div className='w-full py-2 text-center '>
+						<div className='w-full px-5 pb-1 mb-3 border-b shadow-md border-stone-600'>
+							<div>{errors}</div>
+						</div>
+					</div>
+				)}
 				{details.properties ? (
 					<div className='w-full py-2 text-left '>
 						<div className='w-full px-5 pb-1 mb-3 border-b shadow-md border-stone-600'>
@@ -356,20 +377,32 @@ export default function FeaturedQuake() {
 									/>
 								</div>
 							) : (
-								<div className='border border-stone-600 rounded-lg overflow-hidden m-auto mb-5 w-11/12 h-[400px] justify-center safari-rounded'>
+								<div className='border border-stone-600 rounded-lg overflow-hidden m-auto mb-5 w-11/12 h-[400px] md:h-[700px] justify-center safari-rounded bg-stone-500'>
 									<Map
 										className=''
 										provider={maptilerProvider}
 										dprs={[1, 2]}
-										height={400}
 										metaWheelZoom={true}
 										mouseEvents={false}
+										attributionPrefix={false}
+										attribution={
+											<a
+												href='https://www.maptiler.com'
+												target='_blank'
+												style={{ display: 'inline-block' }}
+											>
+												<img
+													src='https://api.maptiler.com/resources/logo.svg'
+													alt='MapTiler logo'
+												/>
+											</a>
+										}
 										// touchEvents={false}
 										defaultCenter={[
 											details.geometry.coordinates[1],
 											details.geometry.coordinates[0],
 										]}
-										defaultZoom={7}
+										defaultZoom={9}
 									>
 										<ZoomControl />
 										<Marker
@@ -470,13 +503,16 @@ export default function FeaturedQuake() {
 						</div>
 					</div>
 				) : (
+					''
+				)}
+				{/* ) : (
 					<div className='w-full mb-4 text-center align-middle border border-stone-600 bg-stone-100'>
 						<div className='mt-5 ldsripple'>
 							<div></div>
 							<div></div>
 						</div>
 					</div>
-				)}
+				)} */}
 			</section>
 		</section>
 	)
