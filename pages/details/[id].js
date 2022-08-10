@@ -16,11 +16,6 @@ import { GoReport } from 'react-icons/go'
 // import { BiLinkExternal } from 'react-icons/bi'
 import NearbyQuakes from '../../components/nearbyQuakes'
 
-let detailSearch =
-	'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventid='
-
-let tectonicSearch = 'https://earthquake.usgs.gov/ws/geoserve/regions.json?'
-
 export default function Details({
 	quakeDetails,
 	tectonicDetails,
@@ -458,10 +453,17 @@ export default function Details({
 
 export async function getServerSideProps(context) {
 	// console.log(context.params.id)
+
+	let detailSearch =
+		'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventid='
+
+	let tectonicSearch = 'https://earthquake.usgs.gov/ws/geoserve/regions.json?'
+
 	let pageId = context.params.id
 
 	let search = detailSearch + pageId
 
+	// console.log(search)
 	const quakeRes = await fetch(search)
 	const quakeDetails = await quakeRes.json()
 
@@ -482,6 +484,12 @@ export async function getServerSideProps(context) {
 	}
 
 	// console.log(quakeDetails)
+	// console.log(
+	// 	quakeDetails.geometry.coordinates[1],
+	// 	quakeDetails.geometry.coordinates[0]
+	// )
+	// console.log(tectonicSearch)
+	// console.log(tectonicDetails)
 
 	return {
 		props: { quakeDetails, tectonicDetails, offshoreDetails },
