@@ -382,15 +382,15 @@ export default function Details({
 																></div>
 															</div>
 														)
-													} else if (offshoreDetails.features.length > 0) {
-														return (
-															<div>
-																<div className='mb-1 text-2xl font-bold'>
-																	Offshore Region
-																</div>
-																<div>{offshoreDetails[0].name.description}</div>
-															</div>
-														)
+														// } else if (offshoreDetails.length > 0) {
+														// 	return (
+														// 		<div>
+														// 			<div className='mb-1 text-2xl font-bold'>
+														// 				Offshore Region
+														// 			</div>
+														// 			<div>{offshoreDetails[0].properties.name}</div>
+														// 		</div>
+														// 	)
 													} else {
 														return <div>No Information Available</div>
 													}
@@ -480,7 +480,8 @@ export async function getServerSideProps(context) {
 		const tectonicRes = await fetch(tectonicSearch)
 		const tectonicJson = await tectonicRes.json()
 		tectonicDetails = tectonicJson.tectonic.features
-		offshoreDetails = tectonicJson.offshore
+		offshoreDetails = tectonicJson.offshore.features
+		// console.log(offshoreDetails)
 	}
 
 	// console.log(quakeDetails)
