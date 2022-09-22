@@ -214,8 +214,8 @@ export default function QuakeWrapper() {
 
 	return (
 		<div className='w-full gap-4 p-2 mt-5 columns-1 min-h-max'>
-			<div className='pb-0 mb-5 overflow-hidden text-center border rounded-md border-stone-500 bg-stone-50'>
-				<div className='flex justify-between p-1 bg-amber-400'>
+			<div className='pb-0 mb-5 overflow-hidden text-center border rounded-md border-stone-500 bg-stone-50 dark:bg-zinc-700 dark:text-zinc-100 text-stone-700'>
+				<div className='flex justify-between p-1 bg-sky-200 dark:bg-sky-600 dark:text-zinc-100'>
 					<button
 						type='submit'
 						className='invisible px-1 m-1 text-center bg-orange-200 border border-orange-700 rounded-md hover:bg-orange-50'
@@ -224,17 +224,17 @@ export default function QuakeWrapper() {
 						Clear
 					</button>
 					<div>
-						<h4 className='block text-2xl uppercase '>
+						<h4 className='block mb-0 text-2xl uppercase'>
 							Earthquake Search Filter
 						</h4>
-						<p className='block text-sm text-stone-600'>
+						<p className='block text-sm text-stone-600 dark:text-zinc-300'>
 							Limited to 100 results
 						</p>
 					</div>
 					<div className='h-auto my-auto align-middle'>
 						<button
 							type='submit'
-							className='px-1 m-1 text-center border rounded-md bg-stone-200 border-stone-700 hover:bg-stone-50'
+							className='px-1 m-1 text-center border rounded-md bg-stone-200 border-stone-700 hover:bg-stone-50 dark:bg-zinc-500 dark:hover:bg-zinc-400'
 							onClick={handleResetFields}
 						>
 							Clear
@@ -246,7 +246,7 @@ export default function QuakeWrapper() {
 						<label className='inline-block p-1 xs:block'>
 							Min Magnitude:{' '}
 							<input
-								className='px-1 text-right border rounded-md bg-stone-200 border-stone-700 hover:bg-blue-50 w-14'
+								className='px-1 text-right text-black border rounded-md bg-stone-200 border-stone-700 hover:bg-blue-50 w-14'
 								type='number'
 								value={minMag}
 								min='0'
@@ -262,7 +262,7 @@ export default function QuakeWrapper() {
 						<label className='inline-block p-1 xs:block'>
 							Max Magnitude:{' '}
 							<input
-								className='px-1 text-right border rounded-md bg-stone-200 border-stone-700 hover:bg-blue-50 w-14'
+								className='px-1 text-right text-black border rounded-md bg-stone-200 border-stone-700 hover:bg-blue-50 w-14'
 								type='number'
 								value={maxMag}
 								min='0'
@@ -280,7 +280,7 @@ export default function QuakeWrapper() {
 						<label className='inline-block p-1 xs:block'>
 							Latitude:{' '}
 							<input
-								className='px-1 text-right border rounded-md bg-stone-200 border-stone-700 hover:bg-blue-50 w-28'
+								className='px-1 text-right text-black border rounded-md bg-stone-200 border-stone-700 hover:bg-blue-50 w-28'
 								type='number'
 								step='0.001'
 								value={latitude}
@@ -296,7 +296,7 @@ export default function QuakeWrapper() {
 						<label className='inline-block p-1 xs:block'>
 							Longitude:{' '}
 							<input
-								className='w-32 px-1 text-right border rounded-md bg-stone-200 border-stone-700 hover:bg-blue-50'
+								className='w-32 px-1 text-right text-black border rounded-md bg-stone-200 border-stone-700 hover:bg-blue-50'
 								type='number'
 								step='0.001'
 								value={longitude}
@@ -313,7 +313,7 @@ export default function QuakeWrapper() {
 						<label className='inline-block p-1 xs:block'>
 							Radius (km):{' '}
 							<input
-								className='px-1 text-right border rounded-md bg-stone-200 border-stone-700 hover:bg-blue-50'
+								className='px-1 text-right text-black border rounded-md bg-stone-200 border-stone-700 hover:bg-blue-50'
 								type='number'
 								value={radius}
 								min='100'
@@ -334,7 +334,7 @@ export default function QuakeWrapper() {
 								📍
 							</button>
 						</div>
-						<p className='text-sm font-normal text-stone-600'>
+						<p className='text-sm font-normal text-stone-600 dark:text-zinc-300'>
 							Must include all fields to use location search
 						</p>
 					</div>
@@ -342,7 +342,7 @@ export default function QuakeWrapper() {
 						<label className='inline-block p-1 xs:block'>
 							Start Date:{' '}
 							<input
-								className='px-1 text-right border rounded-md bg-stone-200 border-stone-700 hover:bg-blue-50'
+								className='px-1 text-right text-black border rounded-md bg-stone-200 border-stone-700 hover:bg-blue-50'
 								type='date'
 								value={start}
 								//   min='1'
@@ -357,7 +357,7 @@ export default function QuakeWrapper() {
 						<label className='inline-block p-1 xs:block'>
 							End Date:{' '}
 							<input
-								className='px-1 text-right border rounded-md bg-stone-200 border-stone-700 hover:bg-blue-50'
+								className='px-1 text-right text-black border rounded-md bg-stone-200 border-stone-700 hover:bg-blue-50'
 								type='date'
 								value={end}
 								//   min='1'
@@ -369,7 +369,7 @@ export default function QuakeWrapper() {
 								}}
 							/>
 						</label>
-						<p className='text-sm font-normal text-stone-600'>
+						<p className='text-sm font-normal text-stone-600 dark:text-zinc-300'>
 							Defaults to previous 30 days
 						</p>
 					</div>
@@ -425,7 +425,7 @@ export default function QuakeWrapper() {
 					<div className='block m-2 mb-1 text-center'>
 						<button
 							type='submit'
-							className='px-2 py-1 text-center border-2 rounded-md bg-amber-400 border-stone-700 hover:bg-amber-200'
+							className='px-2 py-1 text-center border rounded-md bg-sky-300 border-stone-700 hover:bg-sky-200 dark:bg-sky-500 dark:hover:bg-sky-400'
 							onClick={handleFetchChange}
 						>
 							Find Earthquakes
@@ -434,7 +434,7 @@ export default function QuakeWrapper() {
 					<div className='m-2 text-sm font-normal text-red-600'>
 						{meta.error}
 					</div>
-					<div className='m-2 text-sm font-normal text-stone-600'>
+					<div className='m-2 text-sm font-normal text-stone-600 dark:text-stone-200'>
 						{loading ? (
 							<div>Searching...</div>
 						) : (

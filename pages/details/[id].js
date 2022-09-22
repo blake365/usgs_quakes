@@ -123,7 +123,7 @@ export default function Details({
 	}
 
 	return (
-		<div className='flex flex-col items-center justify-center min-h-screen py-2 bg-stone-300'>
+		<div className='flex flex-col items-center justify-center min-h-screen py-2 bg-zinc-200 text-stone-700 dark:bg-zinc-900'>
 			<Head>
 				<title>{quakeDetails.properties.title}</title>
 				<link rel='icon' href='/icons/waveform 1.svg' />
@@ -132,14 +132,14 @@ export default function Details({
 					content={`Detailed description for the ${quakeDetails.properties.title} earthquake with the shake map, human impacts, and tectonic summary which explains the geology behind the earthquake (when available) . Also includes nearby earthquakes within the last month. Data provided by the United States Geological Survey.`}
 				/>
 			</Head>
-			<div className='flex w-full h-20 p-2 mt-5 overflow-hidden font-semibold text-center align-middle border-y border-stone-600 bg-stone-100'>
+			<div className='flex w-full h-20 p-2 mt-5 overflow-hidden font-semibold text-center align-middle border-y border-stone-400 bg-sky-200 dark:bg-sky-600 text-stone-700 dark:border-zinc-800 dark:text-zinc-100'>
 				<h1 className='w-full my-auto text-2xl uppercase lg:text-6xl md:text-5xl sm:text-3xl'>
 					<img
 						src='/icons/waveform 1.svg'
 						className='hidden w-10 h-10 md:w-20 md:h-20 sm:inline'
 					/>
 					<Link href='/'>
-						<a className='w-full text-2xl text-black uppercase lg:text-6xl md:text-5xl sm:text-3xl hover:no-underline'>
+						<a className='w-full text-2xl text-black uppercase dark:text-zinc-100 lg:text-6xl md:text-5xl sm:text-3xl hover:no-underline'>
 							{' '}
 							USGS Earthquake Feed{' '}
 						</a>
@@ -154,23 +154,23 @@ export default function Details({
 				<div className='flex flex-col lg:flex-row'>
 					{/* selected quake */}
 					<section className='px-2 min-h-max lg:w-3/5 xl:w-3/5'>
-						<div className='w-full mt-5 overflow-hidden border rounded-lg shadow-lg columns-1 border-stone-600 bg-stone-100'>
+						<div className='w-full mt-5 overflow-hidden border rounded-lg shadow-lg columns-1 border-stone-400 bg-stone-100 dark:bg-zinc-600 dark:border-zinc-800 dark:text-zinc-100'>
 							{quakeDetails.properties ? (
-								<div className='w-full py-2 m-0 text-left'>
-									<div className='w-full px-5 pb-1 mb-3 border-b shadow-md border-stone-600'>
+								<div className='w-full m-0 text-left'>
+									<div className='w-full px-5 pt-2 pb-1 mb-3 border-b shadow-md border-stone-400 dark:border-zinc-800 dark:bg-zinc-500'>
 										{/* time */}
-										<div className='flex justify-between text-sm text-stone-800 columns-2'>
+										<div className='flex justify-between text-sm columns-2'>
 											<div className=''>
 												{new Date(quakeDetails.properties.time).customFormat(
 													'#MM#/#DD#/#YYYY# #hh#:#mm#:#ss# #AMPM#'
 												)}
 											</div>
 											{quakeDetails.properties.status === 'reviewed' ? (
-												<div className='pr-1 text-green-700'>
+												<div className='pr-1 text-green-700 dark:text-green-500'>
 													{quakeDetails.properties.status}
 												</div>
 											) : (
-												<div className='pr-1 text-stone-700'>
+												<div className='pr-1'>
 													{quakeDetails.properties.status.substring(0, 4)}
 												</div>
 											)}
@@ -181,21 +181,21 @@ export default function Details({
 												{quakeDetails.properties.title}
 											</div>
 										) : quakeDetails.properties.alert === 'red' ? (
-											<div className='flex text-3xl font-bold text-red-700 '>
+											<div className='flex text-3xl font-bold text-red-700 dark:text-red-600 '>
 												{quakeDetails.properties.title}
 											</div>
 										) : quakeDetails.properties.alert === 'yellow' ? (
-											<div className='flex text-3xl font-bold text-amber-400'>
+											<div className='flex text-3xl font-bold text-amber-500'>
 												{quakeDetails.properties.title}
 											</div>
 										) : (
-											<div className='flex text-3xl font-bold text-green-700 '>
+											<div className='flex text-3xl font-bold text-green-700 dark:text-green-600'>
 												{quakeDetails.properties.title}
 											</div>
 										)}
 
 										<div className='flex items-center leading-8 align-middle md:text-lg'>
-											<div className='pr-2 text-lg text-green-700 align-middle'>
+											<div className='pr-2 text-lg text-green-700 align-middle dark:text-green-200'>
 												<BsPinMapFill />
 											</div>
 											<div className='font-normal text-md'>
@@ -219,9 +219,9 @@ export default function Details({
 												km deep
 											</div>
 										</div>
-										<div className='flex justify-between leading-8 text-stone-800 columns-2'>
+										<div className='flex justify-between leading-8 columns-2'>
 											<div className='flex items-center pb-1 font-normal text-md'>
-												<div className='pr-2 text-lg text-purple-700 '>
+												<div className='pr-2 text-lg text-purple-700 dark:text-purple-400'>
 													<GoReport />
 												</div>
 												{quakeDetails.properties.felt != null
@@ -234,7 +234,7 @@ export default function Details({
 													''
 												) : (
 													<a
-														className='pl-2 text-blue-600 hover:text-blue-800 hover:underline'
+														className='pl-2 text-sky-600 hover:text-sky-800 hover:underline dark:text-sky-500 dark:hover:text-sky-500'
 														href={quakeDetails.properties.url + '/tellus'}
 														target='_blank'
 													>
@@ -245,7 +245,7 @@ export default function Details({
 											<div className='pr-1 text-sm place-self-center sm:text-lg '>
 												<a
 													href={quakeDetails.properties.url}
-													className='px-1 font-bold text-green-800 border border-green-800 rounded-sm hover:bg-green-800 hover:text-white hover:no-underline'
+													className='px-1 font-bold text-green-800 border border-green-800 rounded-sm hover:bg-green-800 hover:text-white hover:no-underline dark:bg-green-800 dark:text-zinc-100 dark:border-zinc-100'
 													target='_blank'
 													rel='noreffer'
 												>
@@ -254,9 +254,9 @@ export default function Details({
 											</div>
 										</div>
 									</div>
-									<div className='w-full px-5 mt-4'>
+									<div className='w-full mt-4'>
 										{quakeDetails.properties.products['shakemap'] ? (
-											<div className='m-auto max-w-[700px] mb-5 border rounded-md border-stone-600 bg-stone-500'>
+											<div className='m-auto max-w-[700px] mb-5 mx-5 border rounded-md border-stone-600 bg-stone-500'>
 												<Image
 													layout='responsive'
 													width={787}
@@ -319,7 +319,7 @@ export default function Details({
 											</div>
 										)}
 
-										<div className='max-h-[600px] overflow-scroll p-4 mb-3 border border-stone-600 rounded-md bg-stone-200'>
+										<div className='max-h-[600px] w-full overflow-scroll border-t border-stone-400 dark:border-zinc-800 bg-stone-200 px-6 py-2 dark:bg-zinc-500'>
 											{quakeDetails.properties.products['impact-text'] ? (
 												<div className=''>
 													<div className='mb-1 text-2xl font-bold'>
@@ -392,7 +392,7 @@ export default function Details({
 														// 		</div>
 														// 	)
 													} else {
-														return <div>No Information Available</div>
+														return <div></div>
 													}
 												}
 											})()}
@@ -411,11 +411,11 @@ export default function Details({
 					</section>
 					{/* nearby quakes component */}
 					<div className='block w-full px-2 pt-0 mt-5 columns-1 lg:w-2/5 xl:w-2/5'>
-						<div className='w-full text-center bg-amber-400 border border-stone-600 rounded-lg mb-2.5 p-1 '>
-							<div className='text-xl uppercase md:text-2xl'>
+						<div className='w-full text-center text-stone-700 bg-sky-200 border border-stone-400 rounded-lg mb-2.5 p-1 dark:bg-sky-600 dark:text-zinc-100 dark:border-zinc-600'>
+							<h4 className='mb-0 text-xl uppercase md:text-2xl'>
 								Recent Nearby Earthquakes
-							</div>
-							<div className='block text-sm text-stone-600'>
+							</h4>
+							<div className='block text-sm text-stone-600 dark:text-zinc-300'>
 								Searches a 160 km radius in the past month
 							</div>
 						</div>
@@ -437,12 +437,12 @@ export default function Details({
 				</div>
 			</main>
 			<div className='h-4'></div>
-			<footer className='w-full p-5 text-lg text-center border-y border-stone-600 bg-stone-100'>
+			<footer className='w-full p-5 text-lg text-center text-stone-700 border-y border-stone-400 bg-sky-200 dark:bg-sky-600 dark:text-zinc-100 dark:border-zinc-600'>
 				<div>Data provided by the United States Geological Survey</div>
 				<a
 					href='https://earthquake.usgs.gov/fdsnws/event/1/'
 					target='_blank'
-					className='text-blue-600 underline hover:text-blue-900'
+					className='underline text-sky-600 hover:text-sky-900 dark:text-zinc-100 dark:hover:text-zinc-300'
 				>
 					API Documentation
 				</a>

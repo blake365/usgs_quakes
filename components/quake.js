@@ -104,10 +104,24 @@ export default function Quake(props) {
 
 	let now = new Date()
 
+	// console.log(props.quakeData.properties.time)
+
+	let timeSince = (now - props.quakeData.properties.time) / 3600000
+	// let quakeBgColor = ''
+
+	// if (props.quakeData.properties.mag < 4) {
+	// 	quakeBgColor = 'green'
+	// } else if (props.quakeData.properties.mag >= 6.5) {
+	// 	quakeBgColor = 'red'
+	// } else if (props.quakeData.properties.mag >= 5) {
+	// 	quakeBgColor = 'orange'
+	// } else {
+	// 	quakeBgColor = 'yellow'
+	// }
 	// console.log(props.quakeData.properties.title)
 
 	return (
-		<section className='flex w-full mb-4 overflow-hidden border rounded-lg shadow-md columns-2 border-stone-600 bg-stone-100'>
+		<section className='flex w-full mb-4 overflow-hidden border rounded-lg shadow-md columns-2 dark:border-zinc-800 border-stone-400 bg-stone-100 dark:bg-zinc-600 dark:text-zinc-100 text-stone-700'>
 			{props.quakeData.properties.mag < 4 ? (
 				<div className='w-5 bg-green-400 '></div>
 			) : props.quakeData.properties.mag >= 6.5 ? (
@@ -118,31 +132,39 @@ export default function Quake(props) {
 				<div className='w-5 bg-yellow-300 '></div>
 			)}
 
-			<div className='w-full p-1 pl-3 text-left border-l border-stone-600'>
-				<div className='flex justify-between text-sm text-stone-800 columns-2'>
-					<div className=''>
-						{' '}
-						{new Date(props.quakeData.properties.time).customFormat(
-							'#MM#/#DD#/#YYYY# #hh#:#mm#:#ss# #AMPM#'
-						)}
-					</div>
+			{/* <div className={`w-5 bg-${quakeBgColor}-400 `}></div> */}
+
+			<div className='w-full p-1 pl-3 text-left border-l border-stone-400 dark:border-zinc-800'>
+				<div className='flex justify-between text-sm columns-2'>
+					{timeSince <= 24 ? (
+						<div className='text-md '>
+							{Math.round(timeSince * 10) / 10} hours ago
+						</div>
+					) : (
+						<div className='text-md '>
+							{new Date(props.quakeData.properties.time).customFormat(
+								'#MM#/#DD#/#YYYY# #hh#:#mm#:#ss# #AMPM#'
+							)}
+						</div>
+					)}
+
 					{props.quakeData.properties.status === 'reviewed' ? (
-						<div className='pr-1 text-green-700'>
+						<div className='pr-1 text-green-700 dark:text-green-500'>
 							{props.quakeData.properties.status}
 						</div>
 					) : (
-						<div className='pr-1 text-stone-700'>
+						<div className='pr-1'>
 							{props.quakeData.properties.status.substring(0, 4)}
 						</div>
 					)}
 				</div>
 				<Link href={`/details/${props.quakeData.id}`}>
-					<a className='pr-3 text-lg font-bold text-blue-700 hover:text-blue-900 hover:underline'>
+					<a className='pr-3 text-lg font-bold text-sky-700 hover:text-sky-900 hover:underline dark:text-sky-300 dark:hover:text-sky-500'>
 						{props.quakeData.properties.title}
 					</a>
 				</Link>
 				<div className='flex items-center leading-8 align-middle md:text-lg'>
-					<div className='pr-2 text-lg text-green-700 align-middle'>
+					<div className='pr-2 text-lg text-green-700 align-middle dark:text-green-200'>
 						<BsPinMapFill />
 					</div>
 					<div className='font-normal text-md'>
@@ -164,21 +186,21 @@ export default function Quake(props) {
           <img src='/icons/waveform 1.svg' className='inline w-7 h-7' />{' '}
           {props.quakeData.properties.mag} {props.quakeData.properties.magType}
           </div>*/}
-				<div className='flex justify-between leading-8 text-stone-800 columns-2'>
-					<div className='flex items-center pb-1 font-normal text-md'>
-						<div className='pr-2 text-lg text-purple-700 '>
+				<div className='flex justify-between leading-8 columns-2'>
+					<div className='flex items-center pb-1 font-normal text-md '>
+						<div className='pr-2 text-lg text-purple-700 dark:text-purple-400'>
 							<GoReport />
 						</div>
 						{props.quakeData.properties.felt != null
 							? props.quakeData.properties.felt
 							: 0}{' '}
-						reports{' '}
+						reports
 						{(now - props.quakeData.properties.time) / (1000 * 60 * 60 * 24) >
 						30 ? (
 							''
 						) : (
 							<a
-								className='pl-2 text-blue-600 hover:text-blue-800 hover:underline'
+								className='pl-2 text-sky-600 hover:text-sky-800 hover:underline dark:text-sky-500 dark:hover:text-sky-600'
 								href={props.quakeData.properties.url + '/tellus'}
 								target='_blank'
 							>
@@ -189,7 +211,7 @@ export default function Quake(props) {
 					<div className='pr-1 text-sm place-self-center sm:text-lg '>
 						<a
 							href={props.quakeData.properties.url}
-							className='px-1 font-bold text-green-800 border border-green-800 rounded-sm hover:bg-green-800 hover:text-white hover:no-underline'
+							className='px-1 font-bold text-green-800 border border-green-800 rounded-sm hover:bg-green-800 hover:text-white hover:no-underline dark:bg-green-800 dark:text-zinc-100 dark:border-zinc-100'
 							target='_blank'
 							rel='noreffer'
 						>

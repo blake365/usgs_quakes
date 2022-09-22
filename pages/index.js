@@ -5,7 +5,7 @@ import QuakeWrapper from '../components/quakeWrapper'
 
 export default function Home() {
 	return (
-		<div className='flex flex-col items-center justify-center min-h-screen py-2 bg-stone-300'>
+		<div className='flex flex-col items-center justify-center min-h-screen py-2 bg-zinc-200 dark:bg-zinc-900'>
 			<Head>
 				<title>USGS Earthquake Feed</title>
 				<link rel='icon' href='/icons/waveform 1.svg' />
@@ -14,8 +14,8 @@ export default function Home() {
 					content='A feed of recent earthquakes and search filter for past earthquakes using data provided by the US Geological Survey. Detailed descriptions for each earthquake show the shake map, human impacts, and tectonic summary which explains the geology behind the earthquake.'
 				/>
 			</Head>
-			<div className='flex w-full h-20 p-2 mt-5 overflow-hidden font-semibold text-center align-middle border-y border-stone-600 bg-stone-100'>
-				<h1 className='w-full my-auto text-2xl uppercase lg:text-6xl md:text-4xl sm:text-3xl'>
+			<div className='flex w-full h-20 p-2 mt-5 overflow-hidden font-semibold text-center align-middle border-y border-stone-400 bg-sky-200 dark:bg-sky-600 text-stone-700 dark:border-zinc-800 dark:text-zinc-100'>
+				<h1 className='w-full my-auto text-3xl uppercase lg:text-6xl md:text-4xl '>
 					<img
 						src='/icons/waveform 1.svg'
 						className='hidden w-10 h-10 md:w-20 md:h-20 sm:inline'
@@ -35,12 +35,12 @@ export default function Home() {
 				<QuakeWrapper />
 			</main>
 
-			<footer className='w-full p-5 text-lg text-center border-y border-stone-600 bg-stone-100'>
+			<footer className='w-full p-5 text-lg text-center text-stone-700 border-y border-stone-400 bg-sky-200 dark:bg-sky-600 dark:text-zinc-100 dark:border-zinc-600'>
 				<div>Data provided by the United States Geological Survey</div>
 				<a
 					href='https://earthquake.usgs.gov/fdsnws/event/1/'
 					target='_blank'
-					className='text-blue-600 underline hover:text-blue-900'
+					className='underline text-sky-600 hover:text-sky-900 dark:text-zinc-100 dark:hover:text-zinc-300'
 				>
 					API Documentation
 				</a>

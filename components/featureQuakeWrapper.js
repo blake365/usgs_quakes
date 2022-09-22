@@ -46,16 +46,16 @@ export default function FeatureQuakeWrapper() {
 
 	return (
 		<div className='block w-full px-2 pt-0 mt-5 columns-1 lg:w-2/5 xl:w-2/5'>
-			<div className='w-full text-center bg-amber-400 border border-stone-600 rounded-lg mb-2.5 p-1 '>
-				<div className='text-xl uppercase md:text-2xl'>
+			<div className='w-full text-center text-stone-700 bg-sky-200 border border-stone-400 rounded-lg mb-2.5 p-1 dark:bg-sky-600 dark:text-zinc-100 dark:border-zinc-600'>
+				<h4 className='mb-0 text-xl uppercase md:text-2xl '>
 					10 Most Recent Quakes: M {'>'} 2.5
-				</div>
-				<div className='block text-sm text-stone-600'>
-					Automatically refreshes every minute
+				</h4>
+				<div className='block text-sm dark:text-zinc-300 text-stone-600'>
+					Checks for new earthquakes every minute
 				</div>
 			</div>
 			{isLoading ? (
-				<div className='w-full mb-4 text-center align-middle border border-stone-600 bg-stone-100'>
+				<div className='w-full mb-4 text-center align-middle border border-stone-400 bg-stone-200'>
 					<div className='mt-5 ldsripple'>
 						<div></div>
 						<div></div>

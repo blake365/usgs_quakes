@@ -48,7 +48,7 @@ export default function FeaturedQuake() {
 	useEffect(() => {
 		let featureDetails = JSON.parse(sessionStorage.getItem('feature'))
 		let tectonicDetails = JSON.parse(sessionStorage.getItem('tectonic'))
-
+		isLoading(true)
 		if (featureDetails) {
 			setDetails(featureDetails)
 			if (tectonicDetails) {
@@ -113,6 +113,7 @@ export default function FeaturedQuake() {
 					setError(err.message)
 				})
 		}
+		isLoading(false)
 	}, [version])
 
 	let now = new Date()
@@ -222,8 +223,8 @@ export default function FeaturedQuake() {
 	// console.log(errors)
 	return (
 		<section className='px-2 lg:w-3/5 xl:w-3/5 '>
-			<section className='w-full mt-5 overflow-hidden border rounded-lg shadow-lg columns-1 border-stone-600 bg-stone-100'>
-				<div className='flex w-full p-1 border-b border-stone-600 bg-amber-400'>
+			<section className='w-full my-5 overflow-hidden border rounded-lg shadow-lg columns-1 border-stone-400 bg-stone-100 dark:bg-zinc-600 dark:border-zinc-800 dark:text-zinc-100'>
+				<div className='flex w-full p-1 border-b border-stone-400 bg-sky-200 dark:bg-sky-600 dark:border-zinc-800'>
 					<div className='flex-none invisible place-self-right'>
 						<button
 							type='submit'
@@ -233,13 +234,13 @@ export default function FeaturedQuake() {
 							<BiRefresh />
 						</button>
 					</div>
-					<div className='flex-grow text-2xl text-center uppercase place-self-center'>
+					<h4 className='flex-grow mb-0 text-2xl text-center uppercase place-self-center'>
 						Featured quake
-					</div>
+					</h4>
 					<div className='flex-none place-self-right'>
 						<button
 							type='submit'
-							className='px-1 py-1 m-1 text-2xl text-center border rounded-md hover:bg-stone-50 bg-stone-200 border-stone-700'
+							className='px-1 py-1 m-1 text-2xl text-center border rounded-md hover:bg-stone-50 bg-stone-200 border-stone-700 dark:bg-zinc-500 dark:hover:bg-zinc-400'
 							onClick={refresh}
 							aria-label='Refresh featured earthquake'
 						>
@@ -255,16 +256,16 @@ export default function FeaturedQuake() {
 					</div>
 				)}
 				{details.properties ? (
-					<div className='w-full py-2 text-left '>
-						<div className='w-full px-5 pb-1 mb-3 border-b shadow-md border-stone-600'>
-							<div className='flex justify-between text-sm text-stone-800 columns-2'>
+					<div className='w-full text-left '>
+						<div className='w-full px-5 pt-2 pb-1 mb-3 border-b shadow-md border-stone-400 dark:border-zinc-800 dark:bg-zinc-500'>
+							<div className='flex justify-between text-sm columns-2'>
 								<div className=''>
 									{new Date(details.properties.time).customFormat(
 										'#MM#/#DD#/#YYYY# #hh#:#mm#:#ss# #AMPM#'
 									)}
 								</div>
 								{details.properties.status === 'reviewed' ? (
-									<div className='pr-1 text-green-700'>
+									<div className='pr-1 text-green-700 dark:text-green-500'>
 										{details.properties.status}
 									</div>
 								) : (
@@ -283,7 +284,7 @@ export default function FeaturedQuake() {
 								</a>
 							) : details.properties.alert === 'red' ? (
 								<a
-									className='text-3xl font-bold text-red-700 hover:text-red-900 hover:underline'
+									className='text-3xl font-bold text-red-700 hover:text-red-900 dark:text-red-600 dark:hover:text-red-700 hover:underline'
 									// href={details.properties.url}
 									href={`/details/${details.id}`}
 								>
@@ -299,7 +300,7 @@ export default function FeaturedQuake() {
 								</a>
 							) : (
 								<a
-									className='text-3xl font-bold text-green-700 hover:text-green-900 hover:underline'
+									className='text-3xl font-bold text-green-700 hover:text-green-900 dark:text-green-600 dark:hover:text-green-500 hover:underline'
 									// href={details.properties.url}
 									href={`/details/${details.id}`}
 								>
@@ -308,7 +309,7 @@ export default function FeaturedQuake() {
 							)}
 
 							<div className='flex items-center leading-8 align-middle md:text-lg'>
-								<div className='pr-2 text-lg text-green-700 align-middle'>
+								<div className='pr-2 text-lg text-green-700 align-middle dark:text-green-200'>
 									<BsPinMapFill />
 								</div>
 								<div className='font-normal text-md'>
@@ -326,9 +327,9 @@ export default function FeaturedQuake() {
 									deep
 								</div>
 							</div>
-							<div className='flex justify-between leading-8 text-stone-800 columns-2'>
+							<div className='flex justify-between leading-8 columns-2'>
 								<div className='flex items-center pb-1 font-normal text-md'>
-									<div className='pr-2 text-lg text-purple-700 '>
+									<div className='pr-2 text-lg text-purple-700 dark:text-purple-400'>
 										<GoReport />
 									</div>
 									{details.properties.felt != null
@@ -340,7 +341,7 @@ export default function FeaturedQuake() {
 										''
 									) : (
 										<a
-											className='pl-2 text-blue-600 hover:text-blue-800 hover:underline'
+											className='pl-2 text-sky-600 hover:text-sky-800 hover:underline dark:text-sky-500 dark:hover:text-sky-500'
 											href={details.properties.url + '/tellus'}
 											target='_blank'
 										>
@@ -351,7 +352,7 @@ export default function FeaturedQuake() {
 								<div className='pr-1 text-sm place-self-center sm:text-lg '>
 									<a
 										href={details.properties.url}
-										className='px-1 font-bold text-green-800 border border-green-800 rounded-sm hover:bg-green-800 hover:text-white hover:no-underline'
+										className='px-1 font-bold text-green-800 border border-green-800 rounded-sm hover:bg-green-800 hover:text-white hover:no-underline dark:bg-green-800 dark:text-zinc-100 dark:border-zinc-100'
 										target='_blank'
 										rel='noreffer'
 									>
@@ -425,81 +426,81 @@ export default function FeaturedQuake() {
 								className='max-h-[95vh] max-w-full h-auto object-cover m-auto border border-stone-600 mb-5 rounded-md'
 								src={`https://earthquake.usgs.gov/product/shakemap/${details.properties.products.shakemap[0].code}/${details.properties.products.shakemap[0].source}/${details.properties.products.shakemap[0].updateTime}/download/intensity.jpg`}
               /> */}
+						</div>
+						<div className='max-h-[600px] w-full overflow-scroll border-t border-stone-400 dark:border-zinc-800 bg-stone-200 px-6 py-2 dark:bg-zinc-500'>
+							{details.properties.products['impact-text'] ? (
+								<div className=''>
+									<div className='mb-1 text-2xl font-bold'>Human Impact</div>
+									<div
+										className='mb-1 text-sm'
+										dangerouslySetInnerHTML={{
+											__html:
+												details.properties.products['impact-text'][0].contents[
+													''
+												].bytes,
+										}}
+									></div>
+								</div>
+							) : (
+								''
+							)}
 
-							<div className='max-h-[600px] overflow-scroll p-4 mb-3 border border-stone-600 rounded-md bg-stone-200'>
-								{details.properties.products['impact-text'] ? (
-									<div className=''>
-										<div className='mb-1 text-2xl font-bold'>Human Impact</div>
-										<div
-											className='mb-1 text-sm'
-											dangerouslySetInnerHTML={{
-												__html:
-													details.properties.products['impact-text'][0]
-														.contents[''].bytes,
-											}}
-										></div>
-									</div>
-								) : (
-									''
-								)}
-
-								{(() => {
-									if (details.properties.products['general-text']) {
+							{(() => {
+								if (details.properties.products['general-text']) {
+									return (
+										<div>
+											<div className='mb-1 text-2xl font-bold'>
+												Tectonic Summary
+											</div>
+											{details.properties.products['general-text'][0].contents[
+												''
+											].bytes
+												.split('Tectonic Summary')[1]
+												.split('\n')
+												.filter((n) => n)
+												.map((item, index) => {
+													return (
+														<div
+															key={index}
+															className='text-sm mb-1.5'
+															dangerouslySetInnerHTML={{
+																__html: item,
+															}}
+														></div>
+													)
+												})}
+										</div>
+									)
+								} else {
+									if (loading) {
+										return (
+											<div className='w-full mb-4 text-center align-middle border border-stone-600 bg-stone-100'>
+												<div className='mt-5 ldsripple'>
+													<div></div>
+													<div></div>
+												</div>
+											</div>
+										)
+									} else if (tectonic.length > 0) {
+										// console.log(tectonic[0].properties.summary.length)
 										return (
 											<div>
 												<div className='mb-1 text-2xl font-bold'>
 													Tectonic Summary
 												</div>
-												{details.properties.products[
-													'general-text'
-												][0].contents[''].bytes
-													.split('Tectonic Summary')[1]
-													.split('\n')
-													.filter((n) => n)
-													.map((item, index) => {
-														return (
-															<div
-																key={index}
-																className='text-sm mb-1.5'
-																dangerouslySetInnerHTML={{
-																	__html: item,
-																}}
-															></div>
-														)
-													})}
+												<div
+													className='mb-1 text-sm'
+													dangerouslySetInnerHTML={{
+														__html: tectonic[0].properties.summary,
+													}}
+												></div>
 											</div>
 										)
 									} else {
-										if (loading) {
-											return (
-												<div className='w-full mb-4 text-center align-middle border border-stone-600 bg-stone-100'>
-													<div className='mt-5 ldsripple'>
-														<div></div>
-														<div></div>
-													</div>
-												</div>
-											)
-										} else if (tectonic.length > 0) {
-											// console.log(tectonic[0].properties.summary.length)
-											return (
-												<div>
-													<div className='mb-1 text-2xl font-bold'>
-														Tectonic Summary
-													</div>
-													<div
-														className='mb-1 text-sm'
-														dangerouslySetInnerHTML={{
-															__html: tectonic[0].properties.summary,
-														}}
-													></div>
-												</div>
-											)
-										} else {
-											return <div>No Information Found</div>
-										}
+										return <div></div>
 									}
-								})()}
-							</div>
+								}
+							})()}
 						</div>
 					</div>
 				) : (
