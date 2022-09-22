@@ -5,7 +5,7 @@ import QuakeWrapper from '../components/quakeWrapper'
 
 export default function Home() {
 	return (
-		<div className='flex flex-col items-center justify-center min-h-screen py-2 bg-zinc-200 dark:bg-zinc-900'>
+		<div className='flex flex-col items-center justify-center min-h-screen pb-6 bg-zinc-200 dark:bg-zinc-900'>
 			<Head>
 				<title>USGS Earthquake Feed</title>
 				<link rel='icon' href='/icons/waveform 1.svg' />
@@ -15,7 +15,7 @@ export default function Home() {
 				/>
 			</Head>
 			<div className='flex w-full h-20 p-2 mt-5 overflow-hidden font-semibold text-center align-middle border-y border-stone-400 bg-sky-200 dark:bg-sky-600 text-stone-700 dark:border-zinc-800 dark:text-zinc-100'>
-				<h1 className='w-full my-auto text-3xl uppercase lg:text-6xl md:text-4xl '>
+				<h1 className='w-full my-auto text-2xl uppercase lg:text-6xl md:text-4xl '>
 					<img
 						src='/icons/waveform 1.svg'
 						className='hidden w-10 h-10 md:w-20 md:h-20 sm:inline'

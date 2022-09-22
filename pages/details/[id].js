@@ -123,7 +123,7 @@ export default function Details({
 	}
 
 	return (
-		<div className='flex flex-col items-center justify-center min-h-screen py-2 bg-zinc-200 text-stone-700 dark:bg-zinc-900'>
+		<div className='flex flex-col items-center justify-center min-h-screen pb-6 bg-zinc-200 text-stone-700 dark:bg-zinc-900'>
 			<Head>
 				<title>{quakeDetails.properties.title}</title>
 				<link rel='icon' href='/icons/waveform 1.svg' />
@@ -139,7 +139,7 @@ export default function Details({
 						className='hidden w-10 h-10 md:w-20 md:h-20 sm:inline'
 					/>
 					<Link href='/'>
-						<a className='w-full text-2xl text-black uppercase dark:text-zinc-100 lg:text-6xl md:text-5xl sm:text-3xl hover:no-underline'>
+						<a className='w-full text-2xl uppercase text-stone-700 dark:text-zinc-100 lg:text-6xl md:text-5xl sm:text-3xl hover:no-underline'>
 							{' '}
 							USGS Earthquake Feed{' '}
 						</a>
@@ -181,7 +181,7 @@ export default function Details({
 												{quakeDetails.properties.title}
 											</div>
 										) : quakeDetails.properties.alert === 'red' ? (
-											<div className='flex text-3xl font-bold text-red-700 dark:text-red-600 '>
+											<div className='flex text-3xl font-bold text-red-700 dark:text-red-500 '>
 												{quakeDetails.properties.title}
 											</div>
 										) : quakeDetails.properties.alert === 'yellow' ? (
@@ -189,7 +189,7 @@ export default function Details({
 												{quakeDetails.properties.title}
 											</div>
 										) : (
-											<div className='flex text-3xl font-bold text-green-700 dark:text-green-600'>
+											<div className='flex text-3xl font-bold text-green-700 dark:text-green-500'>
 												{quakeDetails.properties.title}
 											</div>
 										)}
@@ -255,71 +255,72 @@ export default function Details({
 										</div>
 									</div>
 									<div className='w-full mt-4'>
-										{quakeDetails.properties.products['shakemap'] ? (
-											<div className='m-auto max-w-[700px] mb-5 mx-5 border rounded-md border-stone-600 bg-stone-500'>
-												<Image
-													layout='responsive'
-													width={787}
-													height={1003}
-													priority
-													loading='eager'
-													// placeholder='blur'
-													// blurDataURL={blurDataURL}
-													className='border rounded-md border-stone-600'
-													// onLoad={() => setLoaded(true)}
-													src={`https://earthquake.usgs.gov/product/shakemap/${quakeDetails.properties.products.shakemap[0].code}/${quakeDetails.properties.products.shakemap[0].source}/${quakeDetails.properties.products.shakemap[0].updateTime}/download/intensity.jpg`}
-													alt={`Shake map for ${quakeDetails.properties.title} showing shaking intensity and report locations around the epicenter.`}
-												/>
-											</div>
-										) : (
-											<div className='border border-stone-600 rounded-lg overflow-hidden m-auto mb-5 w-11/12 h-[400px] md:h-[700px] justify-center safari-rounded bg-stone-500'>
-												<Map
-													className=''
-													provider={maptilerProvider}
-													dprs={[1, 2]}
-													metaWheelZoom={true}
-													mouseEvents={false}
-													attributionPrefix={false}
-													attribution={
-														<a
-															href='https://www.maptiler.com'
-															target='_blank'
-															style={{ display: 'inline-block' }}
-														>
-															<img
-																src='https://api.maptiler.com/resources/logo.svg'
-																alt='MapTiler logo'
-															/>
-														</a>
-													}
-													center={[
-														quakeDetails.geometry.coordinates[1],
-														quakeDetails.geometry.coordinates[0],
-													]}
-													onBoundsChanged={({ center }) => {
-														center = center
-													}}
-													defaultZoom={7}
-												>
-													<ZoomControl />
-													<Marker
-														color={
-															quakeDetails.properties.alert === null
-																? 'green'
-																: quakeDetails.properties.alert
+										<div className='px-5'>
+											{quakeDetails.properties.products['shakemap'] ? (
+												<div className='mx-auto mb-5 border rounded-md max-w-[700px] border-stone-600 bg-stone-500'>
+													<Image
+														layout='responsive'
+														width={787}
+														height={1003}
+														priority
+														loading='eager'
+														// placeholder='blur'
+														// blurDataURL={blurDataURL}
+														className='mx-auto border rounded-md border-stone-600'
+														// onLoad={() => setLoaded(true)}
+														src={`https://earthquake.usgs.gov/product/shakemap/${quakeDetails.properties.products.shakemap[0].code}/${quakeDetails.properties.products.shakemap[0].source}/${quakeDetails.properties.products.shakemap[0].updateTime}/download/intensity.jpg`}
+														alt={`Shake map for ${quakeDetails.properties.title} showing shaking intensity and report locations around the epicenter.`}
+													/>
+												</div>
+											) : (
+												<div className='border border-stone-600 rounded-lg overflow-hidden m-auto mb-5 w-11/12 h-[400px] md:h-[700px] justify-center safari-rounded bg-stone-500'>
+													<Map
+														className=''
+														provider={maptilerProvider}
+														dprs={[1, 2]}
+														metaWheelZoom={true}
+														mouseEvents={false}
+														attributionPrefix={false}
+														attribution={
+															<a
+																href='https://www.maptiler.com'
+																target='_blank'
+																style={{ display: 'inline-block' }}
+															>
+																<img
+																	src='https://api.maptiler.com/resources/logo.svg'
+																	alt='MapTiler logo'
+																/>
+															</a>
 														}
-														width={30}
-														hover={false}
-														anchor={[
+														center={[
 															quakeDetails.geometry.coordinates[1],
 															quakeDetails.geometry.coordinates[0],
 														]}
-													/>
-												</Map>
-											</div>
-										)}
-
-										<div className='max-h-[600px] w-full overflow-scroll border-t border-stone-400 dark:border-zinc-800 bg-stone-200 px-6 py-2 dark:bg-zinc-500'>
+														onBoundsChanged={({ center }) => {
+															center = center
+														}}
+														defaultZoom={7}
+													>
+														<ZoomControl />
+														<Marker
+															color={
+																quakeDetails.properties.alert === null
+																	? 'green'
+																	: quakeDetails.properties.alert
+															}
+															width={30}
+															hover={false}
+															anchor={[
+																quakeDetails.geometry.coordinates[1],
+																quakeDetails.geometry.coordinates[0],
+															]}
+														/>
+													</Map>
+												</div>
+											)}
+										</div>
+										<div className='max-h-[600px] w-full overflow-scroll border-t border-stone-400 dark:border-zinc-800 bg-stone-200 px-6 py-2 dark:bg-zinc-500 rounded-b-md'>
 											{quakeDetails.properties.products['impact-text'] ? (
 												<div className=''>
 													<div className='mb-1 text-2xl font-bold'>
@@ -437,7 +438,7 @@ export default function Details({
 				</div>
 			</main>
 			<div className='h-4'></div>
-			<footer className='w-full p-5 text-lg text-center text-stone-700 border-y border-stone-400 bg-sky-200 dark:bg-sky-600 dark:text-zinc-100 dark:border-zinc-600'>
+			<footer className='w-full p-5 mt-5 text-lg text-center text-stone-700 border-y border-stone-400 bg-sky-200 dark:bg-sky-600 dark:text-zinc-100 dark:border-zinc-600'>
 				<div>Data provided by the United States Geological Survey</div>
 				<a
 					href='https://earthquake.usgs.gov/fdsnws/event/1/'

@@ -234,7 +234,7 @@ export default function FeaturedQuake() {
 							<BiRefresh />
 						</button>
 					</div>
-					<h4 className='flex-grow mb-0 text-2xl text-center uppercase place-self-center'>
+					<h4 className='flex-grow mb-0 text-2xl text-center uppercase text-stone-700 dark:text-zinc-100 place-self-center'>
 						Featured quake
 					</h4>
 					<div className='flex-none place-self-right'>
@@ -284,7 +284,7 @@ export default function FeaturedQuake() {
 								</a>
 							) : details.properties.alert === 'red' ? (
 								<a
-									className='text-3xl font-bold text-red-700 hover:text-red-900 dark:text-red-600 dark:hover:text-red-700 hover:underline'
+									className='text-3xl font-bold text-red-700 hover:text-red-900 dark:text-red-500 dark:hover:text-red-600 hover:underline'
 									// href={details.properties.url}
 									href={`/details/${details.id}`}
 								>
@@ -300,7 +300,7 @@ export default function FeaturedQuake() {
 								</a>
 							) : (
 								<a
-									className='text-3xl font-bold text-green-700 hover:text-green-900 dark:text-green-600 dark:hover:text-green-500 hover:underline'
+									className='text-3xl font-bold text-green-700 hover:text-green-900 dark:text-green-500 dark:hover:text-green-400 hover:underline'
 									// href={details.properties.url}
 									href={`/details/${details.id}`}
 								>
@@ -427,7 +427,7 @@ export default function FeaturedQuake() {
 								src={`https://earthquake.usgs.gov/product/shakemap/${details.properties.products.shakemap[0].code}/${details.properties.products.shakemap[0].source}/${details.properties.products.shakemap[0].updateTime}/download/intensity.jpg`}
               /> */}
 						</div>
-						<div className='max-h-[600px] w-full overflow-scroll border-t border-stone-400 dark:border-zinc-800 bg-stone-200 px-6 py-2 dark:bg-zinc-500'>
+						<div className='max-h-[600px] w-full overflow-scroll border-t border-stone-400 dark:border-zinc-800 bg-stone-200 px-6 py-2 dark:bg-zinc-500 rounded-b-md'>
 							{details.properties.products['impact-text'] ? (
 								<div className=''>
 									<div className='mb-1 text-2xl font-bold'>Human Impact</div>
