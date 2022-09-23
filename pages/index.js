@@ -15,7 +15,7 @@ export default function Home() {
 				/>
 			</Head>
 			<div className='flex w-full h-20 p-2 mt-5 overflow-hidden font-semibold text-center align-middle border-y border-stone-400 bg-sky-200 dark:bg-sky-600 text-stone-700 dark:border-zinc-800 dark:text-zinc-100'>
-				<h1 className='w-full my-auto text-2xl uppercase lg:text-6xl md:text-4xl '>
+				<h1 className='w-full my-auto text-2xl uppercase lg:text-6xl md:text-5xl sm:text-3xl'>
 					<img
 						src='/icons/waveform 1.svg'
 						className='hidden w-10 h-10 md:w-20 md:h-20 sm:inline'

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Quake from './quake'
+import QuakeCard from './quakeCard'
 
 export default function QuakeWrapper() {
 	let today = ''
@@ -31,7 +32,7 @@ export default function QuakeWrapper() {
 	const [direction, setDir] = useState('desc')
 
 	const [fetchString, setFetch] = useState(
-		'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&minmagnitude=6&limit=10&orderby=magnitude'
+		'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&minmagnitude=6&orderby=magnitude'
 	)
 
 	const [quakes, setQuakes] = useState([])
@@ -443,23 +444,24 @@ export default function QuakeWrapper() {
 					</div>
 				</form>
 			</div>
-
-			{loading ? (
-				<div className='w-full mb-4 text-center align-middle border border-stone-600 bg-stone-100'>
-					<div className='mt-5 ldsripple'>
-						<div></div>
-						<div></div>
+			<div className='flex flex-wrap justify-between gap-4'>
+				{loading ? (
+					<div className='w-full mb-4 text-center align-middle border border-stone-600 bg-stone-100'>
+						<div className='mt-5 ldsripple'>
+							<div></div>
+							<div></div>
+						</div>
 					</div>
-				</div>
-			) : quakes.length > 0 ? (
-				quakes.map((quake) => {
-					return <Quake quakeData={quake} key={quake.id} />
-				})
-			) : (
-				<div className='block w-full p-5 mt-5 mb-4 text-center align-middle border rounded-lg shadow-md border-stone-600 bg-stone-100'>
-					No Earthquakes Found
-				</div>
-			)}
+				) : quakes.length > 0 ? (
+					quakes.map((quake) => {
+						return <QuakeCard quakeData={quake} key={quake.id} />
+					})
+				) : (
+					<div className='block w-full p-5 mt-5 mb-4 text-center align-middle border rounded-lg shadow-md border-stone-600 bg-stone-100'>
+						No Earthquakes Found
+					</div>
+				)}
+			</div>
 		</div>
 	)
 }

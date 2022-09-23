@@ -1,4 +1,3 @@
-// import { useRouter } from 'next/router'
 import { useState } from 'react'
 import Link from 'next/link'
 import Head from 'next/head'
@@ -19,12 +18,12 @@ import NearbyQuakes from '../../components/nearbyQuakes'
 export default function Details({
 	quakeDetails,
 	tectonicDetails,
-	offshoreDetails,
 	// blurDataURL,
 }) {
 	let now = new Date()
 
-	const [loaded, setLoaded] = useState(true)
+	console.log(quakeDetails.properties.products)
+	// const [loaded, setLoaded] = useState(true)
 
 	const maptilerProvider = maptiler('MaTKi78CrHEEExK4dS8x', 'topo')
 
@@ -154,10 +153,10 @@ export default function Details({
 				<div className='flex flex-col lg:flex-row'>
 					{/* selected quake */}
 					<section className='px-2 min-h-max lg:w-3/5 xl:w-3/5'>
-						<div className='w-full mt-5 overflow-hidden border rounded-lg shadow-lg columns-1 border-stone-400 bg-stone-100 dark:bg-zinc-600 dark:border-zinc-800 dark:text-zinc-100'>
+						<div className='w-full mt-5 overflow-hidden border rounded-lg shadow-lg columns-1 border-stone-400 bg-stone-100 dark:bg-zinc-600 dark:border-zinc-800 dark:text-zinc-100 z-2'>
 							{quakeDetails.properties ? (
 								<div className='w-full m-0 text-left'>
-									<div className='w-full px-5 pt-2 pb-1 mb-3 border-b shadow-md border-stone-400 dark:border-zinc-800 dark:bg-zinc-500'>
+									<div className='w-full px-5 pt-2 border-b shadow-md border-stone-400 dark:border-zinc-800 dark:bg-zinc-500'>
 										{/* time */}
 										<div className='flex justify-between text-sm columns-2'>
 											<div className=''>
@@ -254,10 +253,14 @@ export default function Details({
 											</div>
 										</div>
 									</div>
-									<div className='w-full mt-4'>
-										<div className='px-5'>
+									<div className='w-full'>
+										<div
+											className={`${
+												quakeDetails.properties.products['shakemap'] && 'px-5'
+											}`}
+										>
 											{quakeDetails.properties.products['shakemap'] ? (
-												<div className='mx-auto mb-5 border rounded-md max-w-[700px] border-stone-600 bg-stone-500'>
+												<div className='mx-auto mb-5 mt-5 border rounded-md max-w-[700px] border-stone-600 bg-stone-500'>
 													<Image
 														layout='responsive'
 														width={787}
@@ -273,7 +276,7 @@ export default function Details({
 													/>
 												</div>
 											) : (
-												<div className='border border-stone-600 rounded-lg overflow-hidden m-auto mb-5 w-11/12 h-[400px] md:h-[700px] justify-center safari-rounded bg-stone-500'>
+												<div className=' overflow-hidden m-0 w-full h-[400px] md:h-[600px] justify-center z-1 bg-stone-500'>
 													<Map
 														className=''
 														provider={maptilerProvider}
@@ -285,7 +288,10 @@ export default function Details({
 															<a
 																href='https://www.maptiler.com'
 																target='_blank'
-																style={{ display: 'inline-block' }}
+																style={{
+																	display: 'inline-block',
+																	marginBottom: '-4px',
+																}}
 															>
 																<img
 																	src='https://api.maptiler.com/resources/logo.svg'
@@ -320,7 +326,7 @@ export default function Details({
 												</div>
 											)}
 										</div>
-										<div className='max-h-[600px] w-full overflow-scroll border-t border-stone-400 dark:border-zinc-800 bg-stone-200 px-6 py-2 dark:bg-zinc-500 rounded-b-md'>
+										<div className='max-h-[600px] w-full overflow-scroll border-t border-stone-400 dark:border-zinc-800 bg-stone-200 px-6 py-3 dark:bg-zinc-500 rounded-b-md'>
 											{quakeDetails.properties.products['impact-text'] ? (
 												<div className=''>
 													<div className='mb-1 text-2xl font-bold'>
@@ -469,7 +475,6 @@ export async function getServerSideProps(context) {
 	const quakeDetails = await quakeRes.json()
 
 	let tectonicDetails = null
-	let offshoreDetails = null
 
 	if (!quakeDetails.properties.products['general-text']) {
 		tectonicSearch =
@@ -480,8 +485,8 @@ export async function getServerSideProps(context) {
 			quakeDetails.geometry.coordinates[0]
 		const tectonicRes = await fetch(tectonicSearch)
 		const tectonicJson = await tectonicRes.json()
-		tectonicDetails = tectonicJson.tectonic.features
-		offshoreDetails = tectonicJson.offshore.features
+		tectonicDetails = tectonicJson.tectonic?.features
+		// offshoreDetails = tectonicJson.offshore.features
 		// console.log(offshoreDetails)
 	}
 
@@ -494,7 +499,7 @@ export async function getServerSideProps(context) {
 	// console.log(tectonicDetails)
 
 	return {
-		props: { quakeDetails, tectonicDetails, offshoreDetails },
+		props: { quakeDetails, tectonicDetails },
 	}
 }
 
