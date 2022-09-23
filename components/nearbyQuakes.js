@@ -24,7 +24,7 @@ export default function NearbyQuakes({ latitude, longitude, currentId }) {
 	}, [fetchString])
 
 	return (
-		<div>
+		<div className='flex flex-wrap justify-between gap-4 pt-2'>
 			{loading ? (
 				<div className='w-full mb-4 text-center align-middle border border-stone-600 bg-stone-100'>
 					<div className='mt-5 ldsripple'>

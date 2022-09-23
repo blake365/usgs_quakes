@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import Quake from './quake'
 import QuakeCard from './quakeCard'
 
+import { BiGridAlt, BiListUl } from 'react-icons/bi'
+
 export default function QuakeWrapper() {
 	let today = ''
 	let startDefault = ''
@@ -38,6 +40,7 @@ export default function QuakeWrapper() {
 	const [quakes, setQuakes] = useState([])
 	const [meta, setMeta] = useState([])
 	const [loading, isLoading] = useState(false)
+	const [size, setSize] = useState('compact')
 
 	useEffect(() => {
 		const fetchData = async (string) => {
@@ -375,7 +378,7 @@ export default function QuakeWrapper() {
 						</p>
 					</div>
 
-					<div className='flex pb-2 m-2 text-center border-b justify-evenly border-stone-600'>
+					<div className='flex px-2 my-2 text-center justify-evenly border-stone-600'>
 						<div>
 							<div>Order By:</div>
 							<label className='p-1 font-normal'>
@@ -423,24 +426,61 @@ export default function QuakeWrapper() {
 							</label>
 						</div>
 					</div>
-					<div className='block m-2 mb-1 text-center'>
-						<button
-							type='submit'
-							className='px-2 py-1 text-center border rounded-md bg-sky-300 border-stone-700 hover:bg-sky-200 dark:bg-sky-500 dark:hover:bg-sky-400'
-							onClick={handleFetchChange}
-						>
-							Find Earthquakes
-						</button>
-					</div>
-					<div className='m-2 text-sm font-normal text-red-600'>
-						{meta.error}
-					</div>
-					<div className='m-2 text-sm font-normal text-stone-600 dark:text-stone-200'>
-						{loading ? (
-							<div>Searching...</div>
-						) : (
-							<div>{quakes.length} Earthquakes found</div>
-						)}
+					<div className='flex justify-between align-middle border-t border-stone-600'>
+						<div className='flex flex-col invisible ml-2 dark:text-stone-700 grow-0'>
+							<button
+								onClick={() => setSize('large')}
+								className='h-6 px-1 m-1 text-center border rounded-md text-md bg-stone-200 hover:bg-stone-50 border-stone-700 disabled:text-sky-600 disabled:hover:bg-stone-200'
+								disabled={size === 'large'}
+							>
+								<BiGridAlt />
+							</button>
+							<button
+								onClick={() => setSize('compact')}
+								className='h-6 px-1 m-1 mt-0 text-center border rounded-md text-md hover:bg-stone-50 bg-stone-200 border-stone-700 disabled:text-sky-600 disabled:hover:bg-stone-200 '
+								disabled={size === 'compact'}
+							>
+								<BiListUl />
+							</button>
+						</div>
+						<div>
+							<div className='block m-2 mb-1 text-center'>
+								<button
+									type='submit'
+									className='px-2 py-1 text-center border rounded-md bg-sky-300 border-stone-700 hover:bg-sky-200 dark:bg-sky-500 dark:hover:bg-sky-400'
+									onClick={handleFetchChange}
+								>
+									Find Earthquakes
+								</button>
+							</div>
+							<div className='m-2 text-sm font-normal text-red-600'>
+								{meta.error}
+							</div>
+
+							<div className='m-2 text-sm font-normal text-stone-600 dark:text-stone-200'>
+								{loading ? (
+									<div>Searching...</div>
+								) : (
+									<div>{quakes.length} Earthquakes found</div>
+								)}
+							</div>
+						</div>
+						<div className='flex flex-col content-end justify-end my-auto mr-2 dark:text-stone-700 grow-0'>
+							<button
+								onClick={() => setSize('large')}
+								className='h-6 px-1 m-1 mb-0 text-center border rounded-t-md text-md bg-stone-200 hover:bg-stone-50 border-stone-700 disabled:text-sky-600 disabled:hover:bg-stone-200'
+								disabled={size === 'large'}
+							>
+								<BiGridAlt />
+							</button>
+							<button
+								onClick={() => setSize('compact')}
+								className='h-6 px-1 m-1 mt-0 text-center border border-t-0 rounded-b-md text-md hover:bg-stone-50 bg-stone-200 border-stone-700 disabled:text-sky-600 disabled:hover:bg-stone-200 '
+								disabled={size === 'compact'}
+							>
+								<BiListUl />
+							</button>
+						</div>
 					</div>
 				</form>
 			</div>
@@ -454,7 +494,11 @@ export default function QuakeWrapper() {
 					</div>
 				) : quakes.length > 0 ? (
 					quakes.map((quake) => {
-						return <QuakeCard quakeData={quake} key={quake.id} />
+						if (size === 'large') {
+							return <QuakeCard quakeData={quake} key={quake.id} />
+						} else {
+							return <Quake quakeData={quake} key={quake.id} />
+						}
 					})
 				) : (
 					<div className='block w-full p-5 mt-5 mb-4 text-center align-middle border rounded-lg shadow-md border-stone-600 bg-stone-100'>

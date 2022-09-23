@@ -256,8 +256,8 @@ export default function FeaturedQuake() {
 					</div>
 				)}
 				{details.properties ? (
-					<div className='w-full text-left '>
-						<div className='w-full px-5 pt-2 pb-1 mb-3 border-b shadow-md border-stone-400 dark:border-zinc-800 dark:bg-zinc-500'>
+					<div className='w-full text-left bg-stone-200'>
+						<div className='w-full px-5 pt-2 pb-1 mb-3 border-b shadow-md border-stone-400 bg-stone-100 dark:border-zinc-800 dark:bg-zinc-500'>
 							<div className='flex justify-between text-sm columns-2'>
 								<div className=''>
 									{new Date(details.properties.time).customFormat(
@@ -427,7 +427,7 @@ export default function FeaturedQuake() {
 								src={`https://earthquake.usgs.gov/product/shakemap/${details.properties.products.shakemap[0].code}/${details.properties.products.shakemap[0].source}/${details.properties.products.shakemap[0].updateTime}/download/intensity.jpg`}
               /> */}
 						</div>
-						<div className='max-h-[600px] w-full overflow-scroll border-t border-stone-400 dark:border-zinc-800 bg-stone-200 px-6 py-2 dark:bg-zinc-500 rounded-b-md'>
+						<div className='max-h-[600px] w-full overflow-scroll border-t border-stone-400 dark:border-zinc-800 bg-stone-100 px-6 py-2 dark:bg-zinc-500 rounded-b-md'>
 							{details.properties.products['impact-text'] ? (
 								<div className=''>
 									<div className='mb-1 text-2xl font-bold'>Human Impact</div>
