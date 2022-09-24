@@ -26,7 +26,7 @@ export default function NearbyQuakes({ latitude, longitude, currentId }) {
 	return (
 		<div className='flex flex-wrap justify-between gap-4 pt-2'>
 			{loading ? (
-				<div className='w-full mb-4 text-center align-middle border border-stone-600 bg-stone-100'>
+				<div className='block w-full p-5 mb-4 text-center align-middle border rounded-lg shadow-md dark:border-zinc-800 border-stone-400 bg-stone-100 dark:bg-zinc-600 dark:text-zinc-100 text-stone-700'>
 					<div className='mt-5 ldsripple'>
 						<div></div>
 						<div></div>
@@ -41,7 +41,7 @@ export default function NearbyQuakes({ latitude, longitude, currentId }) {
 					}
 				})
 			) : (
-				<div className='block w-full p-5 mt-5 mb-4 text-center align-middle border rounded-lg shadow-md dark:border-zinc-800 border-stone-400 bg-stone-100 dark:bg-zinc-600 dark:text-zinc-100 text-stone-700'>
+				<div className='block w-full p-5 mb-4 text-center align-middle border rounded-lg shadow-md dark:border-zinc-800 border-stone-400 bg-stone-100 dark:bg-zinc-600 dark:text-zinc-100 text-stone-700'>
 					No Earthquakes Found
 				</div>
 			)}

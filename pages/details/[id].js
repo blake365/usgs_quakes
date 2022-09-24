@@ -22,7 +22,7 @@ export default function Details({
 }) {
 	let now = new Date()
 
-	console.log(quakeDetails.properties.products)
+	// console.log(quakeDetails.properties.products)
 	// const [loaded, setLoaded] = useState(true)
 
 	const maptilerProvider = maptiler('MaTKi78CrHEEExK4dS8x', 'topo')
@@ -156,7 +156,7 @@ export default function Details({
 						<div className='w-full mt-5 overflow-hidden border rounded-lg shadow-lg columns-1 border-stone-400 bg-stone-100 dark:bg-zinc-600 dark:border-zinc-800 dark:text-zinc-100 z-2'>
 							{quakeDetails.properties ? (
 								<div className='w-full m-0 text-left'>
-									<div className='w-full px-5 pt-2 border-b shadow-lg  border-stone-400 dark:border-zinc-800 dark:bg-zinc-500'>
+									<div className='w-full px-5 pt-2 border-b shadow-lg border-stone-400 dark:border-zinc-800 dark:bg-zinc-500'>
 										{/* time */}
 										<div className='flex justify-between text-sm columns-2'>
 											<div className=''>

@@ -57,7 +57,7 @@ export default function FeaturedQuake() {
 		} else {
 			fetch(fetchStrings[randomFetchString()])
 				.then(function (response) {
-					console.log(response)
+					// console.log(response)
 					if (response.ok) {
 						return response.json()
 					} else {
@@ -256,7 +256,7 @@ export default function FeaturedQuake() {
 					</div>
 				)}
 				{details.properties ? (
-					<div className='w-full text-left bg-stone-200'>
+					<div className='w-full text-left bg-stone-200 dark:bg-zinc-600'>
 						<div className='w-full px-5 pt-2 pb-1 mb-3 border-b shadow-md border-stone-400 bg-stone-100 dark:border-zinc-800 dark:bg-zinc-500'>
 							<div className='flex justify-between text-sm columns-2'>
 								<div className=''>

@@ -155,9 +155,9 @@ export default function QuakeCard(props) {
 	// console.log(placeLength)
 
 	return (
-		<section className='mx-auto border rounded-lg shadow-md w-[355px] dark:border-zinc-800 border-stone-400 bg-stone-100 dark:bg-zinc-600 dark:text-zinc-100 text-stone-700 grow h-auto overflow-hidden'>
+		<section className='mx-auto border rounded-lg shadow-md w-[355px] dark:border-zinc-800 border-stone-400 bg-stone-100 dark:bg-zinc-600 dark:text-zinc-100 text-stone-700 grow h-auto overflow-hidden safari-rounded'>
 			<div className='relative'>
-				<div className='safari-rounded rounded-md border-b border-stone-400 overflow-hidden m-auto h-[300px] justify-center  bg-stone-500 shadow-md dark:border-zinc-800'>
+				<div className='safari-rounded rounded-md  border-stone-400 overflow-hidden m-auto h-[300px] justify-center  bg-stone-500 shadow-md dark:border-zinc-800'>
 					<Map
 						className=''
 						provider={maptilerProvider}
@@ -235,7 +235,7 @@ export default function QuakeCard(props) {
 				)}
 
 				<div
-					className={`absolute w-full p-1 pl-3 text-left h-[45%] border-stone-400 dark:border-zinc-700 bottom-0 border-t bg-stone-100/80 dark:bg-zinc-600/80 pt-6 rounded-b-lg flex flex-col`}
+					className={`absolute w-full p-1 pl-3 text-left h-[45%] border-stone-400 dark:border-zinc-700 bottom-0 border-t bg-stone-100/80 dark:bg-zinc-600/80 pt-6 flex flex-col`}
 				>
 					<div className='flex justify-end -mt-5'>
 						{props.quakeData.properties.status === 'reviewed' ? (

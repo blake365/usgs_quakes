@@ -35,7 +35,7 @@ export default function Home() {
 				<QuakeWrapper />
 			</main>
 
-			<footer className='w-full p-5 text-lg text-center text-stone-700 border-y border-stone-400 bg-sky-200 dark:bg-sky-600 dark:text-zinc-100 dark:border-zinc-600'>
+			<footer className='w-full p-5 mt-5 text-lg text-center text-stone-700 border-y border-stone-400 bg-sky-200 dark:bg-sky-600 dark:text-zinc-100 dark:border-zinc-600'>
 				<div>Data provided by the United States Geological Survey</div>
 				<a
 					href='https://earthquake.usgs.gov/fdsnws/event/1/'
