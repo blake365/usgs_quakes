@@ -217,19 +217,19 @@ export default function QuakeCard(props) {
 					</div>
 				</div>
 				{props.quakeData.properties.mag < 4 ? (
-					<div className='absolute z-10 flex items-center justify-center w-12 h-12 px-5 text-white bg-green-500 border rounded-full shadow-md top-[140px] border-stone-400 left-5 dark:border-zinc-700'>
+					<div className='absolute z-10 flex items-center justify-center w-12 h-12 px-5 text-white bg-green-500 border rounded-full shadow-md top-[140px] border-stone-400 left-5 dark:border-zinc-700 font-bold'>
 						{props.quakeData.properties.mag}
 					</div>
 				) : props.quakeData.properties.mag >= 6.5 ? (
-					<div className='absolute z-10 flex items-center justify-center w-12 h-12 px-5 text-white bg-red-500 border rounded-full shadow-md top-[140px] border-stone-400 left-5 dark:border-zinc-700'>
+					<div className='absolute z-10 flex items-center justify-center w-12 h-12 px-5 text-white bg-red-500 border rounded-full shadow-md top-[140px] border-stone-400 left-5 dark:border-zinc-700 font-bold'>
 						{props.quakeData.properties.mag}
 					</div>
 				) : props.quakeData.properties.mag >= 5 ? (
-					<div className='absolute z-10 flex items-center justify-center w-12 h-12 px-5 text-white bg-orange-500 border rounded-full shadow-md top-[140px] border-stone-400 left-5 dark:border-zinc-700'>
+					<div className='absolute z-10 flex items-center justify-center w-12 h-12 px-5 text-white bg-orange-500 border rounded-full shadow-md top-[140px] border-stone-400 left-5 dark:border-zinc-700 font-bold'>
 						{props.quakeData.properties.mag}
 					</div>
 				) : (
-					<div className='absolute z-10 flex items-center justify-center w-12 h-12 px-5 bg-yellow-300 border rounded-full shadow-md text-stone-700 top-[140px] border-stone-400 left-5 dark:border-zinc-700'>
+					<div className='absolute z-10 flex items-center justify-center w-12 h-12 px-5 bg-yellow-300 border rounded-full shadow-md text-stone-700 top-[140px] border-stone-400 left-5 dark:border-zinc-700 font-bold'>
 						{props.quakeData.properties.mag}
 					</div>
 				)}
