@@ -504,7 +504,9 @@ export default function FeaturedQuake() {
 						</div>
 					</div>
 				) : (
-					''
+					<div className='w-full text-left bg-stone-200 dark:bg-zinc-600'>
+						<div className='w-full px-5 pt-2 pb-1 mb-3 border-b shadow-md border-stone-400 bg-stone-100 dark:border-zinc-800 dark:bg-zinc-500'></div>
+					</div>
 				)}
 				{/* ) : (
 					<div className='w-full mb-4 text-center align-middle border border-stone-600 bg-stone-100'>

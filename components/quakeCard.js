@@ -144,7 +144,11 @@ export default function QuakeCard(props) {
 
 				tectonicDetails = tectonicJson.tectonic?.features
 				// console.log(tectonicDetails)
-				setPlace(tectonicDetails[0].properties?.name)
+				if (tectonicDetails[0]) {
+					setPlace(tectonicDetails[0].properties.name)
+				} else {
+					setPlace(props.quakeData.properties.title)
+				}
 			}
 			fetchData()
 		}

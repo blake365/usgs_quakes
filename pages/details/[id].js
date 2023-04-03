@@ -474,18 +474,27 @@ export async function getServerSideProps(context) {
 	const quakeRes = await fetch(search)
 	const quakeDetails = await quakeRes.json()
 
+	// console.log(quakeRes)
+	// console.log(quakeDetails)
+
 	let tectonicDetails = null
 
-	if (!quakeDetails.properties.products['general-text']) {
+	if (!quakeDetails.properties.products['general-text'] && quakeDetails) {
 		tectonicSearch =
 			tectonicSearch +
 			'latitude=' +
 			quakeDetails.geometry.coordinates[1] +
 			'&longitude=' +
 			quakeDetails.geometry.coordinates[0]
-		const tectonicRes = await fetch(tectonicSearch)
-		const tectonicJson = await tectonicRes.json()
-		tectonicDetails = tectonicJson.tectonic?.features
+
+		try {
+			const tectonicRes = await fetch(tectonicSearch)
+			const tectonicJson = await tectonicRes.json()
+			tectonicDetails = tectonicJson.tectonic?.features
+		} catch (error) {
+			console.error(error)
+		}
+
 		// offshoreDetails = tectonicJson.offshore.features
 		// console.log(offshoreDetails)
 	}
