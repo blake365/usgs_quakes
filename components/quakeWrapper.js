@@ -378,8 +378,8 @@ export default function QuakeWrapper() {
 						</p>
 					</div>
 
-					<div className='flex px-2 my-2 text-center justify-evenly border-stone-600'>
-						<div>
+					<div className='flex justify-center px-2 my-2 text-center border-stone-600'>
+						<div className='w-[230px]'>
 							<div>Order By:</div>
 							<label className='p-1 font-normal'>
 								Date:{' '}
@@ -402,7 +402,7 @@ export default function QuakeWrapper() {
 								/>
 							</label>
 						</div>
-						<div>
+						<div className='w-[230px]'>
 							<div>Direction:</div>
 							<label className='p-1 font-normal'>
 								Descending:{' '}

@@ -18,14 +18,28 @@ import NearbyQuakes from '../../components/nearbyQuakes'
 export default function Details({
 	quakeDetails,
 	tectonicDetails,
+	waterDetails,
 	// blurDataURL,
 }) {
+	// console.log(quakeDetails)
+	// console.log(tectonicDetails)
 	let now = new Date()
 
 	// console.log(quakeDetails.properties.products)
 	// const [loaded, setLoaded] = useState(true)
+	// console.log(waterDetails)
 
-	const maptilerProvider = maptiler('MaTKi78CrHEEExK4dS8x', 'topo')
+	let tiles = 'topo-v2'
+
+	if (
+		waterDetails?.isWater &&
+		waterDetails?.feature !== 'RIVER' &&
+		waterDetails?.feature !== 'LAKE'
+	) {
+		tiles = 'ocean'
+	}
+
+	const maptilerProvider = maptiler('MaTKi78CrHEEExK4dS8x', tiles)
 
 	//*** This code is copyright 2002-2016 by Gavin Kistner, !@phrogz.net
 	//*** It is covered under the license viewable at http://phrogz.net/JS/_ReuseLicense.txt
@@ -478,6 +492,17 @@ export async function getServerSideProps(context) {
 	// console.log(quakeDetails)
 
 	let tectonicDetails = null
+	let waterDetails = null
+
+	if (quakeDetails) {
+		// check for ocean: https://is-on-water.balbona.me/api/v1/get/[latitude]/[longitude]
+
+		const isWater = await fetch(
+			`https://is-on-water.balbona.me/api/v1/get/${quakeDetails.geometry.coordinates[1]}/${quakeDetails.geometry.coordinates[0]}`
+		)
+
+		waterDetails = await isWater.json()
+	}
 
 	if (!quakeDetails.properties.products['general-text'] && quakeDetails) {
 		tectonicSearch =
@@ -508,7 +533,7 @@ export async function getServerSideProps(context) {
 	// console.log(tectonicDetails)
 
 	return {
-		props: { quakeDetails, tectonicDetails },
+		props: { quakeDetails, tectonicDetails, waterDetails },
 	}
 }
 

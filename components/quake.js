@@ -7,6 +7,7 @@ export default function Quake(props) {
 	//   const [detailsLink, setDetailsLink] = useState('')
 	//   const [details, setDetails] = useState([])
 	// let quakeTime = new Date(props.quakeData.properties.time)
+	// console.log(props)
 
 	//*** This code is copyright 2002-2016 by Gavin Kistner, !@phrogz.net
 	//*** It is covered under the license viewable at http://phrogz.net/JS/_ReuseLicense.txt

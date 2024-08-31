@@ -12,6 +12,7 @@ export default function FeaturedQuake() {
 	const [loading, isLoading] = useState(false)
 	const [version, upVersion] = useState(1)
 	const [errors, setError] = useState(null)
+	const [map, setMap] = useState(null)
 
 	let today = ''
 	function getDateString() {
@@ -22,22 +23,22 @@ export default function FeaturedQuake() {
 
 	today = getDateString()
 
-	const maptilerProvider = maptiler('MaTKi78CrHEEExK4dS8x', 'topo')
+	const maptilerProvider = maptiler('MaTKi78CrHEEExK4dS8x', map)
 
 	const randomFeature = (max) => {
 		return Math.floor(Math.random() * (max - 0)) + 0
 	}
 
-	let redString =
+	const redString =
 		'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&alertlevel=red&minmagnitude=6&starttime=2021-01-01&limit=10'
 
-	let orangeString =
+	const orangeString =
 		'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&alertlevel=orange&minmagnitude=6&starttime=2021-01-01&limit=10'
 
-	let sigString =
+	const sigString =
 		'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_month.geojson'
 
-	let fetchStrings = [sigString, sigString, redString]
+	const fetchStrings = [sigString, sigString, redString]
 
 	const randomFetchString = () => {
 		return Math.floor(Math.random() * (3 - 0)) + 0
@@ -48,75 +49,77 @@ export default function FeaturedQuake() {
 	useEffect(() => {
 		let featureDetails = JSON.parse(sessionStorage.getItem('feature'))
 		let tectonicDetails = JSON.parse(sessionStorage.getItem('tectonic'))
-		isLoading(true)
-		if (featureDetails) {
-			setDetails(featureDetails)
-			if (tectonicDetails) {
-				setTectonic(tectonicDetails)
+
+		const fetchWaterDetails = async (geometry) => {
+			const isWater = await fetch(
+				`https://is-on-water.balbona.me/api/v1/get/${geometry.coordinates[1]}/${geometry.coordinates[0]}`
+			)
+
+			const waterDetails = await isWater.json()
+
+			// console.log(waterDetails)
+			if (
+				waterDetails?.isWater &&
+				waterDetails?.feature !== 'RIVER' &&
+				waterDetails?.feature !== 'LAKE'
+			) {
+				setMap('ocean')
+			} else {
+				setMap('topo-v2')
 			}
-		} else {
-			fetch(fetchStrings[randomFetchString()])
-				.then(function (response) {
-					// console.log(response)
-					if (response.ok) {
-						return response.json()
-					} else {
-						throw Error('Error while fetching data')
-					}
-				})
-				.then(function (data) {
-					// console.log(data)
-					fetch(
-						data.features[randomFeature(data.features.length)].properties.detail
+		}
+
+		const fetchData = async () => {
+			try {
+				const res = await fetch(fetchStrings[randomFetchString()])
+				const features = await res.json()
+
+				const quakeRes = await fetch(
+					features.features[randomFeature(features.features.length)].properties
+						.detail
+				)
+				const quakeData = await quakeRes.json()
+
+				if (quakeData.geometry) {
+					fetchWaterDetails(quakeData.geometry)
+				}
+
+				if (quakeData.properties.products['general-text']) {
+					setDetails(quakeData)
+					sessionStorage.setItem('feature', JSON.stringify(quakeData))
+				} else {
+					tectonicSearch =
+						tectonicSearch +
+						'latitude=' +
+						quakeData.geometry.coordinates[1] +
+						'&longitude=' +
+						quakeData.geometry.coordinates[0]
+
+					const tectonicRes = await fetch(tectonicSearch)
+					const tectonicData = await tectonicRes.json()
+					setTectonic(tectonicData.tectonic.features)
+					sessionStorage.setItem(
+						'tectonic',
+						JSON.stringify(tectonicData.tectonic.features)
 					)
-						.then(function (response) {
-							return response.json()
-						})
-						.then(function (data) {
-							if (data.properties.products['general-text']) {
-								setDetails(data)
-								sessionStorage.setItem('feature', JSON.stringify(data))
-							} else {
-								tectonicSearch =
-									tectonicSearch +
-									'latitude=' +
-									data.geometry.coordinates[1] +
-									'&longitude=' +
-									data.geometry.coordinates[0]
-
-								// console.log(tectonicSearch)
-
-								const fetchData = async () => {
-									isLoading(true)
-									const res = await fetch(tectonicSearch)
-									const json = await res.json()
-									// console.log(json)
-									setTectonic(json.tectonic.features)
-									sessionStorage.setItem(
-										'tectonic',
-										JSON.stringify(json.tectonic.features)
-									)
-									isLoading(false)
-								}
-								fetchData()
-								setDetails(data)
-								sessionStorage.setItem('feature', JSON.stringify(data))
-							}
-						})
-						.catch((err) => {
-							// console.log(err.message)
-							setError(err.message)
-						})
-				})
-				.catch((err) => {
-					// console.log(err)
-					setError(err.message)
-				})
+					setDetails(quakeData)
+					sessionStorage.setItem('feature', JSON.stringify(quakeData))
+				}
+			} catch (error) {
+				console.log(error)
+			}
+		}
+		isLoading(true)
+		if (tectonicDetails && featureDetails) {
+			setTectonic(tectonicDetails)
+			setDetails(featureDetails)
+		} else {
+			fetchData()
 		}
 		isLoading(false)
 	}, [version])
 
-	let now = new Date()
+	const now = new Date()
 
 	const refresh = useCallback(() => {
 		sessionStorage.removeItem('feature')

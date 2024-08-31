@@ -9,7 +9,9 @@ import { useEffect, useState } from 'react'
 export default function QuakeCard(props) {
 	//   const [detailsLink, setDetailsLink] = useState('')
 	//   const [details, setDetails] = useState([])
+	// console.log(props.quakeData)
 	const [place, setPlace] = useState(props.quakeData.properties.place)
+	const [map, setMap] = useState(null)
 	// let quakeTime = new Date(props.quakeData.properties.time)
 
 	//*** This code is copyright 2002-2016 by Gavin Kistner, !@phrogz.net
@@ -107,7 +109,7 @@ export default function QuakeCard(props) {
 	}
 
 	let now = new Date()
-	const maptilerProvider = maptiler('MaTKi78CrHEEExK4dS8x', 'topo')
+
 	// console.log(
 	// 	props.quakeData.geometry.coordinates[1]
 	// 	// props.quakeData.geometry.coordinates[0]
@@ -131,6 +133,25 @@ export default function QuakeCard(props) {
 	const newLat = props.quakeData.geometry.coordinates[1] - 0.5
 
 	useEffect(() => {
+		const fetchWaterDetails = async () => {
+			const isWater = await fetch(
+				`https://is-on-water.balbona.me/api/v1/get/${props.quakeData.geometry.coordinates[1]}/${props.quakeData.geometry.coordinates[0]}`
+			)
+
+			const waterDetails = await isWater.json()
+
+			// console.log(waterDetails)
+			if (
+				waterDetails?.isWater &&
+				waterDetails?.feature !== 'RIVER' &&
+				waterDetails?.feature !== 'LAKE'
+			) {
+				setMap('ocean')
+			} else {
+				setMap('topo-v2')
+			}
+		}
+
 		if (!props.quakeData.properties.place) {
 			const fetchData = async () => {
 				tectonicSearch =
@@ -152,54 +173,60 @@ export default function QuakeCard(props) {
 			}
 			fetchData()
 		}
+		fetchWaterDetails()
 	}, [])
 	// console.log(newLat)
 
 	let placeLength = place?.length
 	// console.log(placeLength)
+	const maptilerProvider = maptiler('MaTKi78CrHEEExK4dS8x', map)
 
 	return (
 		<section className='mx-auto border rounded-lg shadow-md w-[355px] dark:border-zinc-800 border-stone-400 bg-stone-100 dark:bg-zinc-600 dark:text-zinc-100 text-stone-700 grow h-auto overflow-hidden safari-rounded'>
 			<div className='relative'>
 				<div className='safari-rounded rounded-md  border-stone-400 overflow-hidden m-auto h-[300px] justify-center  bg-stone-500 shadow-md dark:border-zinc-800'>
-					<Map
-						className=''
-						provider={maptilerProvider}
-						dprs={[1, 2]}
-						metaWheelZoom={false}
-						mouseEvents={false}
-						touchEvents={false}
-						attributionPrefix={false}
-						attribution={
-							<a
-								href='https://www.maptiler.com'
-								target='_blank'
-								style={{ display: 'inline-block', marginBottom: '-4px' }}
-							>
-								<img
-									src='https://api.maptiler.com/resources/logo.svg'
-									alt='MapTiler logo'
-								/>
-							</a>
-						}
-						// touchEvents={false}
-						defaultCenter={[newLat, props.quakeData.geometry.coordinates[0]]}
-						defaultZoom={6}
-					>
-						<Marker
-							color={
-								props.quakeData.properties.alert === null
-									? 'green'
-									: props.quakeData.properties.alert
+					{!map ? (
+						<div className='h-full bg-stone-800 animate-pulse' />
+					) : (
+						<Map
+							className=''
+							provider={maptilerProvider}
+							dprs={[1, 2]}
+							metaWheelZoom={false}
+							mouseEvents={false}
+							touchEvents={false}
+							attributionPrefix={false}
+							attribution={
+								<a
+									href='https://www.maptiler.com'
+									target='_blank'
+									style={{ display: 'inline-block', marginBottom: '-4px' }}
+								>
+									<img
+										src='https://api.maptiler.com/resources/logo.svg'
+										alt='MapTiler logo'
+									/>
+								</a>
 							}
-							width={30}
-							hover={false}
-							anchor={[
-								props.quakeData.geometry.coordinates[1],
-								props.quakeData.geometry.coordinates[0],
-							]}
-						/>
-					</Map>
+							// touchEvents={false}
+							defaultCenter={[newLat, props.quakeData.geometry.coordinates[0]]}
+							defaultZoom={6}
+						>
+							<Marker
+								color={
+									props.quakeData.properties.alert === null
+										? 'green'
+										: props.quakeData.properties.alert
+								}
+								width={30}
+								hover={false}
+								anchor={[
+									props.quakeData.geometry.coordinates[1],
+									props.quakeData.geometry.coordinates[0],
+								]}
+							/>
+						</Map>
+					)}
 				</div>
 				<div className='absolute flex items-center px-3 leading-8 align-middle border shadow-md z-2 top-1 left-1 rounded-3xl md:text-lg bg-zinc-100 dark:bg-zinc-600/80 bg-stone-100/80 border-stone-400 dark:border-zinc-800'>
 					{/* <div className='pr-2 text-lg text-green-700 align-middle dark:text-green-200'>
