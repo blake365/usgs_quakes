@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import Quake from './quake'
 import QuakeCard from './quakeCard'
+import Globe from './globe'
 
-import { BiGridAlt, BiListUl } from 'react-icons/bi'
+import { BiGridAlt, BiListUl, BiGlobe } from 'react-icons/bi'
 
 export default function QuakeWrapper() {
 	let today = ''
@@ -41,112 +42,122 @@ export default function QuakeWrapper() {
 	const [meta, setMeta] = useState([])
 	const [loading, isLoading] = useState(false)
 	const [size, setSize] = useState('compact')
+	const [showGlobe, setShowGlobe] = useState(false)
 
 	useEffect(() => {
-		const fetchData = async (string) => {
+		const params = new URLSearchParams(window.location.search)
+		const urlMin = params.get('min')
+		const urlMax = params.get('max') 
+		const urlLat = params.get('lat')
+		const urlLong = params.get('long')
+		const urlRadius = params.get('radius')
+		const urlStart = params.get('start')
+		const urlEnd = params.get('end')
+		const urlSort = params.get('sort')
+		const urlDir = params.get('dir')
+
+		setMinMag(urlMin || 6)
+		setMaxMag(urlMax || 10)
+		setLat(urlLat || '')
+		setLong(urlLong || '')
+		setRadius(urlRadius || 500)
+		setStart(urlStart || '')
+		setEnd(urlEnd || today)
+		setSort(urlSort || 'date')
+		setDir(urlDir || 'desc')
+
+		if (params.toString()) {
+			const startString = 'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&'
+			let latString = ''
+			let longString = ''
+			let radiusString = ''
+			let startDateString = ''
+			let endDateString = ''
+			let minMagString = urlMin || '6'
+			let maxMagString = urlMax || '10'
+			let orderString = ''
+
+			if (urlLat && urlLong && urlRadius) {
+				latString = `&latitude=${urlLat}`
+				longString = `&longitude=${urlLong}`
+				radiusString = `&maxradiuskm=${urlRadius}`
+			}
+
+			if (urlStart) {
+				startDateString = `&starttime=${urlStart}`
+			}
+
+			if (urlEnd) {
+				endDateString = `&endtime=${urlEnd}`
+			}
+
+			if ((urlSort || 'date') === 'date') {
+				orderString = `&orderby=time${(urlDir || 'desc') === 'asc' ? '-asc' : ''}`
+			} else {
+				orderString = `&orderby=magnitude${(urlDir || 'desc') === 'asc' ? '-asc' : ''}`
+			}
+
+			const newFetchString = `${startString}minmagnitude=${minMagString}&maxmagnitude=${maxMagString}${latString}${longString}${radiusString}${startDateString}${endDateString}&limit=200${orderString}&jsonerror=true`
+			fetchQuakeData(newFetchString)
+		} else {
+			const defaultFetchString = 'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&minmagnitude=6&maxmagnitude=10&orderby=time&limit=200&jsonerror=true'
+			fetchQuakeData(defaultFetchString)
+		}
+	}, [])
+
+	const fetchQuakeData = async (fetchString) => {
+		try {
 			isLoading(true)
-			const res = await fetch(string)
+			const res = await fetch(fetchString)
 			const json = await res.json()
-			// console.log(json)
 			setQuakes(json.features)
-			sessionStorage.setItem('quakes', JSON.stringify(json.features))
 			setMeta(json.metadata)
-			sessionStorage.setItem('metadata', JSON.stringify(json.metadata))
+		} catch (error) {
+			setMeta({ error: 'Failed to fetch earthquake data' })
+			setQuakes([])
+		} finally {
 			isLoading(false)
 		}
-
-		// if (
-		// 	sessionStorage.getItem('url') !== '' &&
-		// 	sessionStorage.getItem('url') !== fetchString
-		// ) {
-		// 	fetchData(sessionStorage.getItem('url'))
-		// } else {
-		// 	fetchData(fetchString)
-		// }
-
-		let min = sessionStorage.getItem('min')
-		let max = sessionStorage.getItem('max')
-		let lat = sessionStorage.getItem('lat')
-		let long = sessionStorage.getItem('long')
-		let rad = sessionStorage.getItem('radius')
-		let start = sessionStorage.getItem('start')
-		let end = sessionStorage.getItem('end')
-		let sort = sessionStorage.getItem('sort')
-		let dir = sessionStorage.getItem('dir')
-
-		min ? setMinMag(min) : setMinMag(6)
-		max ? setMaxMag(max) : setMaxMag(10)
-		lat ? setLat(lat) : setLat('')
-		long ? setLong(long) : setLong('')
-		rad ? setRadius(rad) : setRadius(500)
-		start ? setStart(start) : setStart('')
-		end ? setEnd(end) : setEnd(today)
-		sort ? setSort(sort) : setSort('date')
-		dir ? setDir(dir) : setDir('desc')
-
-		if (
-			sessionStorage.getItem('quakes') &&
-			sessionStorage.getItem('metadata') &&
-			sessionStorage.getItem('url') !== fetchString
-		) {
-			setQuakes(JSON.parse(sessionStorage.getItem('quakes')))
-			setMeta(JSON.parse(sessionStorage.getItem('metadata')))
-		} else {
-			fetchData(fetchString)
-		}
-	}, [fetchString])
+	}
 
 	const handleSortChange = (e) => {
-		// console.log(e.target)
 		const { value } = e.target
 		setSort(value)
-		sessionStorage.setItem('sort', value)
 	}
 
 	const handleDirChange = (e) => {
-		// console.log(e.target)
 		const { value } = e.target
 		setDir(value)
-		sessionStorage.setItem('dir', value)
 	}
 
 	const handleResetFields = (evt) => {
 		evt.preventDefault()
-		// sessionStorage.clear()
-		setMinMag(0)
-		sessionStorage.setItem('min', 0)
+		setMinMag(6)
 		setMaxMag(10)
-		sessionStorage.setItem('max', 10)
 		setLat('')
-		sessionStorage.setItem('lat', '')
 		setLong('')
-		sessionStorage.setItem('long', '')
-		setRadius('')
-		sessionStorage.setItem('radius', '')
+		setRadius(500)
 		setStart('')
-		sessionStorage.setItem('start', '')
 		setEnd(today)
-		sessionStorage.setItem('end', today)
+		setSort('date')
+		setDir('desc')
+		
+		window.history.replaceState({}, '', window.location.pathname)
 	}
 
 	const handleLocationRequest = (evt) => {
 		evt.preventDefault()
 		navigator.geolocation.getCurrentPosition((position) => {
 			setLat(position.coords.latitude)
-			sessionStorage.setItem('lat', position.coords.latitude)
 			setLong(position.coords.longitude)
-			sessionStorage.setItem('long', position.coords.longitude)
 			setRadius(500)
-			sessionStorage.setItem('radius', 500)
 		})
 	}
 
-	const startString =
-		'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&'
-
 	const handleFetchChange = (evt) => {
 		evt.preventDefault()
-		sessionStorage.removeItem('url')
+		
+		const startString = 'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&'
 		let latString = ''
 		let longString = ''
 		let radiusString = ''
@@ -156,64 +167,43 @@ export default function QuakeWrapper() {
 		let maxMagString = maxMag.toString()
 		let orderString = ''
 
-		if (latitude != '' && longitude != '' && radius != '') {
-			latString = '&latitude=' + latitude
-		} else {
-			latString = ''
-		}
-		if (longitude != '' && latitude != '' && radius != '') {
-			longString = '&longitude=' + longitude
-		} else {
-			longString = ''
-		}
-		if (radius != '' && longitude != '' && latitude != '') {
-			radiusString = '&maxradiuskm=' + radius
-		} else {
-			radiusString = ''
-		}
-		if (start != '') {
-			startDateString = '&starttime=' + start
-			// orderString = '&orderby=time-asc'
-		} else {
-			startDateString = ''
-			// orderString = '&orderby=magnitude'
-		}
-		if (end != null) {
-			endDateString = '&endtime=' + end
-		} else {
-			endDateString = ''
-		}
-		if (sort == 'date') {
-			orderString = '&orderby=time'
-			if (direction == 'asc') {
-				orderString += '-asc'
-			}
-		} else if (sort == 'magnitude') {
-			orderString = '&orderby=magnitude'
-			if (direction == 'asc') {
-				orderString += '-asc'
-			}
+		if (latitude !== '' && longitude !== '' && radius !== '') {
+			latString = `&latitude=${latitude}`
+			longString = `&longitude=${longitude}`
+			radiusString = `&maxradiuskm=${radius}`
 		}
 
-		let fetchString =
-			startString +
-			'minmagnitude=' +
-			minMagString +
-			'&maxmagnitude=' +
-			maxMagString +
-			latString +
-			longString +
-			radiusString +
-			startDateString +
-			endDateString +
-			'&limit=100' +
-			orderString +
-			'&jsonerror=true'
+		if (start !== '') {
+			startDateString = `&starttime=${start}`
+		}
 
-		// console.log(fetchString)
-		sessionStorage.setItem('url', fetchString)
+		if (end !== null) {
+			endDateString = `&endtime=${end}`
+		}
 
-		setFetch(fetchString)
+		if (sort === 'date') {
+			orderString = `&orderby=time${direction === 'asc' ? '-asc' : ''}`
+		} else if (sort === 'magnitude') {
+			orderString = `&orderby=magnitude${direction === 'asc' ? '-asc' : ''}`
+		}
+
+		const newFetchString = `${startString}minmagnitude=${minMagString}&maxmagnitude=${maxMagString}${latString}${longString}${radiusString}${startDateString}${endDateString}&limit=200${orderString}&jsonerror=true`
+
+		const params = new URLSearchParams()
+		if (minMag) params.set('min', minMag)
+		if (maxMag) params.set('max', maxMag)
+		if (latitude) params.set('lat', latitude)
+		if (longitude) params.set('long', longitude)
+		if (radius) params.set('radius', radius)
+		if (start) params.set('start', start)
+		if (end) params.set('end', end)
+		if (sort) params.set('sort', sort)
+		if (direction) params.set('dir', direction)
+
+		const newUrl = `${window.location.pathname}?${params.toString()}`
+		window.history.replaceState({}, '', newUrl)
+
+		fetchQuakeData(newFetchString)
 	}
 
 	return (
@@ -232,7 +222,7 @@ export default function QuakeWrapper() {
 							Earthquake Search Filter
 						</h4>
 						<p className='block text-sm text-stone-600 dark:text-zinc-300'>
-							Limited to 100 results
+							Limited to 200 results
 						</p>
 					</div>
 					<div className='h-auto my-auto align-middle'>
@@ -259,13 +249,13 @@ export default function QuakeWrapper() {
 								placeholder='3'
 								onChange={(e) => {
 									setMinMag(e.target.value)
-									sessionStorage.setItem('min', e.target.value)
 								}}
 							/>
 						</label>
 						<label className='inline-block p-1 xs:block'>
 							Max Magnitude:{' '}
 							<input
+								
 								className='px-1 text-right text-black border rounded-md bg-stone-200 border-stone-700 hover:bg-blue-50 w-14'
 								type='number'
 								value={maxMag}
@@ -275,7 +265,6 @@ export default function QuakeWrapper() {
 								placeholder='8'
 								onChange={(e) => {
 									setMaxMag(e.target.value)
-									sessionStorage.setItem('max', e.target.value)
 								}}
 							/>
 						</label>
@@ -293,7 +282,6 @@ export default function QuakeWrapper() {
 								placeholder='0'
 								onChange={(e) => {
 									setLat(e.target.value)
-									sessionStorage.setItem('lat', e.target.value)
 								}}
 							/>
 						</label>
@@ -309,7 +297,6 @@ export default function QuakeWrapper() {
 								placeholder='0'
 								onChange={(e) => {
 									setLong(e.target.value)
-									sessionStorage.setItem('long', e.target.value)
 								}}
 							/>
 						</label>
@@ -325,7 +312,6 @@ export default function QuakeWrapper() {
 								placeholder='500'
 								onChange={(e) => {
 									setRadius(e.target.value)
-									sessionStorage.setItem('radius', e.target.value)
 								}}
 							/>
 						</label>
@@ -349,12 +335,9 @@ export default function QuakeWrapper() {
 								className='px-1 text-right text-black border rounded-md bg-stone-200 border-stone-700 hover:bg-blue-50'
 								type='date'
 								value={start}
-								//   min='1'
-								//   max='10000'
 								placeholder=''
 								onChange={(e) => {
 									setStart(e.target.value)
-									sessionStorage.setItem('start', e.target.value)
 								}}
 							/>
 						</label>
@@ -364,12 +347,9 @@ export default function QuakeWrapper() {
 								className='px-1 text-right text-black border rounded-md bg-stone-200 border-stone-700 hover:bg-blue-50'
 								type='date'
 								value={end}
-								//   min='1'
-								//   max='10000'
 								placeholder={today}
 								onChange={(e) => {
 									setEnd(e.target.value)
-									sessionStorage.setItem('end', e.target.value)
 								}}
 							/>
 						</label>
@@ -428,20 +408,7 @@ export default function QuakeWrapper() {
 					</div>
 					<div className='flex justify-between align-middle border-t border-stone-600'>
 						<div className='flex flex-col invisible ml-2 dark:text-stone-700 grow-0'>
-							<button
-								onClick={() => setSize('large')}
-								className='h-6 px-1 m-1 text-center border rounded-md text-md bg-stone-200 hover:bg-stone-50 border-stone-700 disabled:text-sky-600 disabled:hover:bg-stone-200'
-								disabled={size === 'large'}
-							>
-								<BiGridAlt />
-							</button>
-							<button
-								onClick={() => setSize('compact')}
-								className='h-6 px-1 m-1 mt-0 text-center border rounded-md text-md hover:bg-stone-50 bg-stone-200 border-stone-700 disabled:text-sky-600 disabled:hover:bg-stone-200 '
-								disabled={size === 'compact'}
-							>
-								<BiListUl />
-							</button>
+							<div className="w-[34px]"/>
 						</div>
 						<div>
 							<div className='block m-2 mb-1 text-center'>
@@ -467,6 +434,7 @@ export default function QuakeWrapper() {
 						</div>
 						<div className='flex flex-col content-end justify-end my-auto mr-2 dark:text-stone-700 grow-0'>
 							<button
+								type='button'
 								onClick={() => setSize('large')}
 								className='h-6 px-1 m-1 mb-0 text-center border rounded-t-md text-md bg-stone-200 hover:bg-stone-50 border-stone-700 disabled:text-sky-600 disabled:hover:bg-stone-200'
 								disabled={size === 'large'}
@@ -474,16 +442,30 @@ export default function QuakeWrapper() {
 								<BiGridAlt />
 							</button>
 							<button
+								type='button'
 								onClick={() => setSize('compact')}
 								className='h-6 px-1 m-1 mt-0 text-center border border-t-0 rounded-b-md text-md hover:bg-stone-50 bg-stone-200 border-stone-700 disabled:text-sky-600 disabled:hover:bg-stone-200 '
 								disabled={size === 'compact'}
 							>
 								<BiListUl />
 							</button>
+							<button
+								type='button'
+								onClick={() => setShowGlobe(!showGlobe)}
+								className={`h-6 px-1 m-1 mt-0 text-center border rounded-md text-md hover:bg-stone-50 bg-stone-200 border-stone-700 ${showGlobe ? 'text-sky-600 hover:bg-stone-200' : ''}`}
+							>
+								<BiGlobe />
+							</button>
 						</div>
 					</div>
 				</form>
 			</div>
+			{showGlobe === true ? <Globe markers={quakes.reduce((acc, quake) => {
+					acc.push({ location: [quake.geometry.coordinates[1], quake.geometry.coordinates[0]], size: quake.properties.mag / 100 })
+					return acc
+					}, [])}
+				/>
+			 : null}
 			<div className='flex flex-wrap justify-between gap-4'>
 				{loading ? (
 					<div className='w-full mb-4 text-center align-middle border rounded-lg shadow-md dark:border-zinc-800 border-stone-400 bg-stone-100 dark:bg-zinc-600 dark:text-zinc-100 text-stone-700'>
@@ -496,9 +478,8 @@ export default function QuakeWrapper() {
 					quakes.map((quake) => {
 						if (size === 'large') {
 							return <QuakeCard quakeData={quake} key={quake.id} />
-						} else {
-							return <Quake quakeData={quake} key={quake.id} />
-						}
+						} 
+						return <Quake quakeData={quake} key={quake.id} />
 					})
 				) : (
 					<div className='block w-full p-5 mt-5 mb-4 text-center align-middle border rounded-lg shadow-md border-stone-600 bg-stone-100'>

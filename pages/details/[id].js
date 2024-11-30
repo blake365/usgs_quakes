@@ -2,7 +2,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Head from 'next/head'
 import Image from 'next/image'
-
+import Footer from '../../components/footer'
 // import intensity from '../../public/images/intensity.jpeg'
 
 import { Map, Marker, ZoomControl } from 'pigeon-maps'
@@ -458,16 +458,7 @@ export default function Details({
 				</div>
 			</main>
 			<div className='h-4'></div>
-			<footer className='w-full p-5 mt-5 text-lg text-center text-stone-700 border-y border-stone-400 bg-sky-200 dark:bg-sky-600 dark:text-zinc-100 dark:border-zinc-600'>
-				<div>Data provided by the United States Geological Survey</div>
-				<a
-					href='https://earthquake.usgs.gov/fdsnws/event/1/'
-					target='_blank'
-					className='underline text-sky-600 hover:text-sky-900 dark:text-zinc-100 dark:hover:text-zinc-300'
-				>
-					API Documentation
-				</a>
-			</footer>
+			<Footer />
 		</div>
 	)
 }

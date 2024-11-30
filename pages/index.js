@@ -2,7 +2,7 @@ import Head from 'next/head'
 import FeaturedQuake from '../components/featureQuake'
 import FeatureQuakeWrapper from '../components/featureQuakeWrapper'
 import QuakeWrapper from '../components/quakeWrapper'
-
+import Footer from '../components/footer'
 export default function Home() {
 	return (
 		<div className='flex flex-col items-center justify-center min-h-screen pb-6 bg-zinc-200 dark:bg-zinc-900'>
@@ -35,16 +35,7 @@ export default function Home() {
 				<QuakeWrapper />
 			</main>
 
-			<footer className='w-full p-5 mt-5 text-lg text-center text-stone-700 border-y border-stone-400 bg-sky-200 dark:bg-sky-600 dark:text-zinc-100 dark:border-zinc-600'>
-				<div>Data provided by the United States Geological Survey</div>
-				<a
-					href='https://earthquake.usgs.gov/fdsnws/event/1/'
-					target='_blank'
-					className='underline text-sky-600 hover:text-sky-900 dark:text-zinc-100 dark:hover:text-zinc-300'
-				>
-					API Documentation
-				</a>
-			</footer>
+			<Footer />
 		</div>
 	)
 }
